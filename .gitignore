@@ -3,5 +3,9 @@ context/
 .vscode/
 CLAUDE.md
 node_modules/
+.next/
+.vercel/
+tsconfig.tsbuildinfo
 
 .env
+.env.local
