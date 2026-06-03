@@ -4,8 +4,11 @@ context/
 CLAUDE.md
 node_modules/
 .next/
+.open-next/
 .vercel/
 tsconfig.tsbuildinfo
 
 .env
 .env.local
+.vercel
+.env*
