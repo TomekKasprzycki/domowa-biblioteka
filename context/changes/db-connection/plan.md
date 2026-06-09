@@ -253,26 +253,26 @@ The `getDataSource()` singleton with the `global` pattern ensures at most one co
 
 #### Automated
 
-- [x] 2.1 `npx tsc --noEmit` passes
-- [x] 2.2 `npm run lint` passes
-- [x] 2.3 `npm run migration:run` completes without error
+- [x] 2.1 `npx tsc --noEmit` passes — 07dd163
+- [x] 2.2 `npm run lint` passes — 07dd163
+- [x] 2.3 `npm run migration:run` completes without error — 07dd163
 
 #### Manual
 
-- [x] 2.4 `src/lib/data-source.ts` exists and exports `getDataSource`
-- [x] 2.5 `src/lib/data-source-cli.ts` exists with a default export
-- [x] 2.6 `src/migrations/` and `src/server/` directories exist
-- [x] 2.7 `npm run typeorm -- --help` prints TypeORM CLI help
+- [x] 2.4 `src/lib/data-source.ts` exists and exports `getDataSource` — 07dd163
+- [x] 2.5 `src/lib/data-source-cli.ts` exists with a default export — 07dd163
+- [x] 2.6 `src/migrations/` and `src/server/` directories exist — 07dd163
+- [x] 2.7 `npm run typeorm -- --help` prints TypeORM CLI help — 07dd163
 
 ### Phase 3: Integration Test & Verification
 
 #### Automated
 
-- [ ] 3.1 `npm test` exits 0 — both test cases pass
-- [ ] 3.2 `npx tsc --noEmit` still passes
+- [x] 3.1 `npm test` exits 0 — both test cases pass
+- [x] 3.2 `npx tsc --noEmit` still passes
 
 #### Manual
 
-- [ ] 3.3 Test output shows two passing cases under `getDataSource`
-- [ ] 3.4 No SSL or connection errors in test run output
-- [ ] 3.5 `npm run dev` starts without DB errors
+- [x] 3.3 Test output shows two passing cases under `getDataSource`
+- [x] 3.4 No SSL or connection errors in test run output
+- [x] 3.5 `npm run dev` starts without DB errors

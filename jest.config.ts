@@ -7,6 +7,7 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testMatch: ["<rootDir>/test/**/*.spec.ts"],
+  modulePathIgnorePatterns: ["<rootDir>/.open-next/"],
   setupFiles: ["<rootDir>/test/setup.ts"],
 };
 
