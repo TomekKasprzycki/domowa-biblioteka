@@ -238,31 +238,31 @@ The `getDataSource()` singleton with the `global` pattern ensures at most one co
 
 #### Automated
 
-- [x] 1.1 `npm install` completes without errors
-- [x] 1.2 `npx tsc --noEmit` passes
-- [x] 1.3 `npm run lint` passes
+- [x] 1.1 `npm install` completes without errors — 730ac09
+- [x] 1.2 `npx tsc --noEmit` passes — 730ac09
+- [x] 1.3 `npm run lint` passes — 730ac09
 
 #### Manual
 
-- [x] 1.4 `package.json` dependencies contain typeorm, pg, reflect-metadata
-- [x] 1.5 `package.json` devDependencies contain jest, ts-jest, @types/jest, @types/pg, dotenv, tsx
-- [x] 1.6 `tsconfig.json` contains `experimentalDecorators: true`
-- [x] 1.7 `jest.config.ts` exists at project root
+- [x] 1.4 `package.json` dependencies contain typeorm, pg, reflect-metadata — 730ac09
+- [x] 1.5 `package.json` devDependencies contain jest, ts-jest, @types/jest, @types/pg, dotenv, tsx — 730ac09
+- [x] 1.6 `tsconfig.json` contains `experimentalDecorators: true` — 730ac09
+- [x] 1.7 `jest.config.ts` exists at project root — 730ac09
 
 ### Phase 2: Data Source & Project Scaffold
 
 #### Automated
 
-- [ ] 2.1 `npx tsc --noEmit` passes
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npm run migration:run` completes without error
+- [x] 2.1 `npx tsc --noEmit` passes
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npm run migration:run` completes without error
 
 #### Manual
 
-- [ ] 2.4 `src/lib/data-source.ts` exists and exports `getDataSource`
-- [ ] 2.5 `src/lib/data-source-cli.ts` exists with a default export
-- [ ] 2.6 `src/migrations/` and `src/server/` directories exist
-- [ ] 2.7 `npm run typeorm -- --help` prints TypeORM CLI help
+- [x] 2.4 `src/lib/data-source.ts` exists and exports `getDataSource`
+- [x] 2.5 `src/lib/data-source-cli.ts` exists with a default export
+- [x] 2.6 `src/migrations/` and `src/server/` directories exist
+- [x] 2.7 `npm run typeorm -- --help` prints TypeORM CLI help
 
 ### Phase 3: Integration Test & Verification
 
