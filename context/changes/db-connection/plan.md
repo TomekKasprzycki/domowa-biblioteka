@@ -268,11 +268,11 @@ The `getDataSource()` singleton with the `global` pattern ensures at most one co
 
 #### Automated
 
-- [x] 3.1 `npm test` exits 0 — both test cases pass
-- [x] 3.2 `npx tsc --noEmit` still passes
+- [x] 3.1 `npm test` exits 0 — both test cases pass — 3159f70
+- [x] 3.2 `npx tsc --noEmit` still passes — 3159f70
 
 #### Manual
 
-- [x] 3.3 Test output shows two passing cases under `getDataSource`
-- [x] 3.4 No SSL or connection errors in test run output
-- [x] 3.5 `npm run dev` starts without DB errors
+- [x] 3.3 Test output shows two passing cases under `getDataSource` — 3159f70
+- [x] 3.4 No SSL or connection errors in test run output — 3159f70
+- [x] 3.5 `npm run dev` starts without DB errors — 3159f70
