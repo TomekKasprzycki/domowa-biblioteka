@@ -103,6 +103,8 @@ Install all required packages and update the two config files that control TypeS
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause for manual confirmation before proceeding to Phase 2.
 
+**Addendum (impl-review 2026-06-16)**: `test/tsconfig.json` (jest/node types scoped to test files) and a ts-jest `transform` override in `jest.config.ts` were added beyond the plan — both benign, supporting the planned test setup. Also added: `modulePathIgnorePatterns: ['<rootDir>/.open-next/']` to avoid scanning Next.js build cache.
+
 ---
 
 ## Phase 2: Data Source & Project Scaffold

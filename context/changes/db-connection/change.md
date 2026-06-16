@@ -1,9 +1,9 @@
 ---
 id: db-connection
 title: "F-01: TypeORM + Neon PostgreSQL data source"
-status: implemented
+status: impl_reviewed
 created: 2026-06-09
-updated: 2026-06-09
+updated: 2026-06-16
 
 roadmap_ref: F-01
 ---

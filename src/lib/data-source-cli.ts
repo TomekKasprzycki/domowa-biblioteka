@@ -10,6 +10,7 @@ const cliDataSource = new DataSource({
   synchronize: false,
   entities: ["src/server/**/*.entity.ts"],
   migrations: ["src/migrations/*.ts"],
+  ssl: { rejectUnauthorized: true },
 });
 
 export default cliDataSource;
