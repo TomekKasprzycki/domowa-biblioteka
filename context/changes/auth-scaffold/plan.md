@@ -414,13 +414,13 @@ export const config = {
 
 #### Automated
 
-- [x] 3.1 `npx tsc --noEmit` passes
-- [x] 3.2 `npm run lint` passes
+- [x] 3.1 `npx tsc --noEmit` passes — aebc07a
+- [x] 3.2 `npm run lint` passes — aebc07a
 
 #### Manual
 
-- [x] 3.3 Unauthenticated access to protected route redirects to `/login` with `callbackUrl`
-- [x] 3.4 `/`, `/login`, `/register` load without redirect when signed out
-- [x] 3.5 Nav shows user name and sign-out button when signed in
-- [x] 3.6 Sign-out button signs user out and lands on `/`
-- [x] 3.7 Full end-to-end flow (register → sign-in → nav → sign-out → redirect) works in `npm run dev`
+- [x] 3.3 Unauthenticated access to protected route redirects to `/login` with `callbackUrl` — aebc07a
+- [x] 3.4 `/`, `/login`, `/register` load without redirect when signed out — aebc07a
+- [x] 3.5 Nav shows user name and sign-out button when signed in — aebc07a
+- [x] 3.6 Sign-out button signs user out and lands on `/` — aebc07a
+- [x] 3.7 Full end-to-end flow (register → sign-in → nav → sign-out → redirect) works in `npm run dev` — aebc07a
