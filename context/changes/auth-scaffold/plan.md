@@ -380,26 +380,26 @@ export const config = {
 
 #### Automated
 
-- [x] 1.1 `npm install` completes without errors
-- [x] 1.2 `npm run lint` passes
-- [x] 1.3 `npx tsc --noEmit` passes
-- [x] 1.4 `npm run migration:run` applies CreateUserTable migration
-- [x] 1.5 `npm test` passes — user.repository integration tests green
+- [x] 1.1 `npm install` completes without errors — 352a864
+- [x] 1.2 `npm run lint` passes — 352a864
+- [x] 1.3 `npx tsc --noEmit` passes — 352a864
+- [x] 1.4 `npm run migration:run` applies CreateUserTable migration — 352a864
+- [x] 1.5 `npm test` passes — user.repository integration tests green — 352a864
 
 #### Manual
 
-- [x] 1.6 `auth.ts` exists at project root and exports `handlers`, `auth`, `signIn`, `signOut`
-- [x] 1.7 `user.entity.ts` has `users` table with all 6 columns, all with explicit TypeORM type options
-- [x] 1.8 `user.repository.ts` exports `findByEmail` and `createUser`
-- [x] 1.9 Migration file exists in `src/migrations/`
-- [x] 1.10 `npm run dev` starts without errors
+- [x] 1.6 `auth.ts` exists at project root and exports `handlers`, `auth`, `signIn`, `signOut` — 352a864
+- [x] 1.7 `user.entity.ts` has `users` table with all 6 columns, all with explicit TypeORM type options — 352a864
+- [x] 1.8 `user.repository.ts` exports `findByEmail` and `createUser` — 352a864
+- [x] 1.9 Migration file exists in `src/migrations/` — 352a864
+- [x] 1.10 `npm run dev` starts without errors — 352a864
 
 ### Phase 2: Sign-In, Sign-Up & Landing Pages
 
 #### Automated
 
-- [ ] 2.1 `npx tsc --noEmit` passes
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `npx tsc --noEmit` passes
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
