@@ -44,6 +44,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
+    authorized({ auth: session, request: { nextUrl } }) {
+      const isLoggedIn = !!session?.user;
+      const publicPaths = ["/", "/login", "/register"];
+      const isPublic =
+        publicPaths.includes(nextUrl.pathname) ||
+        nextUrl.pathname.startsWith("/api/auth/");
+      if (!isPublic && !isLoggedIn) return false;
+      return true;
+    },
     jwt({ token, user }) {
       if (user?.id) token.sub = user.id;
       return token;

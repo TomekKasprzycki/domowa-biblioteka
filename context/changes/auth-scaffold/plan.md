@@ -398,29 +398,29 @@ export const config = {
 
 #### Automated
 
-- [x] 2.1 `npx tsc --noEmit` passes
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `npx tsc --noEmit` passes — b4e84af
+- [x] 2.2 `npm run lint` passes — b4e84af
 
 #### Manual
 
-- [ ] 2.3 `/register` form creates account and redirects to `/`
-- [ ] 2.4 Duplicate email on `/register` shows inline error
-- [ ] 2.5 `/login` with correct credentials signs in and redirects
-- [ ] 2.6 `/login` with wrong credentials shows inline error without page reload
-- [ ] 2.7 `/login?callbackUrl=%2Fbooks` redirects to `/books` after sign-in
-- [ ] 2.8 `/` landing page shows correct content based on auth state
+- [x] 2.3 `/register` form creates account and redirects to `/` — b4e84af
+- [x] 2.4 Duplicate email on `/register` shows inline error — b4e84af
+- [x] 2.5 `/login` with correct credentials signs in and redirects — b4e84af
+- [x] 2.6 `/login` with wrong credentials shows inline error without page reload — b4e84af
+- [x] 2.7 `/login?callbackUrl=%2Fbooks` redirects to `/books` after sign-in — b4e84af
+- [x] 2.8 `/` landing page shows correct content based on auth state — b4e84af
 
 ### Phase 3: Route Protection, Nav & Layout
 
 #### Automated
 
-- [ ] 3.1 `npx tsc --noEmit` passes
-- [ ] 3.2 `npm run lint` passes
+- [x] 3.1 `npx tsc --noEmit` passes
+- [x] 3.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 3.3 Unauthenticated access to protected route redirects to `/login` with `callbackUrl`
-- [ ] 3.4 `/`, `/login`, `/register` load without redirect when signed out
-- [ ] 3.5 Nav shows user name and sign-out button when signed in
-- [ ] 3.6 Sign-out button signs user out and lands on `/`
-- [ ] 3.7 Full end-to-end flow (register → sign-in → nav → sign-out → redirect) works in `npm run dev`
+- [x] 3.3 Unauthenticated access to protected route redirects to `/login` with `callbackUrl`
+- [x] 3.4 `/`, `/login`, `/register` load without redirect when signed out
+- [x] 3.5 Nav shows user name and sign-out button when signed in
+- [x] 3.6 Sign-out button signs user out and lands on `/`
+- [x] 3.7 Full end-to-end flow (register → sign-in → nav → sign-out → redirect) works in `npm run dev`
