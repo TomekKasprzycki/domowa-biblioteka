@@ -1,12 +1,18 @@
+import { DataSource } from "typeorm";
 import { createUser, findByEmail } from "@/server/user/user.repository";
+import { UserEntity } from "@/server/user/user.entity";
 import { getDataSource } from "@/lib/data-source";
 
 describe("userRepository", () => {
   const testEmail = `test-${Date.now()}@example.com`;
+  let ds: DataSource;
 
   afterAll(async () => {
-    const ds = await getDataSource();
-    await ds.destroy();
+    ds = await getDataSource();
+    if (ds?.isInitialized) {
+      await ds.getRepository(UserEntity).delete({ email: testEmail });
+      await ds.destroy();
+    }
   });
 
   it("creates a new user", async () => {

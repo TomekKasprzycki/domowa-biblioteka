@@ -9,7 +9,10 @@ export async function loginAction(
 ): Promise<string | null> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const callbackUrl = (formData.get("callbackUrl") as string) || "/";
+  let callbackUrl = (formData.get("callbackUrl") as string) || "/";
+  if (!callbackUrl.startsWith("/") || callbackUrl.startsWith("//")) {
+    callbackUrl = "/";
+  }
 
   try {
     await signIn("credentials", { email, password, redirectTo: callbackUrl });

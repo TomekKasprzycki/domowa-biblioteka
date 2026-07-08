@@ -129,6 +129,8 @@ declare module "next-auth" {
 - `@CreateDateColumn() createdAt: Date`
 - `@UpdateDateColumn() updatedAt: Date`
 
+Note: explicit `type:` is required on every `@Column()` (SWC constraint — no reflect-metadata). Specialized decorators such as `@PrimaryGeneratedColumn`, `@CreateDateColumn`, `@UpdateDateColumn` encode their type in the decorator name and do NOT need `type:`.
+
 The `users` table name will need to be reconciled when `@auth/typeorm-adapter` is added in the OAuth slice — noted as a future migration concern.
 
 #### 6. User repository

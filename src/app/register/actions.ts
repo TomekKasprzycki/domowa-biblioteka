@@ -35,7 +35,7 @@ export async function registerAction(
   } catch (error) {
     if (
       error instanceof QueryFailedError &&
-      (error as { detail?: string }).detail?.includes("already exists")
+      (error as { code?: string }).code === "23505"
     ) {
       return "An account with this email already exists.";
     }
