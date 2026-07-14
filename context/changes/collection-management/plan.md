@@ -302,29 +302,29 @@ This migration only creates a new table (`books`) with a FK to the existing `use
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Migration applies cleanly: `npm run migration:run`
-- [x] 1.4 Repository tests pass: `npm test -- book.repository`
-- [x] 1.7 UUID generator tests pass: `npm test -- generate-id`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — 636e01a
+- [x] 1.2 Linting passes: `npm run lint` — 636e01a
+- [x] 1.3 Migration applies cleanly: `npm run migration:run` — 636e01a
+- [x] 1.4 Repository tests pass: `npm test -- book.repository` — 636e01a
+- [x] 1.7 UUID generator tests pass: `npm test -- generate-id` — 636e01a
 
 #### Manual
 
-- [x] 1.5 Inspect the `books` table schema/constraints via Neon console/psql
-- [x] 1.6 Confirm `npm run migration:revert` cleanly drops the table
+- [x] 1.5 Inspect the `books` table schema/constraints via Neon console/psql — 636e01a
+- [x] 1.6 Confirm `npm run migration:revert` cleanly drops the table — 636e01a
 
 ### Phase 2: Server Actions
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Action tests pass: `npm test -- collection/actions`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Action tests pass: `npm test -- collection/actions`
 
 #### Manual
 
-- [ ] 2.4 Inspect DB state after action tests to confirm created/updated/deleted rows
-- [ ] 2.5 Confirm cross-user update/delete attempt is rejected via scratch-script check
+- [x] 2.4 Inspect DB state after action tests to confirm created/updated/deleted rows
+- [x] 2.5 Confirm cross-user update/delete attempt is rejected via scratch-script check
 
 ### Phase 3: Collection Page UI & Navigation
 
