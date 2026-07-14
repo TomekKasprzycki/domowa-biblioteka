@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { UserEntity } from "@/server/user/user.entity";
+import { BookEntity } from "@/server/book/book.entity";
 
 const g = global as typeof global & {
   _typeormDataSource?: DataSource;
@@ -13,7 +14,7 @@ function createDataSource(): DataSource {
     url: process.env.DATABASE_URL,
     synchronize: process.env.NODE_ENV === "development",
     logging: process.env.NODE_ENV === "development",
-    entities: [UserEntity],
+    entities: [UserEntity, BookEntity],
     ssl: process.env.DATABASE_URL?.includes("sslmode=require")
       ? { rejectUnauthorized: true }
       : false,
