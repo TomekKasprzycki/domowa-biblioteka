@@ -15,9 +15,12 @@ export default async function Home() {
             <p className="text-lg text-zinc-600">
               Welcome back, {session.user.name ?? session.user.email}.
             </p>
-            <p className="text-sm text-zinc-500">
-              Your collection is coming soon.
-            </p>
+            <a
+              href="/collection"
+              className="text-sm font-medium text-zinc-900 underline"
+            >
+              Go to your collection
+            </a>
           </>
         ) : (
           <>

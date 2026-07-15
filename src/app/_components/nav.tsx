@@ -12,6 +12,12 @@ export default async function Nav() {
       <div className="flex items-center gap-4">
         {session?.user ? (
           <>
+            <Link
+              href="/collection"
+              className="text-sm font-medium text-zinc-900 hover:underline"
+            >
+              Collection
+            </Link>
             <span className="text-sm text-zinc-600">
               {session.user.name ?? session.user.email}
             </span>
