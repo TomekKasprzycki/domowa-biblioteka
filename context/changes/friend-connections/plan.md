@@ -328,31 +328,31 @@ This migration only creates a new table (`friend_connections`) with two FKs to t
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Migration file was actually generated on disk
-- [x] 1.4 Migration applies cleanly: `npm run migration:run`
-- [x] 1.5 Repository tests pass: `npm test -- friend-connection.repository`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — 417be88
+- [x] 1.2 Linting passes: `npm run lint` — 417be88
+- [x] 1.3 Migration file was actually generated on disk — 417be88
+- [x] 1.4 Migration applies cleanly: `npm run migration:run` — 417be88
+- [x] 1.5 Repository tests pass: `npm test -- friend-connection.repository` — 417be88
 
 #### Manual
 
-- [x] 1.6 Inspect the `friend_connections` table schema/constraints via Neon console/psql
-- [x] 1.7 Confirm `npm run migration:revert` cleanly drops the table
+- [x] 1.6 Inspect the `friend_connections` table schema/constraints via Neon console/psql — 417be88
+- [x] 1.7 Confirm `npm run migration:revert` cleanly drops the table — 417be88
 
 ### Phase 2: Server Actions
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Shared helper tests pass: `npm test -- db-error.utils`
-- [ ] 2.4 S-01 regression after the extract: `npm test -- collection/actions`
-- [ ] 2.5 Action tests pass: `npm test -- friends/actions`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Shared helper tests pass: `npm test -- db-error.utils`
+- [x] 2.4 S-01 regression after the extract: `npm test -- collection/actions`
+- [x] 2.5 Action tests pass: `npm test -- friends/actions`
 
 #### Manual
 
-- [ ] 2.6 Inspect DB state after action tests to confirm created/updated/deleted rows
-- [ ] 2.7 Confirm ownership-scoped accept/reject/remove reject an unrelated user via scratch-script check
+- [x] 2.6 Inspect DB state after action tests to confirm created/updated/deleted rows
+- [x] 2.7 Confirm ownership-scoped accept/reject/remove reject an unrelated user via scratch-script check
 
 ### Phase 3: Friends Page UI & Navigation
 

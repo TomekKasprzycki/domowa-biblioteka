@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { QueryFailedError } from "typeorm";
 import { z } from "zod";
 import { auth } from "@/auth";
 import {
@@ -9,6 +8,7 @@ import {
   updateBook,
   deleteBook,
 } from "@/server/book/book.repository";
+import { isDuplicateError } from "@/lib/db-error.utils";
 
 const titleSchema = z.string().trim().min(1, "Title is required").max(255);
 const authorSchema = z.string().trim().min(1, "Author is required").max(255);
@@ -19,13 +19,6 @@ const NOT_FOUND_MESSAGE =
   "Book not found or you don't have permission to edit it.";
 const DUPLICATE_MESSAGE =
   "You already have a book with this title and author.";
-
-function isDuplicateError(error: unknown): boolean {
-  return (
-    error instanceof QueryFailedError &&
-    (error as { code?: string }).code === "23505"
-  );
-}
 
 export async function addBookAction(
   _prevState: string | null,
