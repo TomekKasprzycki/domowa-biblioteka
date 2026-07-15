@@ -59,7 +59,7 @@ Always write through the plain `userId` field when creating/querying in this sli
 
 **Ownership-scoped mutations**: `updateBook` and `deleteBook` must include `userId` in their `WHERE` clause (via `repo.update({ id, userId }, ...)` / `repo.delete({ id, userId })` style scoping, not a separate `findOne` followed by an unscoped `save`/`delete`). Return `null` (update) / `false` (delete) when the affected row count is zero — this covers "not found" and "not owned" identically, so the action layer can't accidentally leak which case occurred.
 
-**Inline edit-in-place state**: `book-list.tsx` is a client component tracking a single `editingId: string | null` in local state. Clicking "Edit" on a row sets `editingId` to that book's id, swapping that row's display into an inline form (its own `useActionState(updateBookAction, null)` instance) with a "Cancel" button that resets `editingId` to `null`. Only one row is editable at a time.
+**Inline edit-in-place state**: `book-list.tsx` is a client component tracking a single `editingId: string | null` in local state. Clicking "Edit" on a row sets `editingId` to that book's id, swapping that row's display into an inline form (its own `useActionState(updateBookAction, null)` instance) with a "Cancel" button that resets `editingId` to `null`. Only one row is editable at a time. A successful Save must *also* reset `editingId` back to display mode — discovered at manual-verification time that `useActionState` has no built-in "on success" callback, so `EditBookRow` detects the pending→not-pending transition with no error (via a `wasPending` ref, to avoid firing on initial mount where `isPending` also starts `false`) and calls an `onSaved` prop, wired to the same `setEditingId(null)` as `onCancel`.
 
 **Delete confirmation**: no modal/dialog component exists in this codebase yet. Use a native `window.confirm()` gate on the delete button's `onClick` (call `e.preventDefault()` if the user cancels, otherwise let the form submit through to `deleteBookAction`) — no new UI dependency needed.
 
@@ -166,9 +166,10 @@ Wire `addBookAction`, `updateBookAction`, and `deleteBookAction` on top of the r
 
 **Contract**:
 - Module-level zod schema: `title` (string, trim, min 1, max 255), `author` (string, trim, min 1, max 255), `notes` (optional string, trim, max 2000, empty string treated as absent). A separate `bookId: z.string().uuid()` check guards `updateBookAction`/`deleteBookAction` (see below) — `bookId` is read from a hidden form field, and Server Actions are directly reachable POST endpoints, not just via the rendered form, so a malformed value must not reach the repository as a raw string.
-- `addBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — `auth()` for `session.user.id`; on missing session return an error string (defensive; route is already middleware-protected); parse form fields; call `createBook`; catch `QueryFailedError` code `23505` → `"You already have a book with this title and author."`; other errors re-thrown.
-- `updateBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — the edit form is always submitted in full (every field pre-filled, not a partial patch), so unlike `addBookAction`, an empty `notes` field here is unambiguous: it means the user cleared it, and must be passed through as `notes: null` (not omitted) so `updateBook` actually clears the column. Same `title`/`author` validation, plus a required `bookId` field from a hidden input validated with `z.string().uuid()` (a failed parse maps to the same not-found/not-owned message below, rather than reaching the repository); call `updateBook(bookId, session.user.id, data)`; `null` result → `"Book not found or you don't have permission to edit it."`; duplicate-constraint handling same as add.
-- `deleteBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — required `bookId` field, validated the same way as `updateBookAction`; call `deleteBook(bookId, session.user.id)`; `false` result → same not-found/not-owned message.
+- All three actions call `revalidatePath("/collection")` (from `next/cache`) immediately after a successful mutation, before returning `null` — discovered at manual-verification time: invoking a Server Action does **not** by itself invalidate the client Router Cache, so without this, `/collection` kept rendering the pre-mutation RSC payload until a hard refresh (confirmed by testing update in a real browser).
+- `addBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — `auth()` for `session.user.id`; on missing session return an error string (defensive; route is already middleware-protected); parse form fields; call `createBook`; catch `QueryFailedError` code `23505` → `"You already have a book with this title and author."`; other errors re-thrown; on success, `revalidatePath("/collection")` then return `null`.
+- `updateBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — the edit form is always submitted in full (every field pre-filled, not a partial patch), so unlike `addBookAction`, an empty `notes` field here is unambiguous: it means the user cleared it, and must be passed through as `notes: null` (not omitted) so `updateBook` actually clears the column. Same `title`/`author` validation, plus a required `bookId` field from a hidden input validated with `z.string().uuid()` (a failed parse maps to the same not-found/not-owned message below, rather than reaching the repository); call `updateBook(bookId, session.user.id, data)`; `null` result → `"Book not found or you don't have permission to edit it."`; duplicate-constraint handling same as add; on success, `revalidatePath("/collection")` then return `null`.
+- `deleteBookAction(prevState: string | null, formData: FormData): Promise<string | null>` — required `bookId` field, validated the same way as `updateBookAction`; call `deleteBook(bookId, session.user.id)`; `false` result → same not-found/not-owned message; on success, `revalidatePath("/collection")` then return `null`.
 
 #### 2. Server Action tests
 
@@ -219,11 +220,11 @@ Build the `/collection` page: inline add form, list of owned books, inline edit-
 
 #### 3. Book list with inline edit/delete
 
-**File**: `src/app/collection/_components/book-list.tsx`
+**Files**: `src/app/collection/_components/book-list.tsx`, `src/app/collection/_components/book-row.tsx`, `src/app/collection/_components/edit-book-row.tsx` (split into one component per file per this project's convention, discovered/confirmed at implementation time — `book-list.tsx` exports the shared `Book` plain-object type used by the other two).
 
-**Intent**: Client component rendering the owned books, with per-row inline edit (via local `editingId` state, see Critical Implementation Details) and delete-with-confirm.
+**Intent**: Client components rendering the owned books, with per-row inline edit (via local `editingId` state, see Critical Implementation Details) and delete-with-confirm.
 
-**Contract**: Props `{ books: Array<{ id: string; title: string; author: string; notes: string | null; createdAt: Date }> }` — a plain serializable shape, not `BookEntity[]` (TypeORM entities are class instances and cannot cross the Server→Client boundary as props). Each row displays title/author/notes with Edit/Delete controls when not the `editingId`; the `editingId` row renders an inline `useActionState(updateBookAction, null)` form (pre-filled, includes hidden `bookId`) with Save/Cancel; Delete button gated by `window.confirm(...)` before submitting a `useActionState(deleteBookAction, null)` form with hidden `bookId`.
+**Contract**: `book-list.tsx` exports `type Book = { id: string; title: string; author: string; notes: string | null; createdAt: Date }` (a plain serializable shape, not `BookEntity[]` — TypeORM entities are class instances and cannot cross the Server→Client boundary as props) and `BookList({ books: Book[] })`, which renders each row as `BookRow` (display + Edit/Delete) or, when its id matches local `editingId` state, `EditBookRow` (inline `useActionState(updateBookAction, null)` form, pre-filled, hidden `bookId`, Save/Cancel). `BookRow`'s Delete button is gated by `window.confirm(...)` before submitting a `useActionState(deleteBookAction, null)` form with hidden `bookId`.
 
 #### 4. Navigation link
 
@@ -317,21 +318,21 @@ This migration only creates a new table (`books`) with a FK to the existing `use
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Action tests pass: `npm test -- collection/actions`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — 641a27a
+- [x] 2.2 Linting passes: `npm run lint` — 641a27a
+- [x] 2.3 Action tests pass: `npm test -- collection/actions` — 641a27a
 
 #### Manual
 
-- [x] 2.4 Inspect DB state after action tests to confirm created/updated/deleted rows
-- [x] 2.5 Confirm cross-user update/delete attempt is rejected via scratch-script check
+- [x] 2.4 Inspect DB state after action tests to confirm created/updated/deleted rows — 641a27a
+- [x] 2.5 Confirm cross-user update/delete attempt is rejected via scratch-script check — 641a27a
 
 ### Phase 3: Collection Page UI & Navigation
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
 
 #### Manual
 

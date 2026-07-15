@@ -10,9 +10,11 @@ const cliDataSource = new DataSource({
   synchronize: false,
   entities: ["src/server/**/*.entity.ts"],
   migrations: ["src/migrations/*.ts"],
-  ssl: process.env.DATABASE_URL_UNPOOLED?.includes("sslmode=require")
-    ? { rejectUnauthorized: true }
-    : false,
+  ssl:
+    process.env.DATABASE_URL_UNPOOLED?.includes("sslmode=require") ||
+    process.env.DATABASE_URL_UNPOOLED?.includes("sslmode=verify-full")
+      ? { rejectUnauthorized: true }
+      : false,
 });
 
 export default cliDataSource;

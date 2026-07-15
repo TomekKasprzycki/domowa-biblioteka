@@ -13,6 +13,9 @@ Domowa-biblioteka is a social book-lending web app — Next.js 15 (App Router), 
 - Do not use ^ in package version. No "reflect-metadata": "^0.2.2", use "reflect-metadata": "0.2.2".
 - **TypeORM entities: always declare column types explicitly.** Next.js uses SWC which does not support `emitDecoratorMetadata` — TypeORM cannot infer types from TypeScript. Every `@Column()` must include a `type` option, e.g. `@Column({ type: 'varchar' })`. Omitting it throws at runtime.
 - Never commit to master. Master branch should be protected: no push directly to master allowed.
+- In API optional fields use <some type> | null. Do not use <some type> | undefined. In update use PUT method.
+- Handle id for database entities in application. Create IdGenerator which will create UUID and add it to new entity. Do not let database handle id.
+- Every component should be in separate file.
 
 ## Project Structure
 
@@ -41,6 +44,8 @@ Domowa-biblioteka is a social book-lending web app — Next.js 15 (App Router), 
 - Use msw to mock http request  (not yet installed)
 - Each it block tests one case: one input, one set of related assertions. Do not test two distinct behaviors (e.g. success + error) in the same it block.
 - When testing feature with different input use it.each
+- Test should contains 3 blocks: given / when / then.
+- When testing function expected value should be mocked and assert with result.
 
 ## Commit Guidelines
 

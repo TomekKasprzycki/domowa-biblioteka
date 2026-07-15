@@ -13,6 +13,10 @@ import { getDataSource } from "@/lib/data-source";
 jest.mock("@/auth", () => ({ auth: jest.fn() }));
 import { auth } from "@/auth";
 
+// revalidatePath needs Next's request-scoped context, which doesn't exist
+// when invoking a Server Action directly outside a real request/render.
+jest.mock("next/cache", () => ({ revalidatePath: jest.fn() }));
+
 const mockAuth = auth as jest.Mock;
 
 function formData(fields: Record<string, string>): FormData {

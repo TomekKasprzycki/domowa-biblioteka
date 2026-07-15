@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { QueryFailedError } from "typeorm";
 import { z } from "zod";
 import { auth } from "@/auth";
@@ -67,6 +68,10 @@ export async function addBookAction(
     throw error;
   }
 
+  // Server Actions don't auto-invalidate the client Router Cache: without
+  // this, /collection keeps rendering the pre-mutation RSC payload until a
+  // hard refresh.
+  revalidatePath("/collection");
   return null;
 }
 
@@ -119,6 +124,7 @@ export async function updateBookAction(
     throw error;
   }
 
+  revalidatePath("/collection");
   return null;
 }
 
@@ -141,5 +147,6 @@ export async function deleteBookAction(
     return NOT_FOUND_MESSAGE;
   }
 
+  revalidatePath("/collection");
   return null;
 }

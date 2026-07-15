@@ -15,9 +15,11 @@ function createDataSource(): DataSource {
     synchronize: process.env.NODE_ENV === "development",
     logging: process.env.NODE_ENV === "development",
     entities: [UserEntity, BookEntity],
-    ssl: process.env.DATABASE_URL?.includes("sslmode=require")
-      ? { rejectUnauthorized: true }
-      : false,
+    ssl:
+      process.env.DATABASE_URL?.includes("sslmode=require") ||
+      process.env.DATABASE_URL?.includes("sslmode=verify-full")
+        ? { rejectUnauthorized: true }
+        : false,
   });
 }
 
