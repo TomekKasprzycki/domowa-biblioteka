@@ -16,6 +16,7 @@ Domowa-biblioteka is a social book-lending web app — Next.js 15 (App Router), 
 - In API optional fields use <some type> | null. Do not use <some type> | undefined. In update use PUT method.
 - Handle id for database entities in application. Create IdGenerator which will create UUID and add it to new entity. Do not let database handle id.
 - Every component should be in separate file.
+- When using enum strings, create a const using values ​​marked as const and create a type from them using the key of that const.
 
 ## Project Structure
 
