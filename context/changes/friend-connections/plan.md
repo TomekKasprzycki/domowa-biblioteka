@@ -343,34 +343,34 @@ This migration only creates a new table (`friend_connections`) with two FKs to t
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Shared helper tests pass: `npm test -- db-error.utils`
-- [x] 2.4 S-01 regression after the extract: `npm test -- collection/actions`
-- [x] 2.5 Action tests pass: `npm test -- friends/actions`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — 3bdaf45
+- [x] 2.2 Linting passes: `npm run lint` — 3bdaf45
+- [x] 2.3 Shared helper tests pass: `npm test -- db-error.utils` — 3bdaf45
+- [x] 2.4 S-01 regression after the extract: `npm test -- collection/actions` — 3bdaf45
+- [x] 2.5 Action tests pass: `npm test -- friends/actions` — 3bdaf45
 
 #### Manual
 
-- [x] 2.6 Inspect DB state after action tests to confirm created/updated/deleted rows
-- [x] 2.7 Confirm ownership-scoped accept/reject/remove reject an unrelated user via scratch-script check
+- [x] 2.6 Inspect DB state after action tests to confirm created/updated/deleted rows — 3bdaf45
+- [x] 2.7 Confirm ownership-scoped accept/reject/remove reject an unrelated user via scratch-script check — 3bdaf45
 
 ### Phase 3: Friends Page UI & Navigation
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Nav link reaches `/friends`
-- [ ] 3.4 Send invite appears immediately in Sent
-- [ ] 3.5 Accept moves connection into both users' Friends lists
-- [ ] 3.6 Reject removes it from Received with no Friends entry
-- [ ] 3.7 Re-invite after rejection succeeds and reappears in Received
-- [ ] 3.8 Unknown-email invite rejected with friendly message
-- [ ] 3.9 Self-invite rejected with friendly message
-- [ ] 3.10 Already-friends duplicate invite rejected with friendly message
-- [ ] 3.11 Reverse-pending invite auto-accepts instead of creating a duplicate
-- [ ] 3.12 Remove friend (with confirm) updates both users' Friends lists
-- [ ] 3.13 Logged-out redirect from `/friends` to `/login`
+- [x] 3.3 Nav link reaches `/friends`
+- [x] 3.4 Send invite appears immediately in Sent
+- [x] 3.5 Accept moves connection into both users' Friends lists
+- [x] 3.6 Reject removes it from Received with no Friends entry
+- [x] 3.7 Re-invite after rejection succeeds and reappears in Received
+- [x] 3.8 Unknown-email invite rejected with friendly message
+- [x] 3.9 Self-invite rejected with friendly message
+- [x] 3.10 Already-friends duplicate invite rejected with friendly message
+- [x] 3.11 Reverse-pending invite auto-accepts instead of creating a duplicate
+- [x] 3.12 Remove friend (with confirm) updates both users' Friends lists
+- [x] 3.13 Logged-out redirect from `/friends` to `/login`

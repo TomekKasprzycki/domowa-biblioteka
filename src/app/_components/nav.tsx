@@ -18,6 +18,12 @@ export default async function Nav() {
             >
               Collection
             </Link>
+            <Link
+              href="/friends"
+              className="text-sm font-medium text-zinc-900 hover:underline"
+            >
+              Friends
+            </Link>
             <span className="text-sm text-zinc-600">
               {session.user.name ?? session.user.email}
             </span>
