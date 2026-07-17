@@ -20,19 +20,19 @@
 
 - **Context**: src/app/friends/_components/*.tsx and src/app/collection/_components/*.tsx — App Router feature folders with sibling/parent imports
 - **Problem**: AGENTS.md mandates "Use the @/* path alias instead of relative ../ imports across src/", but both the collection (S-01) and friends (S-02) feature components import via "../actions" and "./sibling". The written rule and the actual, repeated code pattern have drifted — each new feature copies the relative style from the last.
-- **Rule**: <TODO: e.g. "Intra-feature sibling/parent imports may stay relative; reserve @/* for cross-feature imports" — OR — "All src/ imports must use @/*; fix collection + friends together">
-- **Applies to**: <TODO: e.g. "App Router feature components under src/app/**/_components">
+- **Rule**: The written rule wins — all cross-module imports under src/ use the @/* alias, including sibling ("./x") and parent ("../x") imports within a feature folder. Friends (S-02) was converted in commit 585a4d3; collection (S-01) still uses relative imports and is outstanding debt to bring in line (do it as a small standalone cleanup, not bundled into a feature slice). Do not copy the relative style into new features.
+- **Applies to**: all imports across src/ (App Router pages/components, server, lib); strongest for src/app/**/_components
 
 ## Component prop types: inline vs *.types.ts
 
 - **Context**: src/app/friends/_components/received-invites-list.tsx, friends-list.tsx (and src/app/collection/_components/book-list.tsx) — Client Component prop-shape types
 - **Problem**: AGENTS.md says "Types or interfaces should be in *.types.ts", but list components export their row/item prop type inline (`ReceivedInvite`, `Friend`, `Book`) and sibling row components import it from the component file. The convention and the repeated pattern have drifted across S-01 and S-02.
-- **Rule**: <TODO: e.g. "Component prop/DTO types shared only within one feature's _components may stay co-located with the list component" — OR — "Extract all exported types into <feature>.types.ts">
-- **Applies to**: <TODO: e.g. "Client Component prop types under src/app/**/_components">
+- **Rule**: The written rule wins — exported prop/DTO/shared types live in a `<feature>.types.ts` file, not inline in a component. Friends (S-02) types were extracted to src/app/friends/friends.types.ts in commit 585a4d3; collection's inline `Book` type (S-01) is outstanding debt to extract (small standalone cleanup). A type used only inside one component file and never exported may stay local; the moment a second file imports it, it belongs in `*.types.ts`.
+- **Applies to**: exported types across src/ (component props, DTOs, shared shapes); strongest for src/app/**/_components
 
-## Component specs deferred until UI test infra exists
+## Component specs: UI test infra is installed — write specs going forward
 
-- **Context**: src/app/**/_components/*.tsx across S-01 (collection) and S-02 (friends) — React Client Components with no accompanying spec files
-- **Problem**: AGENTS.md requires "Every exported function/component must have a spec file", but no component has one. The repo has no UI test infra installed (`@testing-library/react` and `jest-environment-jsdom` are both absent), and each slice's plan explicitly waives component tests under "What We're NOT Doing". The written rule and the actual, repeated practice have drifted, and the gap compounds with every new feature.
-- **Rule**: Component specs remain intentionally deferred. Do NOT add component specs ad hoc per feature — the missing piece is shared infra, not per-file tests. When component coverage is wanted, do it as one dedicated slice that (a) installs `@testing-library/react` + `jest-environment-jsdom`, (b) adds a jsdom jest project/config, (c) backfills specs for existing components, and (d) updates AGENTS.md / the plan template so future slices stop treating component tests as out of scope. Until that slice lands, repository + Server Action integration tests plus manual verification are the accepted coverage boundary.
-- **Applies to**: React components under src/app/**; plan authoring (scope/"What We're NOT Doing"); AGENTS.md testing rules
+- **Context**: src/app/**/_components/*.tsx and src/app/**/*.tsx — React components. Infra added during S-02 (friend-connections).
+- **Problem**: AGENTS.md requires "Every exported function/component must have a spec file", but early slices shipped none because no UI test infra existed and each plan waived component tests under "What We're NOT Doing". That gap has now been closed for the tooling.
+- **Rule**: UI test infra is installed — `@testing-library/react`, `@testing-library/dom`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jest-environment-jsdom` (all pinned, no `^`). Component specs live in `test/` mirroring `src/`, named `<component>.spec.tsx`, and start with the `/** @jest-environment jsdom */` docblock (the global jest env stays `node` so DB integration specs are unaffected). Import `@testing-library/jest-dom` at the top of each spec. Client components: mock the actions module (`jest.mock("@/app/<feature>/actions", ...)`) and assert render output + that the right action fires on submit. Async Server Components: mock `@/auth` and `render(await Component())`. New components MUST ship with a spec. The friends components (S-02) are covered; collection (S-01) components are outstanding backfill debt (standalone cleanup). test/tsconfig.json needs `"jsx": "react-jsx"` because the root tsconfig uses `"jsx": "preserve"` for SWC.
+- **Applies to**: all React components under src/app/**; jest/tsconfig test setup; AGENTS.md testing rules
