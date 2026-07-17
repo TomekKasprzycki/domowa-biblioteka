@@ -5,9 +5,9 @@ import {
   findFriends,
 } from "@/server/friend-connection/friend-connection.repository";
 import type { FriendConnectionEntity } from "@/server/friend-connection/friend-connection.entity";
-import { SendInviteForm } from "./_components/send-invite-form";
-import { ReceivedInvitesList } from "./_components/received-invites-list";
-import { FriendsList } from "./_components/friends-list";
+import { SendInviteForm } from "@/app/friends/_components/send-invite-form";
+import { ReceivedInvitesList } from "@/app/friends/_components/received-invites-list";
+import { FriendsList } from "@/app/friends/_components/friends-list";
 
 function otherUserOf(
   connection: FriendConnectionEntity,

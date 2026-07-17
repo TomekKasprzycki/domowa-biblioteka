@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { removeFriendAction } from "../actions";
-import type { Friend } from "./friends-list";
+import { removeFriendAction } from "@/app/friends/actions";
+import type { Friend } from "@/app/friends/friends.types";
 
 export function FriendRow({ friend }: { friend: Friend }) {
   const [error, removeAction, isPending] = useActionState(

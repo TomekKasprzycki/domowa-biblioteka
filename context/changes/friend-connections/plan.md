@@ -320,6 +320,10 @@ This migration only creates a new table (`friend_connections`) with two FKs to t
 - Roadmap: `context/foundation/roadmap.md` (S-02)
 - PRD: `context/foundation/prd.md` (FR-005, FR-006)
 
+## Addenda
+
+- **AGENTS.md updated (outside original plan scope)**: a hard rule was added — "When using enum strings, create a const using values marked as const and create a type from them using the key of that const." — codifying the `FriendConnectionStatus` const-plus-`keyof` pattern introduced in `friend-connection.types.ts` (Phase 1). Recorded here so the plan remains the record of every file this change touched.
+
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles. See `references/progress-format.md`.

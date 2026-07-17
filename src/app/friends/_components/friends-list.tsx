@@ -1,10 +1,5 @@
-import { FriendRow } from "./friend-row";
-
-export type Friend = {
-  id: string;
-  otherUser: { email: string; name: string };
-  createdAt: Date;
-};
+import { FriendRow } from "@/app/friends/_components/friend-row";
+import type { Friend } from "@/app/friends/friends.types";
 
 export function FriendsList({ friends }: { friends: Friend[] }) {
   if (friends.length === 0) {

@@ -1,10 +1,5 @@
-import { ReceivedInviteRow } from "./received-invite-row";
-
-export type ReceivedInvite = {
-  id: string;
-  otherUser: { email: string; name: string };
-  createdAt: Date;
-};
+import { ReceivedInviteRow } from "@/app/friends/_components/received-invite-row";
+import type { ReceivedInvite } from "@/app/friends/friends.types";
 
 export function ReceivedInvitesList({
   invites,

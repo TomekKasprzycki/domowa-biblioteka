@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { sendInviteAction } from "../actions";
+import { sendInviteAction } from "@/app/friends/actions";
 
 export function SendInviteForm() {
   const [error, formAction, isPending] = useActionState(

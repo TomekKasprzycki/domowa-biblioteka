@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { acceptInviteAction, rejectInviteAction } from "../actions";
-import type { ReceivedInvite } from "./received-invites-list";
+import { acceptInviteAction, rejectInviteAction } from "@/app/friends/actions";
+import type { ReceivedInvite } from "@/app/friends/friends.types";
 
 export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
   const [acceptError, acceptAction, isAccepting] = useActionState(
