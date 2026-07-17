@@ -358,19 +358,19 @@ This migration only creates a new table (`friend_connections`) with two FKs to t
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — f95267c
+- [x] 3.2 Linting passes: `npm run lint` — f95267c
 
 #### Manual
 
-- [x] 3.3 Nav link reaches `/friends`
-- [x] 3.4 Send invite appears immediately in Sent
-- [x] 3.5 Accept moves connection into both users' Friends lists
-- [x] 3.6 Reject removes it from Received with no Friends entry
-- [x] 3.7 Re-invite after rejection succeeds and reappears in Received
-- [x] 3.8 Unknown-email invite rejected with friendly message
-- [x] 3.9 Self-invite rejected with friendly message
-- [x] 3.10 Already-friends duplicate invite rejected with friendly message
-- [x] 3.11 Reverse-pending invite auto-accepts instead of creating a duplicate
-- [x] 3.12 Remove friend (with confirm) updates both users' Friends lists
-- [x] 3.13 Logged-out redirect from `/friends` to `/login`
+- [x] 3.3 Nav link reaches `/friends` — f95267c
+- [x] 3.4 Send invite appears immediately in Sent — f95267c
+- [x] 3.5 Accept moves connection into both users' Friends lists — f95267c
+- [x] 3.6 Reject removes it from Received with no Friends entry — f95267c
+- [x] 3.7 Re-invite after rejection succeeds and reappears in Received — f95267c
+- [x] 3.8 Unknown-email invite rejected with friendly message — f95267c
+- [x] 3.9 Self-invite rejected with friendly message — f95267c
+- [x] 3.10 Already-friends duplicate invite rejected with friendly message — f95267c
+- [x] 3.11 Reverse-pending invite auto-accepts instead of creating a duplicate — f95267c
+- [x] 3.12 Remove friend (with confirm) updates both users' Friends lists — f95267c
+- [x] 3.13 Logged-out redirect from `/friends` to `/login` — f95267c

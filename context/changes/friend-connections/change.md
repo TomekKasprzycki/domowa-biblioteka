@@ -1,9 +1,9 @@
 ---
 id: friend-connections
 title: "S-02: Friend Connections — send, accept, reject, and remove friend connections"
-status: implementing
+status: implemented
 created: 2026-07-15
-updated: 2026-07-15
+updated: 2026-07-17
 roadmap_id: S-02
 prd_refs:
   - FR-005
