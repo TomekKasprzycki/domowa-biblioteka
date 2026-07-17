@@ -9,7 +9,7 @@ const config: Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testMatch: ["<rootDir>/test/**/*.spec.ts"],
+  testMatch: ["<rootDir>/test/**/*.spec.ts", "<rootDir>/test/**/*.spec.tsx"],
   modulePathIgnorePatterns: ["<rootDir>/.open-next/"],
   setupFiles: ["<rootDir>/test/setup.ts"],
 };
