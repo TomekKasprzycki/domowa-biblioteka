@@ -318,13 +318,13 @@ No schema changes — this slice adds no entity and no migration, only new repos
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Friends tests pass: `npm test -- friends`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 29da9b9
+- [x] 3.2 Linting passes: `npm run lint` — 29da9b9
+- [x] 3.3 Friends tests pass: `npm test -- friends` — 29da9b9
 
 #### Manual
 
-- [x] 3.4 "View collection" deep link from `/friends` lands pre-scoped to the right friend
-- [x] 3.5 Invalid `friend` param redirects to `/friends` with the notice banner
-- [x] 3.6 Plain `/friends` visit shows no banner
-- [x] 3.7 Logged-out visit to `/discover` redirects to `/login`
+- [x] 3.4 "View collection" deep link from `/friends` lands pre-scoped to the right friend — 29da9b9
+- [x] 3.5 Invalid `friend` param redirects to `/friends` with the notice banner — 29da9b9
+- [x] 3.6 Plain `/friends` visit shows no banner — 29da9b9
+- [x] 3.7 Logged-out visit to `/discover` redirects to `/login` — 29da9b9
