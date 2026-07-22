@@ -25,11 +25,24 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
           </p>
         </div>
         <div className="shrink-0">
-          {requestedByViewer ? (
+          {/* Actual loan state wins over the viewer's pending request: a
+              leftover request on a book that has since been lent to someone
+              else must still read as "On loan", not "Requested". */}
+          {status === "on_loan" ? (
+            borrowedByViewer ? (
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                Borrowed by you
+              </span>
+            ) : (
+              <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
+                On loan
+              </span>
+            )
+          ) : requestedByViewer ? (
             <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
               Requested
             </span>
-          ) : status === "available" ? (
+          ) : (
             <form action={action}>
               <input type="hidden" name="bookId" value={book.id} />
               <button
@@ -40,14 +53,6 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
                 Borrow
               </button>
             </form>
-          ) : borrowedByViewer ? (
-            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-              Borrowed by you
-            </span>
-          ) : (
-            <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
-              On loan
-            </span>
           )}
         </div>
       </div>

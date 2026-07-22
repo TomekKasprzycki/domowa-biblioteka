@@ -2,8 +2,8 @@ import { In } from "typeorm";
 import { getDataSource } from "@/lib/data-source";
 import { generateId } from "@/lib/generate-id.utils";
 import { isDuplicateError } from "@/lib/db-error.utils";
-import { LoanEntity } from "./loan.entity";
-import { ApproveLoanResult, LoanStatus } from "./loan.types";
+import { LoanEntity } from "@/server/loan/loan.entity";
+import { ApproveLoanResult, LoanStatus } from "@/server/loan/loan.types";
 
 export async function createLoanRequest(data: {
   bookId: string;
@@ -37,7 +37,6 @@ export async function findActiveLoansForBooks(
   const repo = ds.getRepository<LoanEntity>("loans");
   return repo.find({
     where: { bookId: In(bookIds), status: LoanStatus.ACTIVE },
-    relations: { requester: true },
   });
 }
 

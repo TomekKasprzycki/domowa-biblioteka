@@ -74,6 +74,7 @@ export async function requestBorrowAction(
   }
 
   revalidatePath("/discover");
+  revalidatePath("/borrowing");
   return null;
 }
 
@@ -101,6 +102,7 @@ export async function approveRequestAction(
 
   revalidatePath("/requests");
   revalidatePath("/discover");
+  revalidatePath("/borrowing");
   return null;
 }
 
@@ -124,5 +126,7 @@ export async function declineRequestAction(
   }
 
   revalidatePath("/requests");
+  revalidatePath("/discover");
+  revalidatePath("/borrowing");
   return null;
 }

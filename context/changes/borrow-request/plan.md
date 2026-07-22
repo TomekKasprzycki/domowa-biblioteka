@@ -269,6 +269,8 @@ Add the surfaces that resolve requests and close the US-01 loop: the owner's app
 
 **Contract**: `await auth()` guard; fetch `findOutgoingLoans(session.user.id)`; map to plain objects (book title/author, owner name, status, startedAt). Render each with a status label: "Requested" (pending) / "Borrowed from {owner}" (active) / "Declined" (declined — so the borrower sees the outcome, per F3). Read-only in S-04 (the return action arrives in S-05). Empty state when none.
 
+> **Implementation deviation (Phase 4, user-requested)**: the pending and declined labels also name the owner — "Requested from {owner}" and "Declined by {owner}" — because the bare "Requested"/"Declined" labels gave no indication whose book a row referred to. No new information is disclosed: `/borrowing` only lists the viewer's own outgoing requests, so the owner is already known to them.
+
 #### 4. Nav links + pending-request badge
 
 **File**: `src/app/_components/nav.tsx`
@@ -332,7 +334,7 @@ Add the surfaces that resolve requests and close the US-01 loop: the owner's app
 
 ## Performance Considerations
 
-Availability computation is one bounded `In(bookIds)` query over the already-fetched discover set (target scale small — PRD `target_scale`, roadmap "150+ books... not needed for MVP"). The nav badge is one indexed count per authenticated page render; if it proves hot it can be memoized later, but at target scale it is negligible. No caching of availability — the NFR requires it reflect real loan state at page load.
+Availability computation is one bounded `In(bookIds)` query over the already-fetched discover set (target scale small — PRD `target_scale`, roadmap "150+ books... not needed for MVP"). The nav badge is one indexed count per authenticated page render; if it proves hot it can be memoized later, but at target scale it is negligible. (Impl-review addendum: the original `CreateLoanTable` migration created no index on `ownerId`/`requesterId`, so this claim did not hold as first shipped — `AddLoanLookupIndexes` adds `loans(ownerId, status)` and `loans(requesterId)` to make it true.) No caching of availability — the NFR requires it reflect real loan state at page load.
 
 ## Migration Notes
 

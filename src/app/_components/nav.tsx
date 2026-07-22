@@ -2,10 +2,22 @@ import Link from "next/link";
 import { auth, signOut } from "@/auth";
 import { countIncomingRequests } from "@/server/loan/loan.repository";
 
+// Nav renders from the root layout, so an unhandled rejection here would 500
+// every page — including ones that otherwise need no database. The badge is
+// decorative, so a failed count degrades to "no badge" rather than an error.
+async function safePendingRequestCount(userId: string): Promise<number> {
+  try {
+    return await countIncomingRequests(userId);
+  } catch (error) {
+    console.error("Failed to load pending request count for nav badge", error);
+    return 0;
+  }
+}
+
 export default async function Nav() {
   const session = await auth();
   const pendingRequestCount = session?.user
-    ? await countIncomingRequests(session.user.id)
+    ? await safePendingRequestCount(session.user.id)
     : 0;
 
   return (

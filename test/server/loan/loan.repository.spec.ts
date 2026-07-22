@@ -4,6 +4,7 @@ import {
   findActiveLoanForBook,
   findActiveLoansForBooks,
   findExistingRequest,
+  findRequestedLoansForBooksByRequester,
   findIncomingRequests,
   findOutgoingLoans,
   countIncomingRequests,
@@ -221,7 +222,7 @@ describe("loanRepository", () => {
     expect(existing).toBeNull();
   });
 
-  it("returns active loans for the requested books with the requester populated", async () => {
+  it("returns active loans for the requested books scoped to the right borrower", async () => {
     // given
     // loanA is active for bookA; bookB has no loans
 
@@ -231,7 +232,7 @@ describe("loanRepository", () => {
     // then
     expect(loans).toHaveLength(1);
     expect(loans[0].id).toBe(loanA);
-    expect(loans[0].requester.email).toBe(borrowerEmail);
+    expect(loans[0].requesterId).toBe(borrowerId);
   });
 
   it("short-circuits findActiveLoansForBooks on an empty book list", async () => {
@@ -291,6 +292,52 @@ describe("loanRepository", () => {
     // then
     expect(reRequest.status).toBe(LoanStatus.REQUESTED);
     expect(reRequest.id).not.toBe(loanB);
+  });
+
+  it("returns only the viewer's requested loans, excluding active and declined ones", async () => {
+    // given
+    // bookA has an active loan by borrowerId; bookB has a declined loan
+    // (loanB) plus a fresh requested one, both by borrowerId
+
+    // when
+    const requested = await findRequestedLoansForBooksByRequester(
+      [bookA, bookB],
+      borrowerId
+    );
+
+    // then
+    expect(requested).toHaveLength(1);
+    expect(requested[0].bookId).toBe(bookB);
+    expect(requested[0].status).toBe(LoanStatus.REQUESTED);
+    expect(requested.some((l) => l.id === loanB)).toBe(false);
+  });
+
+  it("returns no requested loans for a different requester", async () => {
+    // given
+    // the requested row on bookB belongs to borrowerId, not otherBorrowerId
+
+    // when
+    const requested = await findRequestedLoansForBooksByRequester(
+      [bookA, bookB],
+      otherBorrowerId
+    );
+
+    // then
+    expect(requested).toEqual([]);
+  });
+
+  it("short-circuits findRequestedLoansForBooksByRequester on an empty book list", async () => {
+    // given
+    // no book ids to look up
+
+    // when
+    const requested = await findRequestedLoansForBooksByRequester(
+      [],
+      borrowerId
+    );
+
+    // then
+    expect(requested).toEqual([]);
   });
 
   it("returns the borrower's requested, active and declined loans with relations", async () => {

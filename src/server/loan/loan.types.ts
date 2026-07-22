@@ -1,4 +1,4 @@
-import type { LoanEntity } from "./loan.entity";
+import type { LoanEntity } from "@/server/loan/loan.entity";
 
 export const LoanStatus = {
   REQUESTED: "requested",

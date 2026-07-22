@@ -304,6 +304,32 @@ describe("borrow actions", () => {
     expect(secondApproval).toBe("This book is already on loan.");
   });
 
+  it("rejects a concurrent double-submit with the duplicate-request message", async () => {
+    // given
+    // a fresh book with no loans, requested twice at once by the same borrower
+    const raceBookId = (
+      await createBook({
+        userId: ownerId,
+        title: `Borrow Book Race ${suffix}`,
+        author: "Author",
+      })
+    ).id;
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const results = await Promise.all([
+      requestBorrowAction(null, formData({ bookId: raceBookId })),
+      requestBorrowAction(null, formData({ bookId: raceBookId })),
+    ]);
+
+    // then
+    // the partial unique index admits exactly one pending row; the loser is
+    // mapped through isDuplicateError rather than throwing
+    expect(results.filter((r) => r === null)).toHaveLength(1);
+    expect(results.filter((r) => r === "You've already requested this book."))
+      .toHaveLength(1);
+  });
+
   it("returns not-found when declining with a malformed loanId", async () => {
     // given
     mockAuth.mockResolvedValue({ user: { id: ownerId } });

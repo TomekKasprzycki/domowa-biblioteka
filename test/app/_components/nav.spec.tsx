@@ -65,6 +65,25 @@ describe("Nav", () => {
     expect(screen.getByText("3")).toBeInTheDocument();
   });
 
+  it("still renders the nav when the pending-count query fails", async () => {
+    // given
+    mockAuth.mockResolvedValue({ user: { name: "Ada", email: "ada@example.com" } });
+    mockCountIncomingRequests.mockRejectedValue(new Error("db unavailable"));
+    const consoleError = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    // when
+    render(await Nav());
+
+    // then
+    expect(
+      screen.getByRole("link", { name: /^Requests/ })
+    ).toBeInTheDocument();
+    expect(consoleError).toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
   it("hides the pending-request badge when the count is zero", async () => {
     // given
     mockAuth.mockResolvedValue({ user: { name: "Ada", email: "ada@example.com" } });

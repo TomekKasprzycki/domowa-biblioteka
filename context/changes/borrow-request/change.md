@@ -1,7 +1,7 @@
 ---
 id: borrow-request
 title: "S-04: Borrow Request — request a friend's book; owner approves or declines; loan created"
-status: implemented
+status: impl_reviewed
 created: 2026-07-22
 updated: 2026-07-22
 roadmap_id: S-04

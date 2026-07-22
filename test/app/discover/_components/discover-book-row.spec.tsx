@@ -112,6 +112,25 @@ describe("DiscoverBookRow", () => {
     expect(screen.getByText("Borrowed by you")).toBeInTheDocument();
   });
 
+  it("prefers On loan over Requested when the book was lent to someone else", () => {
+    // given
+    // the viewer has a leftover pending request, but the owner approved
+    // a different friend in the meantime
+    render(
+      <DiscoverBookRow
+        book={makeBook({
+          status: "on_loan",
+          borrowedByViewer: false,
+          requestedByViewer: true,
+        })}
+      />
+    );
+
+    // when / then
+    expect(screen.getByText("On loan")).toBeInTheDocument();
+    expect(screen.queryByText("Requested")).not.toBeInTheDocument();
+  });
+
   it("shows a generic On loan state with no borrower name for a third friend", () => {
     // given
     render(
