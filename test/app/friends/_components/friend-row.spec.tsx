@@ -34,6 +34,20 @@ describe("FriendRow", () => {
     jest.restoreAllMocks();
   });
 
+  it("links to the friend's collection via the deep link", () => {
+    // given
+    render(<FriendRow friend={friend} />);
+
+    // when
+    const link = screen.getByRole("link", { name: /view collection/i });
+
+    // then
+    expect(link).toHaveAttribute(
+      "href",
+      `/discover?friend=${friend.otherUser.id}`
+    );
+  });
+
   it("renders the friend's name and email with the connection id hidden field", () => {
     // given
     const { container } = render(<FriendRow friend={friend} />);

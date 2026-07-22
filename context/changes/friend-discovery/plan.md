@@ -300,31 +300,31 @@ No schema changes — this slice adds no entity and no migration, only new repos
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Discover tests pass: `npm test -- discover`
-- [x] 2.4 Nav tests pass: `npm test -- nav`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — 32a8e87
+- [x] 2.2 Linting passes: `npm run lint` — 32a8e87
+- [x] 2.3 Discover tests pass: `npm test -- discover` — 32a8e87
+- [x] 2.4 Nav tests pass: `npm test -- nav` — 32a8e87
 
 #### Manual
 
-- [x] 2.5 Nav "Discover" link reaches `/discover` with all confirmed friends' books, owner names, and "Available" badges
-- [x] 2.6 Search by title fragment narrows results live across all friends
-- [x] 2.7 Search by author fragment narrows results live across all friends
-- [x] 2.8 Friend filter narrows to one friend
-- [x] 2.9 Clearing search and filter restores the full list
-- [x] 2.10 Zero-confirmed-friends account sees an empty state, not a crash
+- [x] 2.5 Nav "Discover" link reaches `/discover` with all confirmed friends' books, owner names, and "Available" badges — 32a8e87
+- [x] 2.6 Search by title fragment narrows results live across all friends — 32a8e87
+- [x] 2.7 Search by author fragment narrows results live across all friends — 32a8e87
+- [x] 2.8 Friend filter narrows to one friend — 32a8e87
+- [x] 2.9 Clearing search and filter restores the full list — 32a8e87
+- [x] 2.10 Zero-confirmed-friends account sees an empty state, not a crash — 32a8e87
 
 ### Phase 3: `/friends` Deep Link & Access-Denial Banner
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Friends tests pass: `npm test -- friends`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Friends tests pass: `npm test -- friends`
 
 #### Manual
 
-- [ ] 3.4 "View collection" deep link from `/friends` lands pre-scoped to the right friend
-- [ ] 3.5 Invalid `friend` param redirects to `/friends` with the notice banner
-- [ ] 3.6 Plain `/friends` visit shows no banner
-- [ ] 3.7 Logged-out visit to `/discover` redirects to `/login`
+- [x] 3.4 "View collection" deep link from `/friends` lands pre-scoped to the right friend
+- [x] 3.5 Invalid `friend` param redirects to `/friends` with the notice banner
+- [x] 3.6 Plain `/friends` visit shows no banner
+- [x] 3.7 Logged-out visit to `/discover` redirects to `/login`

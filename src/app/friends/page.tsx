@@ -18,9 +18,15 @@ function otherUserOf(
     : connection.requester;
 }
 
-export default async function FriendsPage() {
+interface FriendsPageProps {
+  searchParams: Promise<{ notice?: string }>;
+}
+
+export default async function FriendsPage({ searchParams }: FriendsPageProps) {
   const session = await auth();
   if (!session?.user) return null;
+
+  const { notice } = await searchParams;
 
   const userId = session.user.id;
   const [received, sent, friends] = await Promise.all([
@@ -54,6 +60,14 @@ export default async function FriendsPage() {
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
           Friends
         </h1>
+        {notice === "not-a-friend" && (
+          <p
+            role="alert"
+            className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+          >
+            You&apos;re not connected with that user.
+          </p>
+        )}
         <SendInviteForm />
 
         <section className="flex flex-col gap-3">
