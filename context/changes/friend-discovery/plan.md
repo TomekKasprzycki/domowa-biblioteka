@@ -290,29 +290,29 @@ No schema changes — this slice adds no entity and no migration, only new repos
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Book repository tests pass: `npm test -- book.repository`
-- [x] 1.4 Friend-connection repository tests pass: `npm test -- friend-connection.repository`
-- [x] 1.5 Friends component tests still pass after the fixture fix: `npm test -- friends`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — 2aedb1f
+- [x] 1.2 Linting passes: `npm run lint` — 2aedb1f
+- [x] 1.3 Book repository tests pass: `npm test -- book.repository` — 2aedb1f
+- [x] 1.4 Friend-connection repository tests pass: `npm test -- friend-connection.repository` — 2aedb1f
+- [x] 1.5 Friends component tests still pass after the fixture fix: `npm test -- friends` — 2aedb1f
 
 ### Phase 2: `/discover` Page, Components & Nav
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Discover tests pass: `npm test -- discover`
-- [ ] 2.4 Nav tests pass: `npm test -- nav`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Discover tests pass: `npm test -- discover`
+- [x] 2.4 Nav tests pass: `npm test -- nav`
 
 #### Manual
 
-- [ ] 2.5 Nav "Discover" link reaches `/discover` with all confirmed friends' books, owner names, and "Available" badges
-- [ ] 2.6 Search by title fragment narrows results live across all friends
-- [ ] 2.7 Search by author fragment narrows results live across all friends
-- [ ] 2.8 Friend filter narrows to one friend
-- [ ] 2.9 Clearing search and filter restores the full list
-- [ ] 2.10 Zero-confirmed-friends account sees an empty state, not a crash
+- [x] 2.5 Nav "Discover" link reaches `/discover` with all confirmed friends' books, owner names, and "Available" badges
+- [x] 2.6 Search by title fragment narrows results live across all friends
+- [x] 2.7 Search by author fragment narrows results live across all friends
+- [x] 2.8 Friend filter narrows to one friend
+- [x] 2.9 Clearing search and filter restores the full list
+- [x] 2.10 Zero-confirmed-friends account sees an empty state, not a crash
 
 ### Phase 3: `/friends` Deep Link & Access-Denial Banner
 
