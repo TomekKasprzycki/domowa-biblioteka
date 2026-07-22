@@ -397,16 +397,16 @@ Apply with `npm run migration:run` (revert with `migration:revert`). This partia
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npx tsc --noEmit`
-- [x] 4.2 Linting passes: `npm run lint`
-- [x] 4.3 Requests tests pass: `npm test -- requests`
-- [x] 4.4 Borrowing tests pass: `npm test -- borrowing`
-- [x] 4.5 Nav tests pass: `npm test -- nav`
+- [x] 4.1 Type checking passes: `npx tsc --noEmit` — 926062d
+- [x] 4.2 Linting passes: `npm run lint` — 926062d
+- [x] 4.3 Requests tests pass: `npm test -- requests` — 926062d
+- [x] 4.4 Borrowing tests pass: `npm test -- borrowing` — 926062d
+- [x] 4.5 Nav tests pass: `npm test -- nav` — 926062d
 
 #### Manual
 
-- [x] 4.6 Owner sees a pending count badge in nav and the request on `/requests`
-- [x] 4.7 Approve flips the book to unavailable in `/discover`; borrower sees "Borrowed from {owner}" on `/borrowing`
-- [x] 4.8 Decline removes the request; the borrower can request the same book again
-- [x] 4.9 Two simultaneous approvals of the same book yield exactly one active loan
-- [x] 4.10 Logged-out visits to `/requests` and `/borrowing` redirect to `/login`
+- [x] 4.6 Owner sees a pending count badge in nav and the request on `/requests` — 926062d
+- [x] 4.7 Approve flips the book to unavailable in `/discover`; borrower sees "Borrowed from {owner}" on `/borrowing` — 926062d
+- [x] 4.8 Decline removes the request; the borrower can request the same book again — 926062d
+- [x] 4.9 Two simultaneous approvals of the same book yield exactly one active loan — 926062d
+- [x] 4.10 Logged-out visits to `/requests` and `/borrowing` redirect to `/login` — 926062d
