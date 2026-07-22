@@ -361,22 +361,22 @@ Apply with `npm run migration:run` (revert with `migration:revert`). This partia
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Loan repository tests pass: `npm test -- loan.repository`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — 6e50d9c
+- [x] 1.2 Linting passes: `npm run lint` — 6e50d9c
+- [x] 1.3 Loan repository tests pass: `npm test -- loan.repository` — 6e50d9c
 
 #### Manual
 
-- [x] 1.4 `npm run migration:run` applied CreateLoanTable; the `loans_one_active_per_book` partial unique index exists on the Neon DB
+- [x] 1.4 `npm run migration:run` applied CreateLoanTable; the `loans_one_active_per_book` partial unique index exists on the Neon DB — 6e50d9c
 
 ### Phase 2: Borrow Request & Approval Server Actions
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Borrow action tests pass: `npm test -- borrow`
-- [ ] 2.4 Book repository tests still pass: `npm test -- book.repository`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Borrow action tests pass: `npm test -- borrow`
+- [x] 2.4 Book repository tests still pass: `npm test -- book.repository`
 
 ### Phase 3: Discover Availability & Borrow Button
 
