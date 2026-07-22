@@ -52,6 +52,18 @@ export async function findExistingRequest(
   });
 }
 
+export async function findRequestedLoansForBooksByRequester(
+  bookIds: string[],
+  requesterId: string
+): Promise<LoanEntity[]> {
+  if (bookIds.length === 0) return [];
+  const ds = await getDataSource();
+  const repo = ds.getRepository<LoanEntity>("loans");
+  return repo.find({
+    where: { bookId: In(bookIds), requesterId, status: LoanStatus.REQUESTED },
+  });
+}
+
 export async function findIncomingRequests(
   ownerId: string
 ): Promise<LoanEntity[]> {

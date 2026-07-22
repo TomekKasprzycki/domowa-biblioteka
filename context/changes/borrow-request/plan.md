@@ -373,25 +373,25 @@ Apply with `npm run migration:run` (revert with `migration:revert`). This partia
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Borrow action tests pass: `npm test -- borrow`
-- [x] 2.4 Book repository tests still pass: `npm test -- book.repository`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — 60dc6b8
+- [x] 2.2 Linting passes: `npm run lint` — 60dc6b8
+- [x] 2.3 Borrow action tests pass: `npm test -- borrow` — 60dc6b8
+- [x] 2.4 Book repository tests still pass: `npm test -- book.repository` — 60dc6b8
 
 ### Phase 3: Discover Availability & Borrow Button
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Discover tests pass: `npm test -- discover`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Discover tests pass: `npm test -- discover`
 
 #### Manual
 
-- [ ] 3.4 Available friend book shows a Borrow button; clicking records a request
-- [ ] 3.5 A book already on loan shows "On loan" with no borrower name
-- [ ] 3.6 After requesting, the same book shows "Requested" and cannot be re-requested
-- [ ] 3.7 A book the viewer currently borrows shows "Borrowed by you"
+- [x] 3.4 Available friend book shows a Borrow button; clicking records a request
+- [x] 3.5 A book already on loan shows "On loan" with no borrower name
+- [x] 3.6 After requesting, the same book shows "Requested" and cannot be re-requested
+- [x] 3.7 A book the viewer currently borrows shows "Borrowed by you"
 
 ### Phase 4: Owner /requests Inbox, Borrower /borrowing View & Nav
 
