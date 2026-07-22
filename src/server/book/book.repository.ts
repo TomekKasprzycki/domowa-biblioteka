@@ -1,3 +1,4 @@
+import { In } from "typeorm";
 import { getDataSource } from "@/lib/data-source";
 import { generateId } from "@/lib/generate-id.utils";
 import { BookEntity } from "./book.entity";
@@ -18,6 +19,19 @@ export async function findByUserId(userId: string): Promise<BookEntity[]> {
   const ds = await getDataSource();
   const repo = ds.getRepository<BookEntity>("books");
   return repo.find({ where: { userId }, order: { createdAt: "DESC" } });
+}
+
+export async function findByOwnerIds(
+  ownerIds: string[]
+): Promise<BookEntity[]> {
+  if (ownerIds.length === 0) return [];
+  const ds = await getDataSource();
+  const repo = ds.getRepository<BookEntity>("books");
+  return repo.find({
+    where: { userId: In(ownerIds) },
+    relations: { owner: true },
+    order: { title: "ASC" },
+  });
 }
 
 export async function updateBook(

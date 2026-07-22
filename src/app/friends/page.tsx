@@ -43,7 +43,7 @@ export default async function FriendsPage() {
     const other = otherUserOf(c, userId);
     return {
       id: c.id,
-      otherUser: { email: other.email, name: other.name },
+      otherUser: { id: other.id, email: other.email, name: other.name },
       createdAt: c.createdAt,
     };
   });

@@ -1,9 +1,9 @@
 ---
 id: friend-discovery
 title: "S-03: Friend Discovery — browse and search a confirmed friend's book collection"
-status: plan_reviewed
+status: implementing
 created: 2026-07-17
-updated: 2026-07-17
+updated: 2026-07-22
 roadmap_id: S-03
 prd_refs:
   - FR-007

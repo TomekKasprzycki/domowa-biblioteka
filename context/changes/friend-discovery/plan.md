@@ -290,11 +290,11 @@ No schema changes — this slice adds no entity and no migration, only new repos
 
 #### Automated
 
-- [ ] 1.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 1.2 Linting passes: `npm run lint`
-- [ ] 1.3 Book repository tests pass: `npm test -- book.repository`
-- [ ] 1.4 Friend-connection repository tests pass: `npm test -- friend-connection.repository`
-- [ ] 1.5 Friends component tests still pass after the fixture fix: `npm test -- friends`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit`
+- [x] 1.2 Linting passes: `npm run lint`
+- [x] 1.3 Book repository tests pass: `npm test -- book.repository`
+- [x] 1.4 Friend-connection repository tests pass: `npm test -- friend-connection.repository`
+- [x] 1.5 Friends component tests still pass after the fixture fix: `npm test -- friends`
 
 ### Phase 2: `/discover` Page, Components & Nav
 

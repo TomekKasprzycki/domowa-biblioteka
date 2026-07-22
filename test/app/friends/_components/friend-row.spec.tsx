@@ -17,7 +17,11 @@ const mockRemove = removeFriendAction as jest.Mock;
 
 const friend: Friend = {
   id: "33333333-3333-3333-3333-333333333333",
-  otherUser: { email: "friend@example.com", name: "Friendly Person" },
+  otherUser: {
+    id: "44444444-4444-4444-4444-444444444444",
+    email: "friend@example.com",
+    name: "Friendly Person",
+  },
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 

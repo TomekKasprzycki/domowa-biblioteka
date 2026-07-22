@@ -5,6 +5,8 @@ import {
   findPendingReceived,
   findPendingSent,
   findFriends,
+  findFriendUsers,
+  isConfirmedFriend,
   updateStatus,
   deleteConnection,
 } from "@/server/friend-connection/friend-connection.repository";
@@ -246,6 +248,62 @@ describe("friendConnectionRepository", () => {
     expect(itemForB).toBeDefined();
     expect(itemForA?.requester.email).toBe(emailB);
     expect(itemForA?.addressee.email).toBe(emailA);
+  });
+
+  it("isConfirmedFriend is true for an accepted connection in either direction", async () => {
+    // given
+    // abConnectionId is accepted between userA and userB
+
+    // when / then
+    expect(await isConfirmedFriend(userA, userB)).toBe(true);
+    expect(await isConfirmedFriend(userB, userA)).toBe(true);
+  });
+
+  it("isConfirmedFriend is false for a pending connection", async () => {
+    // given
+    // acConnectionId is pending between userA and userC
+
+    // when / then
+    expect(await isConfirmedFriend(userA, userC)).toBe(false);
+  });
+
+  it("isConfirmedFriend is false when no connection exists", async () => {
+    // given
+    // no connection exists between userB and userC
+
+    // when / then
+    expect(await isConfirmedFriend(userB, userC)).toBe(false);
+  });
+
+  it("findFriendUsers returns the other side of accepted connections only", async () => {
+    // given
+    // abConnectionId is accepted between userA and userB; acConnectionId is pending A->C
+
+    // when
+    const friendsOfA = await findFriendUsers(userA);
+
+    // then
+    expect(friendsOfA).toContainEqual({
+      id: userB,
+      name: "Friend B",
+      email: emailB,
+    });
+    expect(friendsOfA.some((f) => f.id === userC)).toBe(false);
+  });
+
+  it("findFriendUsers maps the counterpart from the addressee side too", async () => {
+    // given
+    // abConnectionId is accepted between userA and userB
+
+    // when
+    const friendsOfB = await findFriendUsers(userB);
+
+    // then
+    expect(friendsOfB).toContainEqual({
+      id: userA,
+      name: "Friend A",
+      email: emailA,
+    });
   });
 
   it("returns false from deleteConnection for a pending connection", async () => {
