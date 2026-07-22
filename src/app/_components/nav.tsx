@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
+import { countIncomingRequests } from "@/server/loan/loan.repository";
 
 export default async function Nav() {
   const session = await auth();
+  const pendingRequestCount = session?.user
+    ? await countIncomingRequests(session.user.id)
+    : 0;
 
   return (
     <nav className="flex items-center justify-between px-6 py-3 bg-white border-b border-zinc-200">
@@ -29,6 +33,23 @@ export default async function Nav() {
               className="text-sm font-medium text-zinc-900 hover:underline"
             >
               Friends
+            </Link>
+            <Link
+              href="/requests"
+              className="text-sm font-medium text-zinc-900 hover:underline"
+            >
+              Requests
+              {pendingRequestCount > 0 && (
+                <span className="ml-1 inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-semibold text-white">
+                  {pendingRequestCount}
+                </span>
+              )}
+            </Link>
+            <Link
+              href="/borrowing"
+              className="text-sm font-medium text-zinc-900 hover:underline"
+            >
+              Borrowing
             </Link>
             <span className="text-sm text-zinc-600">
               {session.user.name ?? session.user.email}

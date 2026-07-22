@@ -382,31 +382,31 @@ Apply with `npm run migration:run` (revert with `migration:revert`). This partia
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Discover tests pass: `npm test -- discover`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 5feff25
+- [x] 3.2 Linting passes: `npm run lint` — 5feff25
+- [x] 3.3 Discover tests pass: `npm test -- discover` — 5feff25
 
 #### Manual
 
-- [x] 3.4 Available friend book shows a Borrow button; clicking records a request
-- [x] 3.5 A book already on loan shows "On loan" with no borrower name
-- [x] 3.6 After requesting, the same book shows "Requested" and cannot be re-requested
-- [x] 3.7 A book the viewer currently borrows shows "Borrowed by you"
+- [x] 3.4 Available friend book shows a Borrow button; clicking records a request — 5feff25
+- [x] 3.5 A book already on loan shows "On loan" with no borrower name — 5feff25
+- [x] 3.6 After requesting, the same book shows "Requested" and cannot be re-requested — 5feff25
+- [x] 3.7 A book the viewer currently borrows shows "Borrowed by you" — 5feff25
 
 ### Phase 4: Owner /requests Inbox, Borrower /borrowing View & Nav
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 4.2 Linting passes: `npm run lint`
-- [ ] 4.3 Requests tests pass: `npm test -- requests`
-- [ ] 4.4 Borrowing tests pass: `npm test -- borrowing`
-- [ ] 4.5 Nav tests pass: `npm test -- nav`
+- [x] 4.1 Type checking passes: `npx tsc --noEmit`
+- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.3 Requests tests pass: `npm test -- requests`
+- [x] 4.4 Borrowing tests pass: `npm test -- borrowing`
+- [x] 4.5 Nav tests pass: `npm test -- nav`
 
 #### Manual
 
-- [ ] 4.6 Owner sees a pending count badge in nav and the request on `/requests`
-- [ ] 4.7 Approve flips the book to unavailable in `/discover`; borrower sees "Borrowed from {owner}" on `/borrowing`
-- [ ] 4.8 Decline removes the request; the borrower can request the same book again
-- [ ] 4.9 Two simultaneous approvals of the same book yield exactly one active loan
-- [ ] 4.10 Logged-out visits to `/requests` and `/borrowing` redirect to `/login`
+- [x] 4.6 Owner sees a pending count badge in nav and the request on `/requests`
+- [x] 4.7 Approve flips the book to unavailable in `/discover`; borrower sees "Borrowed from {owner}" on `/borrowing`
+- [x] 4.8 Decline removes the request; the borrower can request the same book again
+- [x] 4.9 Two simultaneous approvals of the same book yield exactly one active loan
+- [x] 4.10 Logged-out visits to `/requests` and `/borrowing` redirect to `/login`
