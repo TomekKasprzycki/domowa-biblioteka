@@ -14,7 +14,11 @@ import type { Friend } from "@/app/friends/friends.types";
 const friends: Friend[] = [
   {
     id: "11111111-1111-1111-1111-111111111111",
-    otherUser: { email: "friend@example.com", name: "Friendly Person" },
+    otherUser: {
+      id: "22222222-2222-2222-2222-222222222222",
+      email: "friend@example.com",
+      name: "Friendly Person",
+    },
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
   },
 ];

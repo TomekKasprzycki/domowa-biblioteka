@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { removeFriendAction } from "@/app/friends/actions";
 import type { Friend } from "@/app/friends/friends.types";
@@ -18,6 +19,12 @@ export function FriendRow({ friend }: { friend: Friend }) {
           <p className="text-sm text-zinc-600">{friend.otherUser.email}</p>
         </div>
         <div className="flex shrink-0 gap-3">
+          <Link
+            href={`/discover?friend=${friend.otherUser.id}`}
+            className="text-sm font-medium text-zinc-900 hover:underline"
+          >
+            View collection
+          </Link>
           <form action={removeAction}>
             <input type="hidden" name="connectionId" value={friend.id} />
             <button

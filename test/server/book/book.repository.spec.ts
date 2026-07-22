@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import {
   createBook,
   findByUserId,
+  findByOwnerIds,
   updateBook,
   deleteBook,
 } from "@/server/book/book.repository";
@@ -17,12 +18,14 @@ describe("bookRepository", () => {
   const suffix = Date.now();
   const ownerEmail = `book-owner-${suffix}@example.com`;
   const otherEmail = `book-other-${suffix}@example.com`;
+  const excludedEmail = `book-excluded-${suffix}@example.com`;
   const title = `Test Book ${suffix}`;
   const author = "Test Author";
 
   let ds: DataSource;
   let ownerId: string;
   let otherId: string;
+  let excludedId: string;
   let bookId: string;
 
   beforeAll(async () => {
@@ -37,15 +40,24 @@ describe("bookRepository", () => {
       passwordHash: "hashed_password_value",
       name: "Other User",
     });
+    const excluded = await createUser({
+      email: excludedEmail,
+      passwordHash: "hashed_password_value",
+      name: "Excluded User",
+    });
     ownerId = owner.id;
     otherId = other.id;
+    excludedId = excluded.id;
   });
 
   afterAll(async () => {
     if (ds?.isInitialized) {
       await ds.getRepository(BookEntity).delete({ userId: ownerId });
+      await ds.getRepository(BookEntity).delete({ userId: otherId });
+      await ds.getRepository(BookEntity).delete({ userId: excludedId });
       await ds.getRepository(UserEntity).delete({ email: ownerEmail });
       await ds.getRepository(UserEntity).delete({ email: otherEmail });
+      await ds.getRepository(UserEntity).delete({ email: excludedEmail });
       await ds.destroy();
     }
   });
@@ -60,6 +72,52 @@ describe("bookRepository", () => {
   it("finds books by userId", async () => {
     const books = await findByUserId(ownerId);
     expect(books.some((b) => b.id === bookId)).toBe(true);
+  });
+
+  it("returns [] for an empty ownerIds array without querying", async () => {
+    // given
+    // no owners are supplied
+
+    // when
+    const books = await findByOwnerIds([]);
+
+    // then
+    expect(books).toEqual([]);
+  });
+
+  it("returns books across multiple owners with the owner relation populated", async () => {
+    // given
+    await createBook({
+      userId: otherId,
+      title: `Other Book ${suffix}`,
+      author,
+    });
+
+    // when
+    const books = await findByOwnerIds([ownerId, otherId]);
+
+    // then
+    const ownerBook = books.find((b) => b.userId === ownerId);
+    const otherBook = books.find((b) => b.userId === otherId);
+    expect(ownerBook).toBeDefined();
+    expect(otherBook).toBeDefined();
+    expect(ownerBook?.owner.email).toBe(ownerEmail);
+    expect(otherBook?.owner.email).toBe(otherEmail);
+  });
+
+  it("excludes books owned by users outside the given list", async () => {
+    // given
+    await createBook({
+      userId: excludedId,
+      title: `Excluded Book ${suffix}`,
+      author,
+    });
+
+    // when
+    const books = await findByOwnerIds([ownerId, otherId]);
+
+    // then
+    expect(books.some((b) => b.userId === excludedId)).toBe(false);
   });
 
   it("rejects a duplicate title+author for the same user", async () => {

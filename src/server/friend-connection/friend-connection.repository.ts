@@ -97,6 +97,24 @@ export async function findFriends(
   });
 }
 
+export async function isConfirmedFriend(
+  userA: string,
+  userB: string
+): Promise<boolean> {
+  const connection = await findConnectionBetween(userA, userB);
+  return connection?.status === FriendConnectionStatus.ACCEPTED;
+}
+
+export async function findFriendUsers(
+  userId: string
+): Promise<{ id: string; name: string; email: string }[]> {
+  const connections = await findFriends(userId);
+  return connections.map((c) => {
+    const other = c.requesterId === userId ? c.addressee : c.requester;
+    return { id: other.id, name: other.name, email: other.email };
+  });
+}
+
 export async function updateStatus(
   id: string,
   actingUserId: string,

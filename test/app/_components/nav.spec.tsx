@@ -16,7 +16,7 @@ describe("Nav", () => {
     mockAuth.mockReset();
   });
 
-  it("shows the Collection and Friends links for a signed-in user", async () => {
+  it("shows the Collection, Discover and Friends links for a signed-in user", async () => {
     // given
     mockAuth.mockResolvedValue({ user: { name: "Ada", email: "ada@example.com" } });
 
@@ -27,6 +27,10 @@ describe("Nav", () => {
     expect(screen.getByRole("link", { name: "Collection" })).toHaveAttribute(
       "href",
       "/collection"
+    );
+    expect(screen.getByRole("link", { name: "Discover" })).toHaveAttribute(
+      "href",
+      "/discover"
     );
     expect(screen.getByRole("link", { name: "Friends" })).toHaveAttribute(
       "href",

@@ -17,7 +17,11 @@ const mockRemove = removeFriendAction as jest.Mock;
 
 const friend: Friend = {
   id: "33333333-3333-3333-3333-333333333333",
-  otherUser: { email: "friend@example.com", name: "Friendly Person" },
+  otherUser: {
+    id: "44444444-4444-4444-4444-444444444444",
+    email: "friend@example.com",
+    name: "Friendly Person",
+  },
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 
@@ -28,6 +32,20 @@ describe("FriendRow", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+  });
+
+  it("links to the friend's collection via the deep link", () => {
+    // given
+    render(<FriendRow friend={friend} />);
+
+    // when
+    const link = screen.getByRole("link", { name: /view collection/i });
+
+    // then
+    expect(link).toHaveAttribute(
+      "href",
+      `/discover?friend=${friend.otherUser.id}`
+    );
   });
 
   it("renders the friend's name and email with the connection id hidden field", () => {

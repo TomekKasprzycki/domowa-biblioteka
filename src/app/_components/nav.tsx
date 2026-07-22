@@ -19,6 +19,12 @@ export default async function Nav() {
               Collection
             </Link>
             <Link
+              href="/discover"
+              className="text-sm font-medium text-zinc-900 hover:underline"
+            >
+              Discover
+            </Link>
+            <Link
               href="/friends"
               className="text-sm font-medium text-zinc-900 hover:underline"
             >
