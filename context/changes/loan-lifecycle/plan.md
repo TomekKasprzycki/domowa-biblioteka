@@ -483,15 +483,15 @@ Every environment — including local development — must run `npm run migratio
 
 #### Automated
 
-- [x] 3.1 Borrowing component specs pass: `npm test -- borrowing`
-- [x] 3.2 Full test suite passes: `npm test`
-- [x] 3.3 Type checking passes: `npx tsc --noEmit`
-- [x] 3.4 Linting passes: `npm run lint`
+- [x] 3.1 Borrowing component specs pass: `npm test -- borrowing` — bd2368e
+- [x] 3.2 Full test suite passes: `npm test` — bd2368e
+- [x] 3.3 Type checking passes: `npx tsc --noEmit` — bd2368e
+- [x] 3.4 Linting passes: `npm run lint` — bd2368e
 
 #### Manual
 
 - [ ] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing
-- [x] 3.6 Confirming flips the row to "Return pending" and hides the button
+- [x] 3.6 Confirming flips the row to "Return pending" and hides the button — bd2368e
 - [ ] 3.7 Book still reads unavailable on `/discover` while the return is pending
 - [ ] 3.8 "Past loans" is collapsed by default and contains declined requests
 - [ ] 3.9 Layout holds at mobile width
@@ -500,18 +500,18 @@ Every environment — including local development — must run `npm run migratio
 
 #### Automated
 
-- [ ] 4.1 Requests and nav specs pass: `npm test -- requests nav`
-- [ ] 4.2 Full test suite passes: `npm test`
-- [ ] 4.3 Type checking passes: `npx tsc --noEmit`
-- [ ] 4.4 Linting passes: `npm run lint`
+- [x] 4.1 Requests and nav specs pass: `npm test -- requests nav`
+- [x] 4.2 Full test suite passes: `npm test`
+- [x] 4.3 Type checking passes: `npx tsc --noEmit`
+- [x] 4.4 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 4.5 Distinct return badge and "Awaiting your confirmation" section appear for the owner
-- [ ] 4.6 "I received it back" closes the loan; section empties and badge clears
-- [ ] 4.7 Book becomes available on `/discover` and can be re-requested by the same borrower
-- [ ] 4.8 A non-owner cannot confirm the return
-- [ ] 4.9 Full US-01 loop completes across two accounts
+- [x] 4.5 Distinct return badge and "Awaiting your confirmation" section appear for the owner
+- [x] 4.6 "I received it back" closes the loan; section empties and badge clears
+- [x] 4.7 Book becomes available on `/discover` and can be re-requested by the same borrower
+- [x] 4.8 A non-owner cannot confirm the return
+- [x] 4.9 Full US-01 loop completes across two accounts
 
 ### Phase 5: Collection Loan State & Delete Guard
 
