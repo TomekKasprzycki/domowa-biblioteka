@@ -6,6 +6,12 @@ jest.mock("@/auth", () => ({ auth: jest.fn() }));
 jest.mock("@/server/loan/loan.repository", () => ({
   findOutgoingLoans: jest.fn(),
 }));
+// The page now reaches BorrowingRow, a Client Component importing the Server
+// Action module; loading it for real drags in next/cache, which needs Node
+// globals jsdom doesn't provide.
+jest.mock("@/app/borrow/actions", () => ({
+  markReturnedAction: jest.fn().mockResolvedValue(null),
+}));
 
 import { auth } from "@/auth";
 import { findOutgoingLoans } from "@/server/loan/loan.repository";

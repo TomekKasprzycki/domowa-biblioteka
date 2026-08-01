@@ -474,24 +474,24 @@ Every environment — including local development — must run `npm run migratio
 
 #### Automated
 
-- [x] 2.1 Borrow action specs pass: `npm test -- borrow/actions`
-- [x] 2.2 Full test suite passes: `npm test`
-- [x] 2.3 Type checking passes: `npx tsc --noEmit`
-- [x] 2.4 Linting passes: `npm run lint`
+- [x] 2.1 Borrow action specs pass: `npm test -- borrow/actions` — 7e3875e
+- [x] 2.2 Full test suite passes: `npm test` — 7e3875e
+- [x] 2.3 Type checking passes: `npx tsc --noEmit` — 7e3875e
+- [x] 2.4 Linting passes: `npm run lint` — 7e3875e
 
 ### Phase 3: Borrower Return Flow
 
 #### Automated
 
-- [ ] 3.1 Borrowing component specs pass: `npm test -- borrowing`
-- [ ] 3.2 Full test suite passes: `npm test`
-- [ ] 3.3 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.4 Linting passes: `npm run lint`
+- [x] 3.1 Borrowing component specs pass: `npm test -- borrowing`
+- [x] 3.2 Full test suite passes: `npm test`
+- [x] 3.3 Type checking passes: `npx tsc --noEmit`
+- [x] 3.4 Linting passes: `npm run lint`
 
 #### Manual
 
 - [ ] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing
-- [ ] 3.6 Confirming flips the row to "Return pending" and hides the button
+- [x] 3.6 Confirming flips the row to "Return pending" and hides the button
 - [ ] 3.7 Book still reads unavailable on `/discover` while the return is pending
 - [ ] 3.8 "Past loans" is collapsed by default and contains declined requests
 - [ ] 3.9 Layout holds at mobile width
