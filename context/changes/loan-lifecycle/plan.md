@@ -457,27 +457,27 @@ Every environment — including local development — must run `npm run migratio
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `npm run migration:run`
-- [x] 1.2 Migration reverts and re-applies cleanly: `npm run migration:revert && npm run migration:run`
-- [x] 1.3 Loan repository specs pass: `npm test -- loan.repository`
-- [x] 1.4 Full test suite passes: `npm test`
-- [x] 1.5 Type checking passes: `npx tsc --noEmit`
-- [x] 1.6 Linting passes: `npm run lint`
+- [x] 1.1 Migration applies cleanly: `npm run migration:run` — 618d2f8
+- [x] 1.2 Migration reverts and re-applies cleanly: `npm run migration:revert && npm run migration:run` — 618d2f8
+- [x] 1.3 Loan repository specs pass: `npm test -- loan.repository` — 618d2f8
+- [x] 1.4 Full test suite passes: `npm test` — 618d2f8
+- [x] 1.5 Type checking passes: `npx tsc --noEmit` — 618d2f8
+- [x] 1.6 Linting passes: `npm run lint` — 618d2f8
 
 #### Manual
 
-- [x] 1.7 `\d loans` shows `loans_one_open_per_book` present and `loans_one_active_per_book` absent
-- [x] 1.8 New index survives a dev-server request with `synchronize: true` active
+- [x] 1.7 `\d loans` shows `loans_one_open_per_book` present and `loans_one_active_per_book` absent — 618d2f8
+- [x] 1.8 New index survives a dev-server request with `synchronize: true` active — 618d2f8
 - [ ] 1.9 No S-04 regression: a book with an active loan still cannot be double-approved
 
 ### Phase 2: Return Server Actions
 
 #### Automated
 
-- [ ] 2.1 Borrow action specs pass: `npm test -- borrow/actions`
-- [ ] 2.2 Full test suite passes: `npm test`
-- [ ] 2.3 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.4 Linting passes: `npm run lint`
+- [x] 2.1 Borrow action specs pass: `npm test -- borrow/actions`
+- [x] 2.2 Full test suite passes: `npm test`
+- [x] 2.3 Type checking passes: `npx tsc --noEmit`
+- [x] 2.4 Linting passes: `npm run lint`
 
 ### Phase 3: Borrower Return Flow
 
