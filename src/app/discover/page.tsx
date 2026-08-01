@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { findByOwnerIds } from "@/server/book/book.repository";
 import { findFriendUsers } from "@/server/friend-connection/friend-connection.repository";
 import {
-  findActiveLoansForBooks,
+  findOpenLoansForBooks,
   findRequestedLoansForBooksByRequester,
 } from "@/server/loan/loan.repository";
 import { DiscoverSearch } from "@/app/discover/_components/discover-search";
@@ -34,19 +34,19 @@ export default async function DiscoverPage({
 
   const books = await findByOwnerIds(friends.map((f) => f.id));
   const bookIds = books.map((b) => b.id);
-  const activeLoans = await findActiveLoansForBooks(bookIds);
+  const openLoans = await findOpenLoansForBooks(bookIds);
   const requestedLoans = await findRequestedLoansForBooksByRequester(
     bookIds,
     session.user.id
   );
 
-  const activeLoanByBookId = new Map(
-    activeLoans.map((loan) => [loan.bookId, loan])
+  const openLoanByBookId = new Map(
+    openLoans.map((loan) => [loan.bookId, loan])
   );
   const requestedBookIds = new Set(requestedLoans.map((loan) => loan.bookId));
 
   const plainBooks: DiscoverBook[] = books.map((b) => {
-    const activeLoan = activeLoanByBookId.get(b.id);
+    const openLoan = openLoanByBookId.get(b.id);
     return {
       id: b.id,
       title: b.title,
@@ -55,8 +55,8 @@ export default async function DiscoverPage({
       createdAt: b.createdAt,
       owner: { id: b.owner.id, name: b.owner.name, email: b.owner.email },
       availability: {
-        status: activeLoan ? "on_loan" : "available",
-        borrowedByViewer: activeLoan?.requesterId === session.user.id,
+        status: openLoan ? "on_loan" : "available",
+        borrowedByViewer: openLoan?.requesterId === session.user.id,
         requestedByViewer: requestedBookIds.has(b.id),
       },
     };

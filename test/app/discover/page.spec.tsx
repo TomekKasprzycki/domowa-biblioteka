@@ -10,7 +10,7 @@ jest.mock("@/server/book/book.repository", () => ({
   findByOwnerIds: jest.fn(),
 }));
 jest.mock("@/server/loan/loan.repository", () => ({
-  findActiveLoansForBooks: jest.fn(),
+  findOpenLoansForBooks: jest.fn(),
   findRequestedLoansForBooksByRequester: jest.fn(),
 }));
 jest.mock("@/app/borrow/actions", () => ({
@@ -26,7 +26,7 @@ import { auth } from "@/auth";
 import { findFriendUsers } from "@/server/friend-connection/friend-connection.repository";
 import { findByOwnerIds } from "@/server/book/book.repository";
 import {
-  findActiveLoansForBooks,
+  findOpenLoansForBooks,
   findRequestedLoansForBooksByRequester,
 } from "@/server/loan/loan.repository";
 import { redirect } from "next/navigation";
@@ -35,7 +35,7 @@ import DiscoverPage from "@/app/discover/page";
 const mockAuth = auth as jest.Mock;
 const mockFindFriendUsers = findFriendUsers as jest.Mock;
 const mockFindByOwnerIds = findByOwnerIds as jest.Mock;
-const mockFindActiveLoansForBooks = findActiveLoansForBooks as jest.Mock;
+const mockFindOpenLoansForBooks = findOpenLoansForBooks as jest.Mock;
 const mockFindRequestedLoansForBooksByRequester =
   findRequestedLoansForBooksByRequester as jest.Mock;
 const mockRedirect = redirect as unknown as jest.Mock;
@@ -69,13 +69,13 @@ describe("DiscoverPage", () => {
     mockAuth.mockReset();
     mockFindFriendUsers.mockReset();
     mockFindByOwnerIds.mockReset();
-    mockFindActiveLoansForBooks.mockReset();
+    mockFindOpenLoansForBooks.mockReset();
     mockFindRequestedLoansForBooksByRequester.mockReset();
     mockRedirect.mockClear();
     mockAuth.mockResolvedValue({ user: { id: "me" } });
     mockFindFriendUsers.mockResolvedValue([friend]);
     mockFindByOwnerIds.mockResolvedValue([book]);
-    mockFindActiveLoansForBooks.mockResolvedValue([]);
+    mockFindOpenLoansForBooks.mockResolvedValue([]);
     mockFindRequestedLoansForBooksByRequester.mockResolvedValue([]);
   });
 
@@ -94,7 +94,7 @@ describe("DiscoverPage", () => {
   it("renders an on-loan book as unavailable and an available one with the Borrow affordance", async () => {
     // given
     mockFindByOwnerIds.mockResolvedValue([book, onLoanBook]);
-    mockFindActiveLoansForBooks.mockResolvedValue([
+    mockFindOpenLoansForBooks.mockResolvedValue([
       { bookId: onLoanBook.id, requesterId: "someone-else" },
     ]);
 

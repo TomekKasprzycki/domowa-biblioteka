@@ -7,7 +7,7 @@ import { findBookById } from "@/server/book/book.repository";
 import { isConfirmedFriend } from "@/server/friend-connection/friend-connection.repository";
 import {
   createLoanRequest,
-  findActiveLoanForBook,
+  findOpenLoanForBook,
   findExistingRequest,
   approveLoan,
   declineLoan,
@@ -53,7 +53,7 @@ export async function requestBorrowAction(
   if (!(await isConfirmedFriend(session.user.id, book.userId))) {
     return NOT_FRIEND_MESSAGE;
   }
-  if (await findActiveLoanForBook(bookId)) {
+  if (await findOpenLoanForBook(bookId)) {
     return ALREADY_BORROWED_MESSAGE;
   }
   if (await findExistingRequest(bookId, session.user.id)) {

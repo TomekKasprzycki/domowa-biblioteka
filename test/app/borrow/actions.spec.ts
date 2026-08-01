@@ -6,7 +6,7 @@ import {
 } from "@/app/borrow/actions";
 import {
   findExistingRequest,
-  findActiveLoanForBook,
+  findOpenLoanForBook,
 } from "@/server/loan/loan.repository";
 import { LoanEntity } from "@/server/loan/loan.entity";
 import { LoanStatus } from "@/server/loan/loan.types";
@@ -214,7 +214,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBeNull();
-    const active = await findActiveLoanForBook(availableBookId);
+    const active = await findOpenLoanForBook(availableBookId);
     expect(active?.id).toBe(row!.id);
     expect(active?.startedAt).toBeInstanceOf(Date);
   });
