@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { findByOwnerIds } from "@/server/book/book.repository";
 import { findFriendUsers } from "@/server/friend-connection/friend-connection.repository";
+import {
+  findActiveLoansForBooks,
+  findRequestedLoansForBooksByRequester,
+} from "@/server/loan/loan.repository";
 import { DiscoverSearch } from "@/app/discover/_components/discover-search";
 import type { DiscoverBook } from "@/app/discover/discover.types";
 
@@ -29,14 +33,34 @@ export default async function DiscoverPage({
   }
 
   const books = await findByOwnerIds(friends.map((f) => f.id));
-  const plainBooks: DiscoverBook[] = books.map((b) => ({
-    id: b.id,
-    title: b.title,
-    author: b.author,
-    notes: b.notes,
-    createdAt: b.createdAt,
-    owner: { id: b.owner.id, name: b.owner.name, email: b.owner.email },
-  }));
+  const bookIds = books.map((b) => b.id);
+  const activeLoans = await findActiveLoansForBooks(bookIds);
+  const requestedLoans = await findRequestedLoansForBooksByRequester(
+    bookIds,
+    session.user.id
+  );
+
+  const activeLoanByBookId = new Map(
+    activeLoans.map((loan) => [loan.bookId, loan])
+  );
+  const requestedBookIds = new Set(requestedLoans.map((loan) => loan.bookId));
+
+  const plainBooks: DiscoverBook[] = books.map((b) => {
+    const activeLoan = activeLoanByBookId.get(b.id);
+    return {
+      id: b.id,
+      title: b.title,
+      author: b.author,
+      notes: b.notes,
+      createdAt: b.createdAt,
+      owner: { id: b.owner.id, name: b.owner.name, email: b.owner.email },
+      availability: {
+        status: activeLoan ? "on_loan" : "available",
+        borrowedByViewer: activeLoan?.requesterId === session.user.id,
+        requestedByViewer: requestedBookIds.has(b.id),
+      },
+    };
+  });
 
   return (
     <main className="flex flex-1 flex-col items-center px-4 py-10">

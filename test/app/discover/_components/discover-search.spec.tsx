@@ -2,6 +2,11 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+
+jest.mock("@/app/borrow/actions", () => ({
+  requestBorrowAction: jest.fn(),
+}));
+
 import { DiscoverSearch } from "@/app/discover/_components/discover-search";
 import type { DiscoverBook, DiscoverFriend } from "@/app/discover/discover.types";
 
@@ -16,6 +21,12 @@ const bob: DiscoverFriend = {
   email: "bob@example.com",
 };
 
+const availableToViewer = {
+  status: "available" as const,
+  borrowedByViewer: false,
+  requestedByViewer: false,
+};
+
 const books: DiscoverBook[] = [
   {
     id: "1",
@@ -24,6 +35,7 @@ const books: DiscoverBook[] = [
     notes: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     owner: alice,
+    availability: availableToViewer,
   },
   {
     id: "2",
@@ -32,6 +44,7 @@ const books: DiscoverBook[] = [
     notes: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     owner: bob,
+    availability: availableToViewer,
   },
 ];
 
