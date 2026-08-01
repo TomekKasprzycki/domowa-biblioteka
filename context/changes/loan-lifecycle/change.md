@@ -1,7 +1,7 @@
 ---
 id: loan-lifecycle
 title: "S-05: Loan Lifecycle — owner sees loan state; loans close by two-sided return confirmation"
-status: implementing
+status: implemented
 created: 2026-08-01
 updated: 2026-08-01
 roadmap_id: S-05

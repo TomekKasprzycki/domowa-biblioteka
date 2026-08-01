@@ -468,7 +468,7 @@ Every environment — including local development — must run `npm run migratio
 
 - [x] 1.7 `\d loans` shows `loans_one_open_per_book` present and `loans_one_active_per_book` absent — 618d2f8
 - [x] 1.8 New index survives a dev-server request with `synchronize: true` active — 618d2f8
-- [x] 1.9 No S-04 regression: a book with an active loan still cannot be double-approved
+- [x] 1.9 No S-04 regression: a book with an active loan still cannot be double-approved — 7291dda
 
 ### Phase 2: Return Server Actions
 
@@ -490,11 +490,11 @@ Every environment — including local development — must run `npm run migratio
 
 #### Manual
 
-- [x] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing
+- [x] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing — 7291dda
 - [x] 3.6 Confirming flips the row to "Return pending" and hides the button — bd2368e
-- [x] 3.7 Book still reads unavailable on `/discover` while the return is pending
-- [x] 3.8 "Past loans" is collapsed by default and contains declined requests
-- [x] 3.9 Layout holds at mobile width
+- [x] 3.7 Book still reads unavailable on `/discover` while the return is pending — 7291dda
+- [x] 3.8 "Past loans" is collapsed by default and contains declined requests — 7291dda
+- [x] 3.9 Layout holds at mobile width — 7291dda
 
 ### Phase 4: Owner Confirm Flow
 
@@ -517,16 +517,16 @@ Every environment — including local development — must run `npm run migratio
 
 #### Automated
 
-- [x] 5.1 Collection and db-error specs pass: `npm test -- collection db-error`
-- [x] 5.2 Full test suite passes: `npm test`
-- [x] 5.3 Type checking passes: `npx tsc --noEmit`
-- [x] 5.4 Linting passes: `npm run lint`
+- [x] 5.1 Collection and db-error specs pass: `npm test -- collection db-error` — 7291dda
+- [x] 5.2 Full test suite passes: `npm test` — 7291dda
+- [x] 5.3 Type checking passes: `npx tsc --noEmit` — 7291dda
+- [x] 5.4 Linting passes: `npm run lint` — 7291dda
 
 #### Manual
 
-- [x] 5.5 `/collection` shows "Lent to {name} · since {date}", then "Return pending"
-- [x] 5.6 Display clears once the owner confirms receipt
-- [x] 5.7 Deleting a book that is on loan is refused with a clear message
-- [x] 5.8 Deleting a book whose only loans are closed is refused with the history message, not a 500
-- [x] 5.9 A book that has never been borrowed still deletes normally
-- [x] 5.10 Layout holds at mobile width
+- [x] 5.5 `/collection` shows "Lent to {name} · since {date}", then "Return pending" — 7291dda
+- [x] 5.6 Display clears once the owner confirms receipt — 7291dda
+- [x] 5.7 Deleting a book that is on loan is refused with a clear message — 7291dda
+- [x] 5.8 Deleting a book whose only loans are closed is refused with the history message, not a 500 — 7291dda
+- [x] 5.9 A book that has never been borrowed still deletes normally — 7291dda
+- [x] 5.10 Layout holds at mobile width — 7291dda
