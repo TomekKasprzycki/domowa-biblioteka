@@ -9,10 +9,14 @@ export default async function CollectionPage() {
   const session = await auth();
   if (!session?.user) return null;
 
-  const books = await findByUserId(session.user.id);
-  // Owner-scoped reader: it loads the borrower, which /discover's reader
-  // deliberately does not. See findOpenLoansForOwner.
-  const openLoans = await findOpenLoansForOwner(session.user.id);
+  // Independent queries — findOpenLoansForOwner is scoped by owner, not by the
+  // book ids, so it doesn't wait on the book list.
+  // findOpenLoansForOwner is the owner-scoped reader: it loads the borrower,
+  // which /discover's reader deliberately does not.
+  const [books, openLoans] = await Promise.all([
+    findByUserId(session.user.id),
+    findOpenLoansForOwner(session.user.id),
+  ]);
   const loanByBookId = new Map(openLoans.map((loan) => [loan.bookId, loan]));
 
   const plainBooks: CollectionBook[] = books.map((b) => {

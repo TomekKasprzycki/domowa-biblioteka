@@ -11,6 +11,8 @@ export type IncomingRequest = {
 export type PendingReturn = {
   id: string;
   book: { title: string; author: string };
-  requester: { name: string; email: string };
+  // Name only: this crosses to the client, so it carries what the row renders
+  // and nothing more.
+  requester: { name: string };
   startedAt: Date | null;
 };

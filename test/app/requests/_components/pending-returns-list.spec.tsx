@@ -11,7 +11,7 @@ import type { PendingReturn } from "@/app/requests/requests.types";
 const pendingReturn: PendingReturn = {
   id: "11111111-1111-1111-1111-111111111111",
   book: { title: "Clean Code", author: "Robert Martin" },
-  requester: { name: "Alice", email: "alice@example.com" },
+  requester: { name: "Alice" },
   startedAt: new Date("2026-03-12T00:00:00.000Z"),
 };
 

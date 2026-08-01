@@ -7,6 +7,7 @@ import {
   createBook,
   updateBook,
   deleteBook,
+  findBookById,
 } from "@/server/book/book.repository";
 import {
   countLoansForBook,
@@ -148,11 +149,21 @@ export async function deleteBookAction(
     return NOT_FOUND_MESSAGE;
   }
 
+  const bookId = parsedBookId.data;
+
+  // Ownership first. Every branch below reveals something about the book —
+  // whether it exists, whether it is out, whether it has been borrowed — so a
+  // non-owner has to be turned away before any of it runs. Otherwise the
+  // messages become an oracle for books belonging to other people.
+  const book = await findBookById(bookId);
+  if (!book || book.userId !== session.user.id) {
+    return NOT_FOUND_MESSAGE;
+  }
+
   // The loans->books FK is ON DELETE NO ACTION, so Postgres refuses to delete a
   // book with ANY loan row, closed ones included. Pre-check to give a useful
   // message; catch 23503 as the backstop, since the pre-check is a
   // read-then-write and a loan can be created in between.
-  const bookId = parsedBookId.data;
   if (await countLoansForBook(bookId)) {
     return (await findOpenLoanForBook(bookId))
       ? ON_LOAN_MESSAGE

@@ -42,7 +42,7 @@ Verify by: running the full borrow→return cycle in the UI across two accounts,
 - **No owner-initiated return.** The borrower always initiates; the owner only confirms.
 - **No loan history for the owner.** `/requests` stays a strictly actionable inbox; closed loans are visible to the borrower on `/borrowing` only.
 - **No blocking of book *edits* during a loan** — only deletion is guarded. Editing a title causes no referential inconsistency.
-- **No backfill of S-01 lessons debt** (collection's relative imports, inline `Book` type, missing component specs). Files this plan touches follow the written rules; the standalone cleanup stays separate.
+- **No blanket backfill of S-01 lessons debt.** Files this plan touches follow the written rules — so `collection.types.ts` replaces the inline `Book` type (Phase 5, change 1), the touched collection components move to the `@/*` alias, and the components this plan modifies ship specs (Phase 5, change 5). What stays out of scope is the debt in files this plan does *not* touch: `add-book-form.tsx` and the remaining relative imports elsewhere in `src/app/collection/`.
 - **No `/discover` changes beyond the widened availability read** — the existing "On loan" rendering already covers a return-pending book once the query includes it.
 
 ## Implementation Approach

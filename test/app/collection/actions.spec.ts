@@ -241,6 +241,27 @@ describe("collection actions", () => {
     );
   });
 
+  it("tells a non-owner only not-found, even when the book is on loan", async () => {
+    // given
+    // the on-loan book from the previous test belongs to ownerId
+    const [onLoanBook] = (await findByUserId(ownerId)).filter(
+      (b) => b.title === `On Loan ${suffix}`
+    );
+    mockAuth.mockResolvedValue({ user: { id: otherId } });
+
+    // when
+    const result = await deleteBookAction(
+      null,
+      formData({ bookId: onLoanBook.id })
+    );
+
+    // then
+    // the loan-state messages must not leak to someone who doesn't own it
+    expect(result).toBe(
+      "Book not found or you don't have permission to edit it."
+    );
+  });
+
   it("deletes a book that has never been borrowed", async () => {
     // given
     const book = await createBook({

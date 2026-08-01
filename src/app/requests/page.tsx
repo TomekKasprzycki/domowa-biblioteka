@@ -14,7 +14,11 @@ export default async function RequestsPage() {
   const session = await auth();
   if (!session?.user) return null;
 
-  const requests = await findIncomingRequests(session.user.id);
+  const [requests, pendingReturns] = await Promise.all([
+    findIncomingRequests(session.user.id),
+    findPendingReturnsForOwner(session.user.id),
+  ]);
+
   const plainRequests: IncomingRequest[] = requests.map((r) => ({
     id: r.id,
     book: { title: r.book.title, author: r.book.author },
@@ -22,11 +26,10 @@ export default async function RequestsPage() {
     createdAt: r.createdAt,
   }));
 
-  const pendingReturns = await findPendingReturnsForOwner(session.user.id);
   const plainPendingReturns: PendingReturn[] = pendingReturns.map((r) => ({
     id: r.id,
     book: { title: r.book.title, author: r.book.author },
-    requester: { name: r.requester.name, email: r.requester.email },
+    requester: { name: r.requester.name },
     startedAt: r.startedAt,
   }));
 
