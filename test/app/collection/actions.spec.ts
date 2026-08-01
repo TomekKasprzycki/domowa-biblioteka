@@ -4,7 +4,12 @@ import {
   updateBookAction,
   deleteBookAction,
 } from "@/app/collection/actions";
-import { findByUserId } from "@/server/book/book.repository";
+import { createBook, findByUserId } from "@/server/book/book.repository";
+import {
+  createLoanRequest,
+  approveLoan,
+} from "@/server/loan/loan.repository";
+import { LoanEntity } from "@/server/loan/loan.entity";
 import { BookEntity } from "@/server/book/book.entity";
 import { createUser } from "@/server/user/user.repository";
 import { UserEntity } from "@/server/user/user.entity";
@@ -56,6 +61,9 @@ describe("collection actions", () => {
 
   afterAll(async () => {
     if (ds?.isInitialized) {
+      // Loans first: the books FK is ON DELETE NO ACTION, so a book with any
+      // loan row cannot be removed — the very rule these tests exercise.
+      await ds.getRepository(LoanEntity).delete({ ownerId });
       await ds.getRepository(BookEntity).delete({ userId: ownerId });
       await ds.getRepository(UserEntity).delete({ email: ownerEmail });
       await ds.getRepository(UserEntity).delete({ email: otherEmail });
@@ -176,5 +184,79 @@ describe("collection actions", () => {
     expect(result).toBeNull();
     const remaining = await findByUserId(ownerId);
     expect(remaining.some((b) => b.id === book.id)).toBe(false);
+  });
+
+  it("refuses to delete a book that is currently on loan", async () => {
+    // given
+    const book = await createBook({
+      userId: ownerId,
+      title: `On Loan ${suffix}`,
+      author,
+    });
+    const loan = await createLoanRequest({
+      bookId: book.id,
+      requesterId: otherId,
+      ownerId,
+    });
+    await approveLoan(loan.id, ownerId);
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+
+    // when
+    const result = await deleteBookAction(null, formData({ bookId: book.id }));
+
+    // then
+    expect(result).toBe("This book is currently on loan and can't be deleted.");
+    expect((await findByUserId(ownerId)).some((b) => b.id === book.id)).toBe(
+      true
+    );
+  });
+
+  it("refuses to delete a book whose only loans are closed", async () => {
+    // given
+    const book = await createBook({
+      userId: ownerId,
+      title: `Closed Loan ${suffix}`,
+      author,
+    });
+    const loan = await createLoanRequest({
+      bookId: book.id,
+      requesterId: otherId,
+      ownerId,
+    });
+    // declined is terminal, so the book is free — but the FK still refuses
+    await ds
+      .getRepository(LoanEntity)
+      .update({ id: loan.id }, { status: "declined" });
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+
+    // when
+    const result = await deleteBookAction(null, formData({ bookId: book.id }));
+
+    // then
+    expect(result).toBe(
+      "This book has borrow requests or borrowing history and can't be deleted."
+    );
+    expect((await findByUserId(ownerId)).some((b) => b.id === book.id)).toBe(
+      true
+    );
+  });
+
+  it("deletes a book that has never been borrowed", async () => {
+    // given
+    const book = await createBook({
+      userId: ownerId,
+      title: `Never Borrowed ${suffix}`,
+      author,
+    });
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+
+    // when
+    const result = await deleteBookAction(null, formData({ bookId: book.id }));
+
+    // then
+    expect(result).toBeNull();
+    expect((await findByUserId(ownerId)).some((b) => b.id === book.id)).toBe(
+      false
+    );
   });
 });

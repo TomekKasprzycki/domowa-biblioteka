@@ -208,6 +208,15 @@ export async function countPendingReturns(ownerId: string): Promise<number> {
 // The owner's own view of what is out (FR-010). Loads the requester so the
 // collection page can name the borrower — which is safe here precisely because
 // the query is scoped to loans the caller owns.
+// Any loan row at all, open or closed. Deleting a book with loan history is
+// refused by the FK regardless of status, so the delete guard has to ask this
+// broader question than "is it currently out?".
+export async function countLoansForBook(bookId: string): Promise<number> {
+  const ds = await getDataSource();
+  const repo = ds.getRepository<LoanEntity>("loans");
+  return repo.count({ where: { bookId } });
+}
+
 export async function findOpenLoansForOwner(
   ownerId: string
 ): Promise<LoanEntity[]> {

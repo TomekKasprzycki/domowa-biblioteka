@@ -1,15 +1,15 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { updateBookAction } from "../actions";
-import type { Book } from "./book-list";
+import { updateBookAction } from "@/app/collection/actions";
+import type { CollectionBook } from "@/app/collection/collection.types";
 
 export function EditBookRow({
   book,
   onCancel,
   onSaved,
 }: {
-  book: Book;
+  book: CollectionBook;
   onCancel: () => void;
   onSaved: () => void;
 }) {

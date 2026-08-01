@@ -468,7 +468,7 @@ Every environment — including local development — must run `npm run migratio
 
 - [x] 1.7 `\d loans` shows `loans_one_open_per_book` present and `loans_one_active_per_book` absent — 618d2f8
 - [x] 1.8 New index survives a dev-server request with `synchronize: true` active — 618d2f8
-- [ ] 1.9 No S-04 regression: a book with an active loan still cannot be double-approved
+- [x] 1.9 No S-04 regression: a book with an active loan still cannot be double-approved
 
 ### Phase 2: Return Server Actions
 
@@ -490,43 +490,43 @@ Every environment — including local development — must run `npm run migratio
 
 #### Manual
 
-- [ ] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing
+- [x] 3.5 "I returned it" appears for active loans; cancelling the dialog changes nothing
 - [x] 3.6 Confirming flips the row to "Return pending" and hides the button — bd2368e
-- [ ] 3.7 Book still reads unavailable on `/discover` while the return is pending
-- [ ] 3.8 "Past loans" is collapsed by default and contains declined requests
-- [ ] 3.9 Layout holds at mobile width
+- [x] 3.7 Book still reads unavailable on `/discover` while the return is pending
+- [x] 3.8 "Past loans" is collapsed by default and contains declined requests
+- [x] 3.9 Layout holds at mobile width
 
 ### Phase 4: Owner Confirm Flow
 
 #### Automated
 
-- [x] 4.1 Requests and nav specs pass: `npm test -- requests nav`
-- [x] 4.2 Full test suite passes: `npm test`
-- [x] 4.3 Type checking passes: `npx tsc --noEmit`
-- [x] 4.4 Linting passes: `npm run lint`
+- [x] 4.1 Requests and nav specs pass: `npm test -- requests nav` — ccbf515
+- [x] 4.2 Full test suite passes: `npm test` — ccbf515
+- [x] 4.3 Type checking passes: `npx tsc --noEmit` — ccbf515
+- [x] 4.4 Linting passes: `npm run lint` — ccbf515
 
 #### Manual
 
-- [x] 4.5 Distinct return badge and "Awaiting your confirmation" section appear for the owner
-- [x] 4.6 "I received it back" closes the loan; section empties and badge clears
-- [x] 4.7 Book becomes available on `/discover` and can be re-requested by the same borrower
-- [x] 4.8 A non-owner cannot confirm the return
-- [x] 4.9 Full US-01 loop completes across two accounts
+- [x] 4.5 Distinct return badge and "Awaiting your confirmation" section appear for the owner — ccbf515
+- [x] 4.6 "I received it back" closes the loan; section empties and badge clears — ccbf515
+- [x] 4.7 Book becomes available on `/discover` and can be re-requested by the same borrower — ccbf515
+- [x] 4.8 A non-owner cannot confirm the return — ccbf515
+- [x] 4.9 Full US-01 loop completes across two accounts — ccbf515
 
 ### Phase 5: Collection Loan State & Delete Guard
 
 #### Automated
 
-- [ ] 5.1 Collection and db-error specs pass: `npm test -- collection db-error`
-- [ ] 5.2 Full test suite passes: `npm test`
-- [ ] 5.3 Type checking passes: `npx tsc --noEmit`
-- [ ] 5.4 Linting passes: `npm run lint`
+- [x] 5.1 Collection and db-error specs pass: `npm test -- collection db-error`
+- [x] 5.2 Full test suite passes: `npm test`
+- [x] 5.3 Type checking passes: `npx tsc --noEmit`
+- [x] 5.4 Linting passes: `npm run lint`
 
 #### Manual
 
-- [ ] 5.5 `/collection` shows "Lent to {name} · since {date}", then "Return pending"
-- [ ] 5.6 Display clears once the owner confirms receipt
-- [ ] 5.7 Deleting a book that is on loan is refused with a clear message
-- [ ] 5.8 Deleting a book whose only loans are closed is refused with the history message, not a 500
-- [ ] 5.9 A book that has never been borrowed still deletes normally
-- [ ] 5.10 Layout holds at mobile width
+- [x] 5.5 `/collection` shows "Lent to {name} · since {date}", then "Return pending"
+- [x] 5.6 Display clears once the owner confirms receipt
+- [x] 5.7 Deleting a book that is on loan is refused with a clear message
+- [x] 5.8 Deleting a book whose only loans are closed is refused with the history message, not a 500
+- [x] 5.9 A book that has never been borrowed still deletes normally
+- [x] 5.10 Layout holds at mobile width

@@ -8,7 +8,14 @@ import {
   updateBook,
   deleteBook,
 } from "@/server/book/book.repository";
-import { isDuplicateError } from "@/lib/db-error.utils";
+import {
+  countLoansForBook,
+  findOpenLoanForBook,
+} from "@/server/loan/loan.repository";
+import {
+  isDuplicateError,
+  isForeignKeyViolation,
+} from "@/lib/db-error.utils";
 
 const titleSchema = z.string().trim().min(1, "Title is required").max(255);
 const authorSchema = z.string().trim().min(1, "Author is required").max(255);
@@ -19,6 +26,12 @@ const NOT_FOUND_MESSAGE =
   "Book not found or you don't have permission to edit it.";
 const DUPLICATE_MESSAGE =
   "You already have a book with this title and author.";
+const ON_LOAN_MESSAGE =
+  "This book is currently on loan and can't be deleted.";
+// Covers every non-open loan row: pending requests, declines and closed loans
+// alike. All of them are referenced by the FK, so none can be deleted.
+const HAS_HISTORY_MESSAGE =
+  "This book has borrow requests or borrowing history and can't be deleted.";
 
 export async function addBookAction(
   _prevState: string | null,
@@ -135,9 +148,27 @@ export async function deleteBookAction(
     return NOT_FOUND_MESSAGE;
   }
 
-  const deleted = await deleteBook(parsedBookId.data, session.user.id);
-  if (!deleted) {
-    return NOT_FOUND_MESSAGE;
+  // The loans->books FK is ON DELETE NO ACTION, so Postgres refuses to delete a
+  // book with ANY loan row, closed ones included. Pre-check to give a useful
+  // message; catch 23503 as the backstop, since the pre-check is a
+  // read-then-write and a loan can be created in between.
+  const bookId = parsedBookId.data;
+  if (await countLoansForBook(bookId)) {
+    return (await findOpenLoanForBook(bookId))
+      ? ON_LOAN_MESSAGE
+      : HAS_HISTORY_MESSAGE;
+  }
+
+  try {
+    const deleted = await deleteBook(bookId, session.user.id);
+    if (!deleted) {
+      return NOT_FOUND_MESSAGE;
+    }
+  } catch (error) {
+    if (isForeignKeyViolation(error)) {
+      return ON_LOAN_MESSAGE;
+    }
+    throw error;
   }
 
   revalidatePath("/collection");
