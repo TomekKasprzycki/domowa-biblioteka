@@ -1,18 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { BookRow } from "./book-row";
-import { EditBookRow } from "./edit-book-row";
+import { BookRow } from "@/app/collection/_components/book-row";
+import { EditBookRow } from "@/app/collection/_components/edit-book-row";
+import type { CollectionBook } from "@/app/collection/collection.types";
 
-export type Book = {
-  id: string;
-  title: string;
-  author: string;
-  notes: string | null;
-  createdAt: Date;
-};
-
-export function BookList({ books }: { books: Book[] }) {
+export function BookList({ books }: { books: CollectionBook[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   if (books.length === 0) {

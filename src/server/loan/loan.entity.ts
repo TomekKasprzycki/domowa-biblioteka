@@ -23,9 +23,17 @@ import { LoanStatus } from "@/server/loan/loan.types";
 // Note the `where` predicate is never compared by the synchronizer — only
 // the name, columns, uniqueness and type — so a divergence between these
 // declarations and the migrations will NOT be caught automatically.
-@Index("loans_one_active_per_book", ["bookId"], {
+// S-05 renamed this from loans_one_active_per_book and widened the predicate to
+// cover return_pending as well as active. The RENAME is deliberate and must not
+// be "tidied" back: because the synchronizer never compares the predicate, a
+// same-named index left over in some database with the old
+// `status = 'active'` predicate would look correct to TypeORM forever, while
+// silently allowing a book with a pending return to be borrowed by someone
+// else. A new name guarantees the old index is dropped rather than mistaken for
+// this one. Keep in step with OPEN_LOAN_STATUSES in loan.types.ts.
+@Index("loans_one_open_per_book", ["bookId"], {
   unique: true,
-  where: "\"status\" = 'active'",
+  where: "\"status\" IN ('active', 'return_pending')",
 })
 // Postgres does not auto-index foreign-key columns. These back the owner
 // inbox + nav badge (ownerId, status) and the borrower's /borrowing list

@@ -1,10 +1,12 @@
+import { BorrowingRow } from "@/app/borrowing/_components/borrowing-row";
 import type { OutgoingLoan } from "@/app/borrowing/borrowing.types";
 
-function statusLabel(loan: OutgoingLoan): string {
-  if (loan.status === "active") return `Borrowed from ${loan.owner.name}`;
-  if (loan.status === "declined") return `Declined by ${loan.owner.name}`;
-  return `Requested from ${loan.owner.name}`;
-}
+// Terminal states: nothing the borrower does can move these on. Everything else
+// is live and belongs at the top where it can still be acted on.
+const PAST_STATUSES: ReadonlySet<OutgoingLoan["status"]> = new Set([
+  "returned",
+  "declined",
+]);
 
 export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
   if (loans.length === 0) {
@@ -15,18 +17,33 @@ export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
     );
   }
 
+  const current = loans.filter((loan) => !PAST_STATUSES.has(loan.status));
+  const past = loans.filter((loan) => PAST_STATUSES.has(loan.status));
+
   return (
-    <ul className="flex flex-col gap-3">
-      {loans.map((loan) => (
-        <li
-          key={loan.id}
-          className="flex flex-col gap-2 rounded-lg border border-zinc-200 p-4"
-        >
-          <p className="font-medium text-zinc-900">{loan.book.title}</p>
-          <p className="text-sm text-zinc-600">{loan.book.author}</p>
-          <p className="mt-1 text-sm text-zinc-500">{statusLabel(loan)}</p>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col gap-6">
+      {current.length > 0 && (
+        <ul className="flex flex-col gap-3">
+          {current.map((loan) => (
+            <BorrowingRow key={loan.id} loan={loan} />
+          ))}
+        </ul>
+      )}
+
+      {/* A native disclosure keeps history available without client state and
+          without pushing live loans below the fold. */}
+      {past.length > 0 && (
+        <details className="rounded-lg border border-zinc-200 p-4">
+          <summary className="cursor-pointer text-sm font-medium text-zinc-700">
+            Past loans ({past.length})
+          </summary>
+          <ul className="mt-3 flex flex-col gap-3">
+            {past.map((loan) => (
+              <BorrowingRow key={loan.id} loan={loan} />
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
   );
 }

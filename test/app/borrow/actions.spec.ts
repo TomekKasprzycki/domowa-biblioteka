@@ -3,10 +3,12 @@ import {
   requestBorrowAction,
   approveRequestAction,
   declineRequestAction,
+  markReturnedAction,
+  confirmReturnAction,
 } from "@/app/borrow/actions";
 import {
   findExistingRequest,
-  findActiveLoanForBook,
+  findOpenLoanForBook,
 } from "@/server/loan/loan.repository";
 import { LoanEntity } from "@/server/loan/loan.entity";
 import { LoanStatus } from "@/server/loan/loan.types";
@@ -24,8 +26,10 @@ import { auth } from "@/auth";
 // revalidatePath needs Next's request-scoped context, which doesn't exist
 // when invoking a Server Action directly outside a real request/render.
 jest.mock("next/cache", () => ({ revalidatePath: jest.fn() }));
+import { revalidatePath } from "next/cache";
 
 const mockAuth = auth as jest.Mock;
+const mockRevalidatePath = revalidatePath as jest.Mock;
 
 function formData(fields: Record<string, string>): FormData {
   const fd = new FormData();
@@ -214,7 +218,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBeNull();
-    const active = await findActiveLoanForBook(availableBookId);
+    const active = await findOpenLoanForBook(availableBookId);
     expect(active?.id).toBe(row!.id);
     expect(active?.startedAt).toBeInstanceOf(Date);
   });
@@ -344,5 +348,155 @@ describe("borrow actions", () => {
     expect(result).toBe(
       "Request not found or you don't have permission to do that."
     );
+  });
+
+  it("returns a sign-in message when marking returned with no session", async () => {
+    // given
+    mockAuth.mockResolvedValue(null);
+
+    // when
+    const result = await markReturnedAction(
+      null,
+      formData({ loanId: "00000000-0000-0000-0000-000000000000" })
+    );
+
+    // then
+    expect(result).toBe("You must be signed in to mark a book returned.");
+  });
+
+  it("refuses to mark returned with a malformed loanId", async () => {
+    // given
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const result = await markReturnedAction(
+      null,
+      formData({ loanId: "not-a-uuid" })
+    );
+
+    // then
+    expect(result).toBe(
+      "This loan can't be marked returned — it may already have been."
+    );
+  });
+
+  it("refuses to mark returned when the owner rather than the borrower asks", async () => {
+    // given
+    const loan = await findOpenLoanForBook(availableBookId);
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+
+    // when
+    const result = await markReturnedAction(
+      null,
+      formData({ loanId: loan!.id })
+    );
+
+    // then
+    expect(result).toBe(
+      "This loan can't be marked returned — it may already have been."
+    );
+  });
+
+  it("marks the loan returned for the borrower and refreshes every loan surface", async () => {
+    // given
+    const loan = await findOpenLoanForBook(availableBookId);
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const result = await markReturnedAction(
+      null,
+      formData({ loanId: loan!.id })
+    );
+
+    // then
+    expect(result).toBeNull();
+    const row = await ds
+      .getRepository(LoanEntity)
+      .findOne({ where: { id: loan!.id } });
+    expect(row?.status).toBe(LoanStatus.RETURN_PENDING);
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/borrowing");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/requests");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/collection");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/discover");
+  });
+
+  it("keeps the book unavailable while the return awaits confirmation", async () => {
+    // given
+    // the loan on availableBookId is return_pending
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const result = await requestBorrowAction(
+      null,
+      formData({ bookId: availableBookId })
+    );
+
+    // then
+    expect(result).toBe("This book is already on loan.");
+  });
+
+  it("returns a sign-in message when confirming a return with no session", async () => {
+    // given
+    mockAuth.mockResolvedValue(null);
+
+    // when
+    const result = await confirmReturnAction(
+      null,
+      formData({ loanId: "00000000-0000-0000-0000-000000000000" })
+    );
+
+    // then
+    expect(result).toBe("You must be signed in to confirm a return.");
+  });
+
+  it("refuses to confirm a return when the borrower rather than the owner asks", async () => {
+    // given
+    const loan = await findOpenLoanForBook(availableBookId);
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const result = await confirmReturnAction(
+      null,
+      formData({ loanId: loan!.id })
+    );
+
+    // then
+    expect(result).toBe(
+      "This return can't be confirmed — it may already have been."
+    );
+  });
+
+  it("closes the loan when the owner confirms receipt", async () => {
+    // given
+    const loan = await findOpenLoanForBook(availableBookId);
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+
+    // when
+    const result = await confirmReturnAction(
+      null,
+      formData({ loanId: loan!.id })
+    );
+
+    // then
+    expect(result).toBeNull();
+    const row = await ds
+      .getRepository(LoanEntity)
+      .findOne({ where: { id: loan!.id } });
+    expect(row?.status).toBe(LoanStatus.RETURNED);
+  });
+
+  it("frees the book for borrowing again once the return is confirmed", async () => {
+    // given
+    // the loan on availableBookId is closed
+    mockAuth.mockResolvedValue({ user: { id: friendId } });
+
+    // when
+    const result = await requestBorrowAction(
+      null,
+      formData({ bookId: availableBookId })
+    );
+
+    // then
+    expect(result).toBeNull();
   });
 });

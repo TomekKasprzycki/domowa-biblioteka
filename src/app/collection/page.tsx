@@ -1,20 +1,41 @@
 import { auth } from "@/auth";
 import { findByUserId } from "@/server/book/book.repository";
-import { AddBookForm } from "./_components/add-book-form";
-import { BookList } from "./_components/book-list";
+import { findOpenLoansForOwner } from "@/server/loan/loan.repository";
+import { AddBookForm } from "@/app/collection/_components/add-book-form";
+import { BookList } from "@/app/collection/_components/book-list";
+import type { CollectionBook } from "@/app/collection/collection.types";
 
 export default async function CollectionPage() {
   const session = await auth();
   if (!session?.user) return null;
 
-  const books = await findByUserId(session.user.id);
-  const plainBooks = books.map((b) => ({
-    id: b.id,
-    title: b.title,
-    author: b.author,
-    notes: b.notes,
-    createdAt: b.createdAt,
-  }));
+  // Independent queries — findOpenLoansForOwner is scoped by owner, not by the
+  // book ids, so it doesn't wait on the book list.
+  // findOpenLoansForOwner is the owner-scoped reader: it loads the borrower,
+  // which /discover's reader deliberately does not.
+  const [books, openLoans] = await Promise.all([
+    findByUserId(session.user.id),
+    findOpenLoansForOwner(session.user.id),
+  ]);
+  const loanByBookId = new Map(openLoans.map((loan) => [loan.bookId, loan]));
+
+  const plainBooks: CollectionBook[] = books.map((b) => {
+    const loan = loanByBookId.get(b.id);
+    return {
+      id: b.id,
+      title: b.title,
+      author: b.author,
+      notes: b.notes,
+      createdAt: b.createdAt,
+      loan: loan
+        ? {
+            status: loan.status,
+            borrowerName: loan.requester.name,
+            startedAt: loan.startedAt,
+          }
+        : null,
+    };
+  });
 
   return (
     <main className="flex flex-1 flex-col items-center px-4 py-10">

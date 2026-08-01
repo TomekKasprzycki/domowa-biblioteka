@@ -7,10 +7,12 @@ import { findBookById } from "@/server/book/book.repository";
 import { isConfirmedFriend } from "@/server/friend-connection/friend-connection.repository";
 import {
   createLoanRequest,
-  findActiveLoanForBook,
+  findOpenLoanForBook,
   findExistingRequest,
   approveLoan,
   declineLoan,
+  markReturned,
+  confirmReturn,
 } from "@/server/loan/loan.repository";
 import { isDuplicateError } from "@/lib/db-error.utils";
 
@@ -27,6 +29,28 @@ const ALREADY_BORROWED_MESSAGE = "This book is already on loan.";
 const DUPLICATE_REQUEST_MESSAGE = "You've already requested this book.";
 const LOAN_NOT_FOUND_MESSAGE =
   "Request not found or you don't have permission to do that.";
+const SIGN_IN_TO_RETURN_MESSAGE =
+  "You must be signed in to mark a book returned.";
+const SIGN_IN_TO_CONFIRM_MESSAGE =
+  "You must be signed in to confirm a return.";
+// Deliberately vague, like LOAN_NOT_FOUND_MESSAGE: a failed transition may mean
+// the loan is missing, belongs to someone else, or has already moved on. Naming
+// which would leak the existence of other people's loans.
+const RETURN_NOT_POSSIBLE_MESSAGE =
+  "This loan can't be marked returned — it may already have been.";
+const CONFIRM_NOT_POSSIBLE_MESSAGE =
+  "This return can't be confirmed — it may already have been.";
+
+// Closing or reopening a loan changes what four separate pages render: the
+// borrower's list, the owner's inbox, the owner's collection (loan state), and
+// every friend's discover view (availability). Server Actions don't invalidate
+// the client Router Cache on their own, so each must be named explicitly.
+function revalidateLoanSurfaces(): void {
+  revalidatePath("/borrowing");
+  revalidatePath("/requests");
+  revalidatePath("/collection");
+  revalidatePath("/discover");
+}
 
 export async function requestBorrowAction(
   _prevState: string | null,
@@ -53,7 +77,7 @@ export async function requestBorrowAction(
   if (!(await isConfirmedFriend(session.user.id, book.userId))) {
     return NOT_FRIEND_MESSAGE;
   }
-  if (await findActiveLoanForBook(bookId)) {
+  if (await findOpenLoanForBook(bookId)) {
     return ALREADY_BORROWED_MESSAGE;
   }
   if (await findExistingRequest(bookId, session.user.id)) {
@@ -128,5 +152,55 @@ export async function declineRequestAction(
   revalidatePath("/requests");
   revalidatePath("/discover");
   revalidatePath("/borrowing");
+  return null;
+}
+
+// The two halves of the return handshake. Neither pre-checks ownership: the
+// repository's conditional UPDATE matches on the acting user and the expected
+// status in one statement, so a wrong actor, a wrong state and a missing row
+// all arrive here as the same `false`.
+export async function markReturnedAction(
+  _prevState: string | null,
+  formData: FormData
+): Promise<string | null> {
+  const session = await auth();
+  if (!session?.user) {
+    return SIGN_IN_TO_RETURN_MESSAGE;
+  }
+
+  const parsedLoanId = loanIdSchema.safeParse(formData.get("loanId"));
+  if (!parsedLoanId.success) {
+    return RETURN_NOT_POSSIBLE_MESSAGE;
+  }
+
+  const marked = await markReturned(parsedLoanId.data, session.user.id);
+  if (!marked) {
+    return RETURN_NOT_POSSIBLE_MESSAGE;
+  }
+
+  revalidateLoanSurfaces();
+  return null;
+}
+
+export async function confirmReturnAction(
+  _prevState: string | null,
+  formData: FormData
+): Promise<string | null> {
+  const session = await auth();
+  if (!session?.user) {
+    return SIGN_IN_TO_CONFIRM_MESSAGE;
+  }
+
+  const parsedLoanId = loanIdSchema.safeParse(formData.get("loanId"));
+  if (!parsedLoanId.success) {
+    return CONFIRM_NOT_POSSIBLE_MESSAGE;
+  }
+
+  const confirmed = await confirmReturn(parsedLoanId.data, session.user.id);
+  if (!confirmed) {
+    return CONFIRM_NOT_POSSIBLE_MESSAGE;
+  }
+
+  revalidateLoanSurfaces();
   return null;
 }

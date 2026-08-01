@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
 import {
   createLoanRequest,
-  findActiveLoanForBook,
-  findActiveLoansForBooks,
+  findOpenLoanForBook,
+  findOpenLoansForBooks,
   findExistingRequest,
   findRequestedLoansForBooksByRequester,
   findIncomingRequests,
@@ -10,6 +10,11 @@ import {
   countIncomingRequests,
   approveLoan,
   declineLoan,
+  markReturned,
+  confirmReturn,
+  findPendingReturnsForOwner,
+  countPendingReturns,
+  findOpenLoansForOwner,
 } from "@/server/loan/loan.repository";
 import { LoanEntity } from "@/server/loan/loan.entity";
 import { LoanStatus } from "@/server/loan/loan.types";
@@ -37,6 +42,7 @@ describe("loanRepository", () => {
   let bookC: string;
   let loanA: string;
   let loanB: string;
+  let loanReRequest: string;
 
   beforeAll(async () => {
     ds = await getDataSource();
@@ -115,12 +121,12 @@ describe("loanRepository", () => {
     loanA = loan.id;
   });
 
-  it("returns null from findActiveLoanForBook while the loan is only requested", async () => {
+  it("returns null from findOpenLoanForBook while the loan is only requested", async () => {
     // given
     // loanA is requested for bookA
 
     // when
-    const active = await findActiveLoanForBook(bookA);
+    const active = await findOpenLoanForBook(bookA);
 
     // then
     expect(active).toBeNull();
@@ -205,7 +211,7 @@ describe("loanRepository", () => {
     // loanA is active for bookA
 
     // when
-    const active = await findActiveLoanForBook(bookA);
+    const active = await findOpenLoanForBook(bookA);
 
     // then
     expect(active?.id).toBe(loanA);
@@ -227,7 +233,7 @@ describe("loanRepository", () => {
     // loanA is active for bookA; bookB has no loans
 
     // when
-    const loans = await findActiveLoansForBooks([bookA, bookB]);
+    const loans = await findOpenLoansForBooks([bookA, bookB]);
 
     // then
     expect(loans).toHaveLength(1);
@@ -235,12 +241,12 @@ describe("loanRepository", () => {
     expect(loans[0].requesterId).toBe(borrowerId);
   });
 
-  it("short-circuits findActiveLoansForBooks on an empty book list", async () => {
+  it("short-circuits findOpenLoansForBooks on an empty book list", async () => {
     // given
     // no book ids to look up
 
     // when
-    const loans = await findActiveLoansForBooks([]);
+    const loans = await findOpenLoansForBooks([]);
 
     // then
     expect(loans).toEqual([]);
@@ -387,5 +393,184 @@ describe("loanRepository", () => {
       .getRepository(LoanEntity)
       .count({ where: { bookId: bookC, status: LoanStatus.ACTIVE } });
     expect(activeCount).toBe(1);
+  });
+
+  it("returns false from markReturned when the owner tries to mark it returned", async () => {
+    // given
+    // loanA is active for bookA, borrowed by borrowerId
+
+    // when
+    const result = await markReturned(loanA, ownerId);
+
+    // then
+    expect(result).toBe(false);
+  });
+
+  it("moves the loan to return_pending when the borrower marks it returned", async () => {
+    // given
+    // loanA is active for bookA, borrowed by borrowerId
+
+    // when
+    const result = await markReturned(loanA, borrowerId);
+
+    // then
+    expect(result).toBe(true);
+    const row = await ds
+      .getRepository(LoanEntity)
+      .findOne({ where: { id: loanA } });
+    expect(row?.status).toBe(LoanStatus.RETURN_PENDING);
+  });
+
+  it("still reports the book as open while the return is pending", async () => {
+    // given
+    // loanA is return_pending for bookA
+
+    // when
+    const open = await findOpenLoanForBook(bookA);
+
+    // then
+    expect(open?.id).toBe(loanA);
+  });
+
+  it("blocks a second active loan on a book whose return is only pending", async () => {
+    // given
+    // loanA is return_pending for bookA; another borrower requests the same book
+    const contender = await createLoanRequest({
+      bookId: bookA,
+      requesterId: otherBorrowerId,
+      ownerId,
+    });
+
+    // when
+    const result = await approveLoan(contender.id, ownerId);
+
+    // then
+    expect(result).toBe("already-borrowed");
+  });
+
+  it("lists the owner's pending returns with book and requester relations", async () => {
+    // given
+    // loanA is the owner's only return_pending loan
+
+    // when
+    const pending = await findPendingReturnsForOwner(ownerId);
+
+    // then
+    const item = pending.find((l) => l.id === loanA);
+    expect(item).toBeDefined();
+    expect(item?.book.title).toBe(`Loan Book A ${suffix}`);
+    expect(item?.requester.email).toBe(borrowerEmail);
+  });
+
+  it("counts the owner's pending returns", async () => {
+    // given
+    // loanA is the owner's only return_pending loan
+
+    // when
+    const count = await countPendingReturns(ownerId);
+
+    // then
+    expect(count).toBe(1);
+  });
+
+  it("includes the pending return in the owner's open loans with the borrower loaded", async () => {
+    // given
+    // loanA is return_pending for bookA and belongs to ownerId
+
+    // when
+    const open = await findOpenLoansForOwner(ownerId);
+
+    // then
+    const item = open.find((l) => l.id === loanA);
+    expect(item).toBeDefined();
+    expect(item?.requester.name).toBe("Loan Borrower");
+  });
+
+  it("returns false from confirmReturn when the borrower tries to confirm receipt", async () => {
+    // given
+    // loanA is return_pending and owned by ownerId
+
+    // when
+    const result = await confirmReturn(loanA, borrowerId);
+
+    // then
+    expect(result).toBe(false);
+  });
+
+  it("closes the loan when the owner confirms receipt", async () => {
+    // given
+    // loanA is return_pending and owned by ownerId
+
+    // when
+    const result = await confirmReturn(loanA, ownerId);
+
+    // then
+    expect(result).toBe(true);
+    const row = await ds
+      .getRepository(LoanEntity)
+      .findOne({ where: { id: loanA } });
+    expect(row?.status).toBe(LoanStatus.RETURNED);
+  });
+
+  it("returns false from confirmReturn once the loan is already closed", async () => {
+    // given
+    // loanA is returned, so no return_pending row matches
+
+    // when
+    const result = await confirmReturn(loanA, ownerId);
+
+    // then
+    expect(result).toBe(false);
+  });
+
+  it("frees the book once the loan is closed", async () => {
+    // given
+    // loanA is returned for bookA
+
+    // when
+    const open = await findOpenLoanForBook(bookA);
+
+    // then
+    expect(open).toBeNull();
+  });
+
+  it("surfaces the closed loan in the borrower's outgoing loans", async () => {
+    // given
+    // loanA is returned and belonged to borrowerId
+
+    // when
+    const outgoing = await findOutgoingLoans(borrowerId);
+
+    // then
+    const item = outgoing.find((l) => l.id === loanA);
+    expect(item?.status).toBe(LoanStatus.RETURNED);
+  });
+
+  it("lets the same borrower request the book again after it is returned", async () => {
+    // given
+    // loanA is returned for bookA, previously borrowed by borrowerId
+
+    // when
+    const reRequest = await createLoanRequest({
+      bookId: bookA,
+      requesterId: borrowerId,
+      ownerId,
+    });
+
+    // then
+    expect(reRequest.status).toBe(LoanStatus.REQUESTED);
+    expect(reRequest.id).not.toBe(loanA);
+    loanReRequest = reRequest.id;
+  });
+
+  it("returns false from markReturned for a loan that is not yet active", async () => {
+    // given
+    // loanReRequest is only requested, never approved
+
+    // when
+    const result = await markReturned(loanReRequest, borrowerId);
+
+    // then
+    expect(result).toBe(false);
   });
 });

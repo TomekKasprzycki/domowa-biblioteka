@@ -30,6 +30,13 @@
 - **Rule**: The written rule wins — exported prop/DTO/shared types live in a `<feature>.types.ts` file, not inline in a component. Friends (S-02) types were extracted to src/app/friends/friends.types.ts in commit 585a4d3; collection's inline `Book` type (S-01) is outstanding debt to extract (small standalone cleanup). A type used only inside one component file and never exported may stay local; the moment a second file imports it, it belongs in `*.types.ts`.
 - **Applies to**: exported types across src/ (component props, DTOs, shared shapes); strongest for src/app/**/_components
 
+## Plan scope guardrails must be cross-checked against phase bodies
+
+- **Context**: context/changes/loan-lifecycle/plan.md — "What We're NOT Doing" vs Phase 5 changes 1 and 5
+- **Problem**: The guardrail listed the inline `Book` type and missing collection component specs as S-01 debt explicitly not to backfill. Phase 5 then specified creating `collection.types.ts` (change 1) and adding book-row and page specs (change 5). The two sections contradicted each other. The implementer followed the phase bodies and surfaced it, but neither `/10x-plan` nor `/10x-plan-review` caught the contradiction — plan review checked "What We're NOT Doing" for items reappearing in phases, yet passed because the overlap was worded differently in each place.
+- **Rule**: When writing a plan, every item in "What We're NOT Doing" must be checked against the phase bodies for the same subject matter under different wording; when reviewing a plan, treat this cross-check as mandatory rather than pattern-matching on identical phrasing. If a phase genuinely needs to do a thing the guardrail excludes, amend the guardrail rather than leaving both.
+- **Applies to**: plan authoring and plan review; strongest where a plan touches a feature carrying known debt
+
 ## Component specs: UI test infra is installed — write specs going forward
 
 - **Context**: src/app/**/_components/*.tsx and src/app/**/*.tsx — React components. Infra added during S-02 (friend-connections).
