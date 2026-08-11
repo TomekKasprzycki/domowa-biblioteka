@@ -280,10 +280,10 @@ No data migration. `edit-book-row.tsx` is deleted rather than deprecated — it 
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Specs pass: `npm test`
-- [ ] 2.4 Production build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Specs pass: `npm test`
+- [x] 2.4 Production build passes: `npm run build`
 
 #### Manual
 
@@ -298,11 +298,11 @@ No data migration. `edit-book-row.tsx` is deleted rather than deprecated — it 
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Full suite passes: `npm test`
-- [ ] 3.4 Production build passes: `npm run build`
-- [ ] 3.5 No `edit-book-row` references remain
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Full suite passes: `npm test`
+- [x] 3.4 Production build passes: `npm run build`
+- [x] 3.5 No `edit-book-row` references remain
 
 #### Manual
 
