@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { findByUserId } from "@/server/book/book.repository";
 import { findOpenLoansForOwner } from "@/server/loan/loan.repository";
-import { AddBookForm } from "@/app/collection/_components/add-book-form";
+import { AddBookModal } from "@/app/collection/_components/add-book-modal";
 import { BookList } from "@/app/collection/_components/book-list";
 import type { CollectionBook } from "@/app/collection/collection.types";
 
@@ -43,7 +43,7 @@ export default async function CollectionPage() {
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
           Your collection
         </h1>
-        <AddBookForm />
+        <AddBookModal />
         <BookList books={plainBooks} />
       </div>
     </main>
