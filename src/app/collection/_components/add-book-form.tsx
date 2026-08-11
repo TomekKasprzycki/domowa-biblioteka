@@ -1,16 +1,22 @@
 "use client";
 
 import { useActionState } from "react";
-import { addBookAction } from "../actions";
+import { addBookAction } from "@/app/collection/actions";
+import { useActionSuccess } from "@/lib/use-action-success.utils";
 
-export function AddBookForm() {
+export function AddBookForm({
+  onSaved,
+  onCancel,
+}: {
+  onSaved: () => void;
+  onCancel: () => void;
+}) {
   const [error, formAction, isPending] = useActionState(addBookAction, null);
 
+  useActionSuccess(isPending, error, onSaved);
+
   return (
-    <form
-      action={formAction}
-      className="flex flex-col gap-4 rounded-lg border border-zinc-200 p-4"
-    >
+    <form action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <label htmlFor="title" className="text-sm font-medium text-zinc-700">
           Title
@@ -55,13 +61,22 @@ export function AddBookForm() {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="self-start rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
-      >
-        {isPending ? "Adding…" : "Add book"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
+        >
+          {isPending ? "Adding…" : "Add"}
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 }

@@ -1,38 +1,50 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useCallback, useRef } from "react";
+import { Modal } from "@/app/_components/modal";
 import { updateBookAction } from "@/app/collection/actions";
+import { useActionSuccess } from "@/lib/use-action-success.utils";
 import type { CollectionBook } from "@/app/collection/collection.types";
 
-export function EditBookRow({
+const DISCARD_PROMPT = "Discard your changes to this book?";
+
+export function EditBookModal({
   book,
-  onCancel,
-  onSaved,
+  onClose,
 }: {
   book: CollectionBook;
-  onCancel: () => void;
-  onSaved: () => void;
+  onClose: () => void;
 }) {
-  const [error, formAction, isPending] = useActionState(
-    updateBookAction,
-    null
+  const [error, formAction, isPending] = useActionState(updateBookAction, null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useActionSuccess(isPending, error, onClose);
+
+  // Compared against the book rather than a "touched" flag: typing a character
+  // and deleting it again should not count as a change worth warning about.
+  const isDirty = useCallback(() => {
+    const form = formRef.current;
+    if (!form) return false;
+    const data = new FormData(form);
+    return (
+      data.get("title") !== book.title ||
+      data.get("author") !== book.author ||
+      data.get("notes") !== (book.notes ?? "")
+    );
+  }, [book]);
+
+  const canClose = useCallback(
+    () => !isDirty() || window.confirm(DISCARD_PROMPT),
+    [isDirty]
   );
 
-  // useActionState has no built-in "on success" callback, so detect it by
-  // watching for the pending -> not-pending transition with no error. The
-  // wasPending ref keeps this from firing on initial mount, where isPending
-  // starts false too.
-  const wasPending = useRef(false);
-  useEffect(() => {
-    if (wasPending.current && !isPending && !error) {
-      onSaved();
-    }
-    wasPending.current = isPending;
-  }, [isPending, error, onSaved]);
+  const requestClose = useCallback(() => {
+    if (canClose()) onClose();
+  }, [canClose, onClose]);
 
   return (
-    <li className="flex flex-col gap-3 rounded-lg border border-zinc-300 p-4">
-      <form action={formAction} className="flex flex-col gap-3">
+    <Modal open onClose={onClose} title="Edit book" canClose={canClose}>
+      <form ref={formRef} action={formAction} className="flex flex-col gap-3">
         <input type="hidden" name="bookId" value={book.id} />
 
         <div className="flex flex-col gap-1">
@@ -101,13 +113,13 @@ export function EditBookRow({
           </button>
           <button
             type="button"
-            onClick={onCancel}
+            onClick={requestClose}
             className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
           >
             Cancel
           </button>
         </div>
       </form>
-    </li>
+    </Modal>
   );
 }
