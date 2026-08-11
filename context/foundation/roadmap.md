@@ -3,7 +3,7 @@ project: Domowa Biblioteka
 version: 1
 status: draft
 created: 2026-06-09
-updated: 2026-08-11  <!-- S-06 + S-07 added (Stream C); ISBN lookup unparked from PRD Non-Goals -->
+updated: 2026-08-11  <!-- S-08 + S-09 added (Stream D, from context/design/design.html); i18n parked -->
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -38,6 +38,8 @@ Gwiazda przewodnia — pierwszy slice, którego ukończenie udowadnia, że produ
 | S-05 | loan-lifecycle        | view loan state of their books and close loans via two-sided return confirmation  | S-04             | FR-010, FR-011, US-01          | blocked  |
 | S-06 | collection-modals     | add and edit books in a modal dialog instead of inline forms                       | S-01             | FR-003, FR-004                 | proposed |
 | S-07 | isbn-lookup           | autofill title and author by ISBN when adding a book                              | S-06             | FR-003, Guardrails             | proposed |
+| S-08 | design-system         | see the app in its designed visual identity                                       | S-06             | NFR (usable, responsive)       | proposed |
+| S-09 | shelf-view            | browse books as spines on a shelf and act on one via a detail drawer              | S-08             | FR-004, FR-007                 | proposed |
 
 ## Streams
 
@@ -48,6 +50,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | A      | Pętla wypożyczeń | `F-01` → `F-02` → `S-01` → `S-03` → `S-04` → `S-05` | Główna must-have path; prowadzi do gwiazdy przewodniej S-04. S-02 dołącza przy S-03. |
 | B      | Graf znajomych   | `F-02` → `S-02`                                      | Równolegle z S-01; dołącza do Stream A przy S-03.                   |
 | C      | UX kolekcji      | `S-01` → `S-06` → `S-07`                             | Dodane 2026-08-11 po ukończeniu Stream A. Nie blokuje nic w A ani B — czysto usprawnienie dodawania książek. |
+| D      | Warstwa wizualna | `S-06` → `S-08` → `S-09`                             | Dodane 2026-08-11 na podstawie `context/design/design.html`. S-08 to czysty re-skin; S-09 zmienia sposób prezentacji książek. Kolejność względem S-07: buduj S-07 najpierw, bo modal z makiety zawiera już pole ISBN. |
 
 ## Baseline
 
@@ -175,6 +178,30 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** First outbound third-party HTTP call in the codebase (Open Library, keyless). A slow or failing lookup must never block manual entry — timeout, non-200 and empty-result all degrade to "not found" with the form still usable. Also the first change needing `msw`, which AGENTS.md mandates for HTTP mocking but which is not yet installed.
 - **Status:** proposed
 
+### S-08: Design System
+
+- **Outcome:** The app carries the visual identity from `context/design/design.html` — paper-and-green palette, Fraunces/Inter/JetBrains Mono type, a dark sidebar shell replacing the top nav — and every repeated UI element (button, labelled field, card, pill, library card, empty note, avatar) exists once as a reusable component in `src/app/_components/` instead of being re-typed per feature.
+- **Change ID:** design-system
+- **PRD refs:** NFR ("usable on the latest two major versions of Chrome, Firefox, Safari, Edge"), AGENTS.md mobile-first rule
+- **Prerequisites:** S-06 (the shared `Modal` is one of the surfaces being restyled)
+- **Parallel with:** S-07 — but see Streams note: building S-07 first avoids styling the add modal twice
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** The widest-reaching change so far — all 8 pages and most of the 22 feature components. It is presentation-only by definition, so **any existing spec that breaks is evidence of an accidental behaviour change, not a spec that needs updating**. `src/app/globals.css` is still the Next.js scaffold default (unused dark-mode block, `body { font-family: Arial }`) and gets rewritten wholesale. Tokens belong in Tailwind v4's `@theme` so they generate real utilities rather than forcing arbitrary-value classes everywhere.
+- **Status:** proposed
+
+### S-09: Shelf View
+
+- **Outcome:** A user's own collection and a friend's collection are shown as coloured book spines standing on a shelf rather than as list rows, and selecting a spine opens a detail drawer carrying that book's actions (edit, or request a borrow).
+- **Change ID:** shelf-view
+- **PRD refs:** FR-004, FR-007, US-01
+- **Prerequisites:** S-08
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:** Whether spines stay scannable at the PRD's stated 150+ books, given the author is hidden and long titles truncate. Owner: developer. Block: no — resolve by looking at a real shelf on screen; a list/shelf toggle is the fallback.
+- **Risk:** The only change in Stream D that alters behaviour rather than appearance. Per-book actions move out of always-visible rows and into a drawer, which is one extra interaction to reach them. Spines must stay keyboard-reachable (render as `<button>`) and carry a full `aria-label`, since the visible title is vertical and clipped. Build the drawer on the native `<dialog>` reused from S-06 rather than a positioned div — focus trapping, Esc and background inerting come free.
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID             | Suggested issue title                                       | Ready for `/10x-plan` | Notes                                 |
@@ -187,7 +214,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-04       | borrow-request        | Borrow: request, approve, decline — loan record created     | no                    | Awaits S-03                           |
 | S-05       | loan-lifecycle        | Loans: view state, two-sided return confirmation            | no                    | Awaits S-04                           |
 | S-06       | collection-modals     | Collection: add and edit books in a modal dialog            | yes                   | Run `/10x-plan collection-modals`     |
-| S-07       | isbn-lookup           | Collection: autofill title and author from ISBN             | no                    | Awaits S-06                           |
+| S-07       | isbn-lookup           | Collection: autofill title and author from ISBN             | yes                   | S-06 merged (PR #9)                   |
+| S-08       | design-system         | Design: tokens, fonts, sidebar shell, reusable primitives   | yes                   | Build after S-07 — see Streams note   |
+| S-09       | shelf-view            | Design: book-spine shelf and per-book detail drawer         | no                    | Awaits S-08                           |
 
 ## Open Roadmap Questions
 
@@ -200,6 +229,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Push / email notifications** — Why parked: PRD §Non-Goals — separate infrastructure concern; users check app manually in v1.
 - **Public profiles** — Why parked: PRD §Non-Goals — privacy requirement; catalog never visible outside confirmed friend circle.
 - **Native mobile app** — Why parked: PRD §Non-Goals — responsive web is the delivery target for v1.
+- **Polish UI / i18n** — Why parked: the design mockup (`context/design/design.html`) is written in Polish and the PRD persona is Polish-speaking, but the app ships English throughout, including server-action error messages. Decided 2026-08-11 to keep S-08/S-09 purely visual and treat the mockup's Polish as placeholder copy. Promoting this needs a real i18n approach (locale routing, message catalogue) rather than a one-off string sweep — and it would touch nearly every spec, since most assert on English user-facing text.
 - **Public feed / activity stream** — Why parked: PRD §Non-Goals — private utility, not a social platform.
 - **Wishlist / "want to read" catalog** — Why parked: PRD §Non-Goals — only owned books in scope.
 - ~~**ISBN lookup / external book enrichment**~~ — **Unparked 2026-08-11.** Promoted to S-07 (`isbn-lookup`) by developer decision. Scope is narrower than the original parked item: lookup of title + author by ISBN and storage of the ISBN itself, nothing else. Cover images and full bibliographic enrichment (publisher, year, page count) stay out of scope. `prd.md` §Non-Goals was amended to match — see PRD note dated 2026-08-11.
