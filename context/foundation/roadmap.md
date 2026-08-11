@@ -168,7 +168,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ### S-07: ISBN Lookup
 
-- **Outcome:** When adding a book, the user can enter an ISBN and have title and author fetched and filled in automatically; the fields stay editable and the ISBN is stored on the book. Manual entry remains fully supported.
+- **Outcome:** When adding a book, the user can enter an ISBN and have title and author fetched and filled in automatically; the fields stay editable and the ISBN is stored on the book. Manual entry remains fully supported. The stored ISBN is not displayed by this slice — the design mockup places ISBN display in the S-09 detail drawer (revised 2026-08-11).
 - **Change ID:** isbn-lookup
 - **PRD refs:** FR-003, NFR / Guardrails ("adding a book takes no more than a few seconds")
 - **Prerequisites:** S-06 (the ISBN field lives inside the add modal)
@@ -192,7 +192,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ### S-09: Shelf View
 
-- **Outcome:** A user's own collection and a friend's collection are shown as coloured book spines standing on a shelf rather than as list rows, and selecting a spine opens a detail drawer carrying that book's actions (edit, or request a borrow).
+- **Outcome:** A user's own collection and a friend's collection are shown as coloured book spines standing on a shelf rather than as list rows, and selecting a spine opens a detail drawer carrying that book's title, author, ISBN and actions (edit, or request a borrow).
 - **Change ID:** shelf-view
 - **PRD refs:** FR-004, FR-007, US-01
 - **Prerequisites:** S-08
@@ -200,6 +200,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** Whether spines stay scannable at the PRD's stated 150+ books, given the author is hidden and long titles truncate. Owner: developer. Block: no — resolve by looking at a real shelf on screen; a list/shelf toggle is the fallback.
 - **Risk:** The only change in Stream D that alters behaviour rather than appearance. Per-book actions move out of always-visible rows and into a drawer, which is one extra interaction to reach them. Spines must stay keyboard-reachable (render as `<button>`) and carry a full `aria-label`, since the visible title is vertical and clipped. Build the drawer on the native `<dialog>` reused from S-06 rather than a positioned div — focus trapping, Esc and background inerting come free.
+- **Depends on S-07 for data:** the drawer renders ISBN (added to the mockup 2026-08-11), including a designed missing state for hand-entered books. This slice also has to thread `isbn` through `DiscoverBook`, since the drawer shows it for a friend's books and S-07 deliberately stays out of `/discover`. If S-07 has not landed, the drawer's ISBN line has no source — sequence accordingly.
 - **Status:** proposed
 
 ## Backlog Handoff

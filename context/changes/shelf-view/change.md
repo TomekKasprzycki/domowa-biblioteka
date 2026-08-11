@@ -24,7 +24,25 @@ left out, because they change behaviour rather than appearance:
    Colour, height and width are derived deterministically from a hash of the
    title (`design.html:694-701`), so a book keeps its spine across renders.
 2. **Detail drawer** — selecting a spine opens a right-hand panel carrying that
-   book's actions: edit for your own books, request-a-borrow for a friend's.
+   book's title, author, ISBN and actions: edit for your own books,
+   request-a-borrow for a friend's.
+
+### ISBN in the drawer (added to the mockup 2026-08-11)
+
+The drawer renders the book's ISBN in mono beneath the author
+(`design.html:801-807`), with a designed **missing** state — italicised
+`Brak numeru ISBN — dodano ręcznie` — for books entered by hand. Four of the
+mockup's fixture books deliberately carry no ISBN, which is the design
+confirming two things: the column is genuinely nullable, and manual entry is a
+first-class path rather than a degraded one.
+
+Two consequences:
+- ISBN display belongs **here**, not in S-07. S-07 stores the value and shows
+  nothing; this slice is where it becomes visible.
+- The drawer shows ISBN for a friend's books as well as your own, so
+  `DiscoverBook` (`src/app/discover/discover.types.ts`) and the reader that
+  builds it must carry the field. S-07 deliberately stays out of `/discover`,
+  so threading it through is this slice's work.
 
 Decisions (2026-08-11):
 - Build the drawer on the native `<dialog>`, reusing the `Modal` groundwork from

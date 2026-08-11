@@ -435,6 +435,11 @@
   }
   .drawer-title{ font-size:19px; text-align:center; }
   .drawer-author{ text-align:center; color:var(--ink-soft); font-size:13.5px; }
+  .drawer-isbn{
+    text-align:center; font-family:var(--font-mono); font-size:11.5px;
+    color:var(--ink-faint); letter-spacing:0.03em;
+  }
+  .drawer-isbn.is-missing{ font-style:italic; }
   .drawer-status{ text-align:center; }
   .drawer-actions{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
 
@@ -681,6 +686,7 @@
   <div class="drawer-spine-preview" id="drawerSpine"></div>
   <div class="drawer-title" id="drawerTitle"></div>
   <div class="drawer-author" id="drawerAuthor"></div>
+  <div class="drawer-isbn" id="drawerIsbn"></div>
   <div class="drawer-status" id="drawerStatus"></div>
   <div class="drawer-actions" id="drawerActions"></div>
 </div>
@@ -729,32 +735,32 @@
 
   // ---------- data ----------
   const myBooks = [
-    {title:'Lalka', author:'Bolesław Prus'},
-    {title:'Solaris', author:'Stanisław Lem'},
-    {title:'Ostatnie życzenie', author:'Andrzej Sapkowski'},
-    {title:'Cyberiada', author:'Stanisław Lem'},
+    {title:'Lalka', author:'Bolesław Prus', isbn:'978-83-08-04521-6'},
+    {title:'Solaris', author:'Stanisław Lem', isbn:'978-83-08-07725-4'},
+    {title:'Ostatnie życzenie', author:'Andrzej Sapkowski', isbn:'978-83-7578-034-2'},
+    {title:'Cyberiada', author:'Stanisław Lem', isbn:'978-83-08-04398-4'},
     {title:'Ferdydurke', author:'Witold Gombrowicz'},
-    {title:'Pan Tadeusz', author:'Adam Mickiewicz'},
-    {title:'Inny świat', author:'Gustaw Herling-Grudziński'},
-    {title:'Mistrz i Małgorzata', author:'Michaił Bułhakow'},
-    {title:'Krótka historia czasu', author:'Stephen Hawking'},
+    {title:'Pan Tadeusz', author:'Adam Mickiewicz', isbn:'978-83-06-01712-7'},
+    {title:'Inny świat', author:'Gustaw Herling-Grudziński', isbn:'978-83-08-04102-7'},
+    {title:'Mistrz i Małgorzata', author:'Michaił Bułhakow', isbn:'978-83-08-04521-2'},
+    {title:'Krótka historia czasu', author:'Stephen Hawking', isbn:'978-83-7469-062-1'},
     {title:'Sto lat samotności', author:'Gabriel García Márquez'},
   ];
 
   const friendShelves = {
     kasia: [
-      {title:'Dżuma', author:'Albert Camus', available:true},
-      {title:'Zbrodnia i kara', author:'Fiodor Dostojewski', available:true},
+      {title:'Dżuma', author:'Albert Camus', available:true, isbn:'978-83-08-04217-8'},
+      {title:'Zbrodnia i kara', author:'Fiodor Dostojewski', available:true, isbn:'978-83-08-03651-1'},
       {title:'Opowieść wigilijna', author:'Charles Dickens', available:true},
-      {title:'Blaszany bębenek', author:'Günter Grass', available:false, borrowedBy:'Ty'},
-      {title:'Kroniki marsjańskie', author:'Ray Bradbury', available:true},
-      {title:'Rok 1984', author:'George Orwell', available:false, borrowedBy:'Marek'},
+      {title:'Blaszany bębenek', author:'Günter Grass', available:false, borrowedBy:'Ty', isbn:'978-83-08-03217-9'},
+      {title:'Kroniki marsjańskie', author:'Ray Bradbury', available:true, isbn:'978-83-7469-885-6'},
+      {title:'Rok 1984', author:'George Orwell', available:false, borrowedBy:'Marek', isbn:'978-83-08-04654-1'},
     ],
     marek: [
-      {title:'Wojna polsko-ruska', author:'Dorota Masłowska', available:true},
+      {title:'Wojna polsko-ruska', author:'Dorota Masłowska', available:true, isbn:'978-83-08-04932-0'},
       {title:'Popiół i diament', author:'Jerzy Andrzejewski', available:true},
-      {title:'Hobbit', author:'J.R.R. Tolkien', available:false, borrowedBy:'Kasia'},
-      {title:'Igrzyska śmierci', author:'Suzanne Collins', available:true},
+      {title:'Hobbit', author:'J.R.R. Tolkien', available:false, borrowedBy:'Kasia', isbn:'978-83-08-04672-5'},
+      {title:'Igrzyska śmierci', author:'Suzanne Collins', available:true, isbn:'978-83-08-04512-4'},
     ]
   };
 
@@ -791,6 +797,15 @@
     document.getElementById('drawerSpine').style.background = s.color;
     document.getElementById('drawerTitle').textContent = book.title;
     document.getElementById('drawerAuthor').textContent = book.author;
+
+    const isbnEl = document.getElementById('drawerIsbn');
+    if(book.isbn){
+      isbnEl.textContent = 'ISBN ' + book.isbn;
+      isbnEl.classList.remove('is-missing');
+    } else {
+      isbnEl.textContent = 'Brak numeru ISBN — dodano ręcznie';
+      isbnEl.classList.add('is-missing');
+    }
 
     const statusEl = document.getElementById('drawerStatus');
     const actionsEl = document.getElementById('drawerActions');
