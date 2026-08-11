@@ -1,7 +1,7 @@
 ---
 change_id: collection-modals
 title: "S-06: Collection Modals — add and edit books in a modal dialog"
-status: planned
+status: implementing
 created: 2026-08-11
 updated: 2026-08-11
 archived_at: null
