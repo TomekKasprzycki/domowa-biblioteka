@@ -3,7 +3,7 @@ project: Domowa Biblioteka
 version: 1
 status: draft
 created: 2026-06-09
-updated: 2026-06-09  <!-- S-05 unblocked: owner non-confirmation = book stays locked, no override -->
+updated: 2026-08-11  <!-- S-06 + S-07 added (Stream C); ISBN lookup unparked from PRD Non-Goals -->
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -36,6 +36,8 @@ Gwiazda przewodnia — pierwszy slice, którego ukończenie udowadnia, że produ
 | S-03 | friend-discovery      | browse and search a confirmed friend's book collection                            | F-02, S-01, S-02 | FR-007, US-01                  | proposed |
 | S-04 | borrow-request        | request to borrow a book; owner can approve or decline                            | S-03             | FR-008, FR-009, US-01          | proposed |
 | S-05 | loan-lifecycle        | view loan state of their books and close loans via two-sided return confirmation  | S-04             | FR-010, FR-011, US-01          | blocked  |
+| S-06 | collection-modals     | add and edit books in a modal dialog instead of inline forms                       | S-01             | FR-003, FR-004                 | proposed |
+| S-07 | isbn-lookup           | autofill title and author by ISBN when adding a book                              | S-06             | FR-003, Guardrails             | proposed |
 
 ## Streams
 
@@ -45,6 +47,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 |--------|------------------|-------------------------------------------------------|---------------------------------------------------------------------|
 | A      | Pętla wypożyczeń | `F-01` → `F-02` → `S-01` → `S-03` → `S-04` → `S-05` | Główna must-have path; prowadzi do gwiazdy przewodniej S-04. S-02 dołącza przy S-03. |
 | B      | Graf znajomych   | `F-02` → `S-02`                                      | Równolegle z S-01; dołącza do Stream A przy S-03.                   |
+| C      | UX kolekcji      | `S-01` → `S-06` → `S-07`                             | Dodane 2026-08-11 po ukończeniu Stream A. Nie blokuje nic w A ani B — czysto usprawnienie dodawania książek. |
 
 ## Baseline
 
@@ -148,6 +151,30 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Two-sided return state machine: borrower marks "returned" → book enters "return pending" state (still unavailable to others); owner must confirm receipt to close the loan. If owner never confirms, the book stays permanently unavailable — no timeout, no override. Without push notifications, the owner must check the app to see pending returns; a visible badge/inbox from S-04 covers this.
 - **Status:** proposed
 
+### S-06: Collection Modals
+
+- **Outcome:** User adds a book and edits an existing book through a modal dialog, so `/collection` reads as a list of books rather than a permanently-open form with a list underneath.
+- **Change ID:** collection-modals
+- **PRD refs:** FR-003, FR-004
+- **Prerequisites:** S-01
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Built on the native `<dialog>` element — no dialog dependency is installed and none is being added. `<dialog>` only becomes modal via the imperative `showModal()`, and jsdom implements neither `showModal()` nor `close()`, so component specs need a shared stub. The browser's own Esc-to-dismiss must be reflected back into React state via the `close` event, or the dialog and its parent disagree about whether it is open.
+- **Status:** proposed
+
+### S-07: ISBN Lookup
+
+- **Outcome:** When adding a book, the user can enter an ISBN and have title and author fetched and filled in automatically; the fields stay editable and the ISBN is stored on the book. Manual entry remains fully supported.
+- **Change ID:** isbn-lookup
+- **PRD refs:** FR-003, NFR / Guardrails ("adding a book takes no more than a few seconds")
+- **Prerequisites:** S-06 (the ISBN field lives inside the add modal)
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** First outbound third-party HTTP call in the codebase (Open Library, keyless). A slow or failing lookup must never block manual entry — timeout, non-200 and empty-result all degrade to "not found" with the form still usable. Also the first change needing `msw`, which AGENTS.md mandates for HTTP mocking but which is not yet installed.
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID             | Suggested issue title                                       | Ready for `/10x-plan` | Notes                                 |
@@ -159,10 +186,13 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-03       | friend-discovery      | Discovery: browse and search a friend's collection          | no                    | Awaits S-01 + S-02                    |
 | S-04       | borrow-request        | Borrow: request, approve, decline — loan record created     | no                    | Awaits S-03                           |
 | S-05       | loan-lifecycle        | Loans: view state, two-sided return confirmation            | no                    | Awaits S-04                           |
+| S-06       | collection-modals     | Collection: add and edit books in a modal dialog            | yes                   | Run `/10x-plan collection-modals`     |
+| S-07       | isbn-lookup           | Collection: autofill title and author from ISBN             | no                    | Awaits S-06                           |
 
 ## Open Roadmap Questions
 
-1. **OAuth scope (FR-001)** — Implement Google/GitHub OAuth at launch alongside email + password, or defer OAuth to v1.5? Owner: developer. Block: F-02 partially — email + password path is unblocked; OAuth is additive.
+1. **OAuth scope (FR-001)** — Implement Google/GitHub OAuth at launch alongside email + password, or defer OAuth to v1.5? Owner: developer. Block: F-02 partially — email + password path is unblocked; OAuth is additive. **Status 2026-08-11:** deferred in practice — `auth-scaffold` shipped credentials-only and its plan defers `@auth/typeorm-adapter` plus the `accounts`/`sessions` tables to a future OAuth slice. FR-001 is the only must-have PRD requirement not yet delivered; no roadmap item covers it.
+2. **Book identity / deduplication (PRD Open Question 2)** — S-07 stores an ISBN, which is a *partial* answer only. Books added manually (no ISBN) still have no canonical identity, and two users can enter the same title with different spellings. Promoting FR-012 (reviews) to must-have still needs a real dedup strategy. Owner: developer. Block: no.
 
 ## Parked
 
@@ -172,7 +202,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Native mobile app** — Why parked: PRD §Non-Goals — responsive web is the delivery target for v1.
 - **Public feed / activity stream** — Why parked: PRD §Non-Goals — private utility, not a social platform.
 - **Wishlist / "want to read" catalog** — Why parked: PRD §Non-Goals — only owned books in scope.
-- **ISBN lookup / external book enrichment** — Why parked: PRD §Non-Goals — deferred to v2; books added manually in v1.
+- ~~**ISBN lookup / external book enrichment**~~ — **Unparked 2026-08-11.** Promoted to S-07 (`isbn-lookup`) by developer decision. Scope is narrower than the original parked item: lookup of title + author by ISBN and storage of the ISBN itself, nothing else. Cover images and full bibliographic enrichment (publisher, year, page count) stay out of scope. `prd.md` §Non-Goals was amended to match — see PRD note dated 2026-08-11.
 - **Reviews (FR-012)** — Why parked: nice-to-have priority; book identity / deduplication problem blocks promotion to must-have (PRD Open Question 2).
 
 ## Done

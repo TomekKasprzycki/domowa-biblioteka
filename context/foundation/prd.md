@@ -3,6 +3,7 @@ project: Domowa Biblioteka
 version: 1
 status: draft
 created: 2026-05-29
+updated: 2026-08-11  # FR-003 + Non-Goals amended: ISBN lookup unparked into roadmap S-07
 context_type: greenfield
 product_type: web-app
 target_scale:
@@ -69,8 +70,9 @@ She reaches for this product the moment she decides to read something new and wo
 
 ### Collection management
 
-- FR-003: User can add a book to their personal collection (title and author as minimum required fields). Priority: must-have
-  > Socrates: Counter-argument considered: "Title + author may be too sparse to distinguish editions." Resolution: minimal fields are the right MVP call. ISBN lookup and enrichment are explicitly deferred to v2 (captured in Non-Goals).
+- FR-003: User can add a book to their personal collection (title and author as minimum required fields), optionally assisted by an ISBN lookup that fills those fields in. Priority: must-have
+  > Socrates: Counter-argument considered: "Title + author may be too sparse to distinguish editions." Resolution: minimal fields are the right MVP call.
+  > **Amended 2026-08-11:** the original resolution deferred ISBN lookup to v2. That deferral is reversed — optional ISBN-assisted entry is now in scope (roadmap S-07). Title and author remain the only *required* fields; the ISBN path is additive and a failed lookup never blocks manual entry. See §Non-Goals.
 
 - FR-004: User can view their own collection. Priority: must-have
 
@@ -134,7 +136,7 @@ Multi-user web app with persistent accounts. Sign-up via email + password or OAu
 - **No mobile app in v1.** Responsive web is the delivery target; a native iOS/Android app is out of scope.
 - **No public feed, activity stream, or social network features.** The app is a private utility for a known friend group, not a social platform.
 - **No wishlist or "want to read" catalog.** The collection covers only books the user owns; desire/reading-list tracking is out of scope.
-- **No ISBN lookup or external book database enrichment in v1.** Books are added manually by title and author; barcode scan and Goodreads/Google Books integration are deferred to v2.
+- ~~**No ISBN lookup or external book database enrichment in v1.**~~ **Amended 2026-08-11 (developer decision).** ISBN lookup is now in scope as roadmap slice S-07 (`isbn-lookup`): the user may optionally enter an ISBN to have title and author fetched from Open Library and filled into the add-book form, and the ISBN is stored on the book. The fields stay editable and **manual entry by title and author remains fully supported** — the lookup is an accelerator for the "adding a book takes no more than a few seconds" guardrail, never a requirement. Still out of scope: barcode scanning, cover images, and wider bibliographic enrichment (publisher, year, page count). See FR-003.
 
 ## Open Questions
 
