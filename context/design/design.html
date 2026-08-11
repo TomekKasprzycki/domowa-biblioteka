@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domowa Biblioteka — design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F7F8F2;
+    --paper-card: #FFFFFF;
+    --ink: #14231A;
+    --ink-soft: #4C5C51;
+    --ink-faint: #646D66;
+    --line: #DFE6DB;
+
+    --green-950: #10241A;
+    --green-800: #17402C;
+    --green-700: #1E5138;
+    --green-600: #276A47;
+    --green-500: #3C8759;
+    --green-300: #A6CFAF;
+    --green-150: #DCEEDF;
+    --green-100: #ECF5EC;
+
+    --blue-700: #285B7E;
+    --blue-500: #447B9F;
+    --blue-300: #ABCEE2;
+    --blue-100: #E7F2F8;
+
+    --font-display: "Fraunces", serif;
+    --font-body: "Inter", -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    --radius: 10px;
+    --shadow-card: 0 1px 2px rgba(16,36,26,0.06), 0 6px 20px -8px rgba(16,36,26,0.12);
+    --shadow-panel: -8px 0 30px -10px rgba(16,36,26,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--font-display); margin:0; color:var(--green-950); font-weight:600;}
+  p{margin:0;}
+  button{font-family:var(--font-body); cursor:pointer;}
+  a{color:inherit;}
+
+  :focus-visible{
+    outline:2.5px solid var(--green-500);
+    outline-offset:2px;
+    border-radius:4px;
+  }
+
+  /* ---------- layout ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:248px 1fr;
+    min-height:100vh;
+  }
+
+  .sidebar{
+    background:var(--green-950);
+    color:#EAF3EC;
+    padding:28px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:34px;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 6px;
+  }
+  .brand-mark{
+    width:30px; height:38px;
+    background:linear-gradient(180deg, var(--green-500), var(--green-700));
+    border-radius:2px 6px 6px 2px;
+    position:relative;
+    flex-shrink:0;
+    box-shadow: inset -3px 0 0 rgba(0,0,0,0.18);
+  }
+  .brand-mark::after{
+    content:"";
+    position:absolute; left:5px; top:6px; bottom:6px; width:1px;
+    background:rgba(255,255,255,0.35);
+  }
+  .brand-name{
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:600;
+    line-height:1.15;
+    letter-spacing:0.01em;
+  }
+  .brand-sub{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--green-300);
+    margin-top:2px;
+  }
+
+  nav.nav{display:flex; flex-direction:column; gap:2px;}
+  .nav-item{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:8px;
+    color:#CFE3D5;
+    font-size:14px;
+    font-weight:500;
+    background:transparent;
+    border:none;
+    text-align:left;
+    width:100%;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+  .nav-item.active{ background:var(--green-700); color:#fff; }
+  .nav-item .dot{
+    display:flex; align-items:center; gap:8px;
+  }
+  .nav-badge{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    background:var(--blue-500);
+    color:#fff;
+    padding:1px 6px;
+    border-radius:20px;
+    min-width:18px;
+    text-align:center;
+  }
+  .nav-icon{ width:16px; height:16px; opacity:0.85; flex-shrink:0; }
+
+  .sidebar-foot{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 8px;
+    border-top:1px solid rgba(255,255,255,0.1);
+  }
+  .avatar{
+    width:30px; height:30px; border-radius:50%;
+    background:var(--blue-300);
+    color:var(--green-950);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:600; font-size:13px;
+    flex-shrink:0;
+  }
+  .foot-name{ font-size:13px; font-weight:600; }
+  .foot-sub{ font-size:11px; color:var(--green-300); }
+
+  /* ---------- content ---------- */
+  main.content{ padding:32px 40px 80px; max-width:1180px; }
+  .topbar{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:28px; gap:20px; flex-wrap:wrap;
+  }
+  .topbar h1{ font-size:30px; }
+  .topbar .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--green-600); margin-bottom:6px; display:block;
+  }
+  .topbar-actions{ display:flex; gap:10px; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:7px;
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:13.5px; font-weight:600;
+    border:1px solid transparent;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn-primary{ background:var(--green-700); color:#fff; }
+  .btn-primary:hover{ background:var(--green-600); }
+  .btn-ghost{ background:transparent; color:var(--green-700); border-color:var(--green-300); }
+  .btn-ghost:hover{ background:var(--green-100); }
+  .btn-outline-blue{ background:transparent; color:var(--blue-700); border-color:var(--blue-300); }
+  .btn-outline-blue:hover{ background:var(--blue-100); }
+  .btn-decline{ background:transparent; color:#8A5A3D; border-color:#E3D2C4; }
+  .btn:active{ transform:scale(0.98); }
+  .btn-sm{ padding:7px 12px; font-size:12.5px; }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+  .view{ display:none; }
+  .view.active{ display:block; animation: fade .25s ease; }
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .view.active{ animation:none; }
+  }
+
+  .search-row{
+    display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; align-items:center;
+  }
+  .search-input{
+    flex:1; min-width:220px;
+    padding:10px 14px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .search-input:focus{ border-color:var(--green-500); }
+
+  /* ---------- shelf & spines ---------- */
+  .shelf-block{ margin-bottom:6px; }
+  .shelf-label{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em;
+    color:var(--ink-faint); text-transform:uppercase; margin-bottom:10px; display:block;
+  }
+  .shelf{
+    display:flex; align-items:flex-end; gap:6px;
+    padding:0 8px 14px;
+    flex-wrap:wrap;
+    row-gap:14px;
+    position:relative;
+  }
+  .shelf::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height:8px;
+    background:linear-gradient(180deg, var(--green-700), var(--green-800));
+    border-radius:2px;
+    box-shadow:0 5px 10px -4px rgba(16,36,26,0.35);
+  }
+  .shelf-gap{ margin-bottom:40px; }
+
+  .spine{
+    border:none;
+    border-radius:3px 3px 0 0;
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding-bottom:10px;
+    box-shadow: inset -6px 0 10px -6px rgba(0,0,0,0.35), inset 2px 0 0 rgba(255,255,255,0.12);
+    transition:transform .15s ease;
+    flex-shrink:0;
+  }
+  .spine:hover{ transform:translateY(-6px); }
+  .spine::before, .spine::after{
+    content:""; position:absolute; left:0; right:0; height:2px;
+    background:rgba(255,255,255,0.28);
+  }
+  .spine::before{ top:12px; }
+  .spine::after{ bottom:24px; }
+  .spine-title{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.01em;
+    color:rgba(255,255,255,0.96);
+    max-height:82%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-shadow:0 1px 1px rgba(0,0,0,0.15);
+  }
+  .spine.on-paper .spine-title{ color:var(--green-800); text-shadow:none; }
+  .spine-tag{
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%) rotate(-3deg);
+    background:var(--blue-600, var(--blue-500)); color:#fff;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.03em;
+    padding:2px 7px; border-radius:3px; white-space:nowrap;
+    box-shadow:0 2px 6px rgba(40,91,126,0.35);
+  }
+
+  .legend{ display:flex; gap:18px; margin-bottom:18px; flex-wrap:wrap; }
+  .legend-item{ display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft); }
+  .legend-dot{ width:9px; height:9px; border-radius:50%; }
+
+  /* ---------- friends ---------- */
+  .friend-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+    gap:14px;
+  }
+  .friend-card{
+    background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow-card);
+  }
+  .friend-top{ display:flex; align-items:center; gap:12px; }
+  .friend-avatar{
+    width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:600; font-size:16px; color:#fff;
+    flex-shrink:0;
+  }
+  .friend-name{ font-weight:600; font-size:14.5px; }
+  .friend-meta{ font-size:12px; color:var(--ink-faint); }
+  .status-chip{
+    align-self:flex-start;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em;
+    padding:3px 8px; border-radius:20px; text-transform:uppercase;
+  }
+  .status-confirmed{ background:var(--green-100); color:var(--green-700); }
+  .status-pending{ background:var(--blue-100); color:var(--blue-700); }
+  .friend-actions{ display:flex; gap:8px; margin-top:2px; }
+
+  .invite-row{
+    display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap;
+  }
+
+  /* ---------- request / loan cards (signature: library card) ---------- */
+  .card-stack{ display:flex; flex-direction:column; gap:14px; }
+  .lib-card{
+    display:flex; gap:0;
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow-card);
+  }
+  .lib-card-stamp{
+    width:64px; flex-shrink:0;
+    background:repeating-linear-gradient(180deg, var(--green-100), var(--green-100) 7px, #fff 7px, #fff 14px);
+    border-right:1px dashed var(--green-300);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .lib-card-stamp .rot{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em;
+    color:var(--green-600); text-transform:uppercase; font-weight:600;
+  }
+  .lib-card-body{ padding:16px 18px; flex:1; display:flex; flex-direction:column; gap:10px; }
+  .lib-card-head{ display:flex; justify-content:space-between; gap:14px; align-items:flex-start; flex-wrap:wrap; }
+  .lib-card-title{ font-family:var(--font-display); font-weight:600; font-size:16.5px; }
+  .lib-card-sub{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+  .lib-card-meta{
+    font-family:var(--font-mono); font-size:11px; color:var(--ink-faint);
+    display:flex; gap:16px; flex-wrap:wrap;
+  }
+  .lib-card-actions{ display:flex; gap:8px; margin-top:2px; }
+  .lib-card.is-pending-return .lib-card-stamp{
+    background:repeating-linear-gradient(180deg, var(--blue-100), var(--blue-100) 7px, #fff 7px, #fff 14px);
+    border-right-color:var(--blue-300);
+  }
+  .lib-card.is-pending-return .lib-card-stamp .rot{ color:var(--blue-700); }
+
+  .pill{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.03em;
+    padding:3px 9px; border-radius:20px; text-transform:uppercase; font-weight:600;
+    white-space:nowrap;
+  }
+  .pill-active{ background:var(--green-100); color:var(--green-700); }
+  .pill-return-pending{ background:var(--blue-100); color:var(--blue-700); }
+  .pill-mine{ background:var(--paper); color:var(--ink-soft); border:1px solid var(--line); }
+
+  .empty-note{
+    padding:40px 20px; text-align:center; color:var(--ink-faint); font-size:13.5px;
+    border:1px dashed var(--line); border-radius:var(--radius); background:var(--paper-card);
+  }
+
+  .section-heading{ font-size:14px; font-weight:600; color:var(--green-800); margin:26px 0 12px; }
+  .section-heading:first-of-type{ margin-top:4px; }
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(16,36,26,0.45);
+    display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:#fff; border-radius:14px; width:100%; max-width:440px;
+    padding:26px 26px 22px; box-shadow:0 24px 60px -20px rgba(16,36,26,0.4);
+  }
+  .modal h2{ font-size:19px; margin-bottom:4px; }
+  .modal .modal-sub{ font-size:12.5px; color:var(--ink-faint); margin-bottom:18px; }
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block; font-size:11.5px; font-weight:600; letter-spacing:0.02em;
+    color:var(--ink-soft); margin-bottom:6px; text-transform:uppercase; font-family:var(--font-mono);
+  }
+  .isbn-row{ display:flex; gap:8px; }
+  .field input{
+    width:100%; padding:9px 12px; border-radius:7px; border:1px solid var(--line);
+    font-size:14px; font-family:var(--font-body); color:var(--ink);
+  }
+  .field input:focus{ border-color:var(--green-500); }
+  .isbn-status{
+    font-size:11.5px; margin-top:6px; display:flex; align-items:center; gap:6px; min-height:16px;
+    color:var(--ink-faint);
+  }
+  .isbn-status.found{ color:var(--green-600); }
+  .isbn-status.notfound{ color:var(--blue-700); }
+  .spinner{
+    width:11px; height:11px; border-radius:50%;
+    border:2px solid var(--green-300); border-top-color:var(--green-700);
+    animation:spin .7s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .spinner{ animation-duration:1.4s; } }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:18px; }
+
+  /* ---------- detail drawer ---------- */
+  .drawer-overlay{
+    position:fixed; inset:0; background:rgba(16,36,26,0.3);
+    display:none; z-index:40;
+  }
+  .drawer-overlay.open{ display:block; }
+  .drawer{
+    position:fixed; top:0; right:0; bottom:0; width:340px; max-width:90vw;
+    background:#fff; box-shadow:var(--shadow-panel);
+    padding:26px 24px; transform:translateX(100%); transition:transform .22s ease;
+    z-index:41; display:flex; flex-direction:column; gap:16px;
+  }
+  @media (prefers-reduced-motion: reduce){ .drawer{ transition:none; } }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-close{
+    align-self:flex-end; background:none; border:none; color:var(--ink-faint); font-size:13px;
+    padding:8px 10px; margin:-8px -10px 0 0; border-radius:6px;
+  }
+  .drawer-close:hover{ color:var(--ink); background:var(--paper); }
+  .drawer-spine-preview{
+    width:56px; height:180px; border-radius:3px 3px 0 0; margin:0 auto;
+    display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px;
+    box-shadow: inset -6px 0 10px -6px rgba(0,0,0,0.35);
+  }
+  .drawer-title{ font-size:19px; text-align:center; }
+  .drawer-author{ text-align:center; color:var(--ink-soft); font-size:13.5px; }
+  .drawer-isbn{
+    text-align:center; font-family:var(--font-mono); font-size:11.5px;
+    color:var(--ink-faint); letter-spacing:0.03em;
+  }
+  .drawer-isbn.is-missing{ font-style:italic; }
+  .drawer-status{ text-align:center; }
+  .drawer-actions{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+
+  footer.attribution{
+    margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:11.5px; color:var(--ink-faint); font-family:var(--font-mono);
+  }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 860px){
+    .app{ grid-template-columns:1fr; }
+    .sidebar{
+      position:sticky; height:auto; flex-direction:row; align-items:center;
+      overflow-x:auto; padding:14px 16px; gap:20px;
+    }
+    .sidebar-foot{ display:none; }
+    nav.nav{ flex-direction:row; }
+    .nav-item{ white-space:nowrap; }
+    main.content{ padding:24px 18px 60px; }
+    .topbar h1{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div>
+        <div class="brand-name">Domowa<br>Biblioteka</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="mainNav">
+      <button class="nav-item active" data-view="kolekcja">
+        <span class="dot">📚 Twoja kolekcja</span>
+      </button>
+      <button class="nav-item" data-view="znajomi">
+        <span class="dot">🤝 Znajomi</span>
+      </button>
+      <button class="nav-item" data-view="odkrywaj">
+        <span class="dot">🔎 Odkrywaj</span>
+      </button>
+      <button class="nav-item" data-view="prosby">
+        <span class="dot">✉️ Prośby</span>
+        <span class="nav-badge" id="requestBadge">2</span>
+      </button>
+      <button class="nav-item" data-view="wypozyczenia">
+        <span class="dot">🔁 Wypożyczenia</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="avatar">TY</div>
+      <div>
+        <div class="foot-name">Ty</div>
+        <div class="foot-sub">10 książek na półce</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- ============ KOLEKCJA ============ -->
+    <section class="view active" id="view-kolekcja">
+      <div class="topbar">
+        <div>
+          <span class="eyebrow">Twoja półka</span>
+          <h1>Twoja kolekcja</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="openAddModal()">+ Dodaj książkę</button>
+        </div>
+      </div>
+
+      <div class="shelf-block shelf-gap">
+        <span class="shelf-label">10 pozycji</span>
+        <div class="shelf" id="myShelf"></div>
+      </div>
+    </section>
+
+    <!-- ============ ZNAJOMI ============ -->
+    <section class="view" id="view-znajomi">
+      <div class="topbar">
+        <div>
+          <span class="eyebrow">Krąg zaufania</span>
+          <h1>Znajomi</h1>
+        </div>
+      </div>
+
+      <div class="invite-row">
+        <input class="search-input" placeholder="Zaproś po e-mailu lub nazwie użytkownika…" style="max-width:340px;">
+        <button class="btn btn-primary">Wyślij zaproszenie</button>
+      </div>
+
+      <div class="section-heading">Oczekuje na Ciebie</div>
+      <div class="friend-grid" style="margin-bottom:6px;">
+        <div class="friend-card">
+          <div class="friend-top">
+            <div class="friend-avatar" style="background:var(--blue-500);">TK</div>
+            <div>
+              <div class="friend-name">Tomek Kowalski</div>
+              <div class="friend-meta">chce dołączyć do Twojego kręgu</div>
+            </div>
+          </div>
+          <span class="status-chip status-pending">Oczekuje</span>
+          <div class="friend-actions">
+            <button class="btn btn-primary btn-sm">Akceptuj</button>
+            <button class="btn btn-decline btn-sm">Odrzuć</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading">Potwierdzeni znajomi</div>
+      <div class="friend-grid">
+        <div class="friend-card">
+          <div class="friend-top">
+            <div class="friend-avatar" style="background:var(--green-600);">KN</div>
+            <div>
+              <div class="friend-name">Kasia Nowak</div>
+              <div class="friend-meta">6 książek na półce</div>
+            </div>
+          </div>
+          <span class="status-chip status-confirmed">Potwierdzony</span>
+        </div>
+        <div class="friend-card">
+          <div class="friend-top">
+            <div class="friend-avatar" style="background:var(--green-500);">MW</div>
+            <div>
+              <div class="friend-name">Marek Wiśniewski</div>
+              <div class="friend-meta">9 książek na półce</div>
+            </div>
+          </div>
+          <span class="status-chip status-confirmed">Potwierdzony</span>
+        </div>
+        <div class="friend-card">
+          <div class="friend-top">
+            <div class="friend-avatar" style="background:var(--blue-300); color:var(--green-950);">OZ</div>
+            <div>
+              <div class="friend-name">Ola Zielińska</div>
+              <div class="friend-meta">zaproszenie wysłane</div>
+            </div>
+          </div>
+          <span class="status-chip status-pending">Oczekuje</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ODKRYWAJ ============ -->
+    <section class="view" id="view-odkrywaj">
+      <div class="topbar">
+        <div>
+          <span class="eyebrow">Cudza półka</span>
+          <h1>Odkrywaj</h1>
+        </div>
+      </div>
+
+      <div class="search-row">
+        <select class="search-input" style="max-width:220px;" id="friendPicker" onchange="renderFriendShelf()">
+          <option value="kasia">Kasia Nowak</option>
+          <option value="marek">Marek Wiśniewski</option>
+        </select>
+        <input class="search-input" placeholder="Szukaj po tytule lub autorze…" id="discoverSearch" oninput="renderFriendShelf()">
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--green-500);"></span>Dostępna</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--blue-500);"></span>Wypożyczona</div>
+      </div>
+
+      <div class="shelf-block">
+        <div class="shelf" id="friendShelf"></div>
+      </div>
+    </section>
+
+    <!-- ============ PROŚBY ============ -->
+    <section class="view" id="view-prosby">
+      <div class="topbar">
+        <div>
+          <span class="eyebrow">Skrzynka próśb · gwiazda przewodnia</span>
+          <h1>Prośby o wypożyczenie</h1>
+        </div>
+      </div>
+
+      <div class="card-stack" id="requestStack"></div>
+    </section>
+
+    <!-- ============ WYPOŻYCZENIA ============ -->
+    <section class="view" id="view-wypozyczenia">
+      <div class="topbar">
+        <div>
+          <span class="eyebrow">Stan wypożyczeń</span>
+          <h1>Wypożyczenia</h1>
+        </div>
+      </div>
+
+      <div class="section-heading">Twoje książki u innych</div>
+      <div class="card-stack" id="loanedOutStack"></div>
+
+      <div class="section-heading">Książki, które masz od znajomych</div>
+      <div class="card-stack" id="borrowedStack"></div>
+    </section>
+
+    <footer class="attribution">DOMOWA BIBLIOTEKA — DESIGN MOCKUP · v1</footer>
+  </main>
+</div>
+
+<!-- Modal: dodaj / edytuj książkę -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Dodaj książkę</h2>
+    <div class="modal-sub">Wpisz ISBN, by uzupełnić dane automatycznie, albo podaj je ręcznie.</div>
+
+    <div class="field">
+      <label for="isbnInput">ISBN (opcjonalnie)</label>
+      <div class="isbn-row">
+        <input id="isbnInput" placeholder="np. 9788308077254">
+        <button class="btn btn-outline-blue btn-sm" onclick="lookupIsbn()">Wyszukaj</button>
+      </div>
+      <div class="isbn-status" id="isbnStatus"></div>
+    </div>
+
+    <div class="field">
+      <label for="titleInput">Tytuł</label>
+      <input id="titleInput" placeholder="Tytuł książki">
+    </div>
+    <div class="field">
+      <label for="authorInput">Autor</label>
+      <input id="authorInput" placeholder="Imię i nazwisko autora">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeAddModal()">Anuluj</button>
+      <button class="btn btn-primary" onclick="closeAddModal()">Zapisz książkę</button>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: szczegóły książki znajomego -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeDrawer()">Zamknij ✕</button>
+  <div class="drawer-spine-preview" id="drawerSpine"></div>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-author" id="drawerAuthor"></div>
+  <div class="drawer-isbn" id="drawerIsbn"></div>
+  <div class="drawer-status" id="drawerStatus"></div>
+  <div class="drawer-actions" id="drawerActions"></div>
+</div>
+
+<script>
+  // ---------- palette & spine generator ----------
+  const spinePalette = ['#17402C','#1E5138','#276A47','#3C8759','#4B8260','#285B7E','#447B9F','#ECF5EC'];
+  function hashStr(s){
+    let h = 0;
+    for(let i=0;i<s.length;i++){ h = (h<<5) - h + s.charCodeAt(i); h |= 0; }
+    return Math.abs(h);
+  }
+  function spineStyleFor(title){
+    const h = hashStr(title);
+    const color = spinePalette[h % spinePalette.length];
+    const height = 148 + (h % 65);
+    const width = 32 + (h % 9);
+    const onPaper = color === '#ECF5EC';
+    return {color, height, width, onPaper};
+  }
+  function buildSpine(book, {clickable, tag} = {}){
+    const s = spineStyleFor(book.title);
+    const el = document.createElement(clickable ? 'button' : 'div');
+    el.className = 'spine' + (s.onPaper ? ' on-paper' : '');
+    el.style.height = s.height + 'px';
+    el.style.width = s.width + 'px';
+    el.style.background = s.color;
+    el.title = book.title + ' — ' + book.author;
+    if(clickable){
+      el.style.border='none';
+      el.setAttribute('aria-label', 'Zobacz: ' + book.title + ', ' + book.author);
+      el.onclick = () => openDrawer(book);
+    }
+    const span = document.createElement('span');
+    span.className = 'spine-title';
+    span.textContent = book.title;
+    el.appendChild(span);
+    if(tag){
+      const t = document.createElement('span');
+      t.className = 'spine-tag';
+      t.textContent = tag;
+      el.appendChild(t);
+    }
+    return el;
+  }
+
+  // ---------- data ----------
+  const myBooks = [
+    {title:'Lalka', author:'Bolesław Prus', isbn:'978-83-08-04521-6'},
+    {title:'Solaris', author:'Stanisław Lem', isbn:'978-83-08-07725-4'},
+    {title:'Ostatnie życzenie', author:'Andrzej Sapkowski', isbn:'978-83-7578-034-2'},
+    {title:'Cyberiada', author:'Stanisław Lem', isbn:'978-83-08-04398-4'},
+    {title:'Ferdydurke', author:'Witold Gombrowicz'},
+    {title:'Pan Tadeusz', author:'Adam Mickiewicz', isbn:'978-83-06-01712-7'},
+    {title:'Inny świat', author:'Gustaw Herling-Grudziński', isbn:'978-83-08-04102-7'},
+    {title:'Mistrz i Małgorzata', author:'Michaił Bułhakow', isbn:'978-83-08-04521-2'},
+    {title:'Krótka historia czasu', author:'Stephen Hawking', isbn:'978-83-7469-062-1'},
+    {title:'Sto lat samotności', author:'Gabriel García Márquez'},
+  ];
+
+  const friendShelves = {
+    kasia: [
+      {title:'Dżuma', author:'Albert Camus', available:true, isbn:'978-83-08-04217-8'},
+      {title:'Zbrodnia i kara', author:'Fiodor Dostojewski', available:true, isbn:'978-83-08-03651-1'},
+      {title:'Opowieść wigilijna', author:'Charles Dickens', available:true},
+      {title:'Blaszany bębenek', author:'Günter Grass', available:false, borrowedBy:'Ty', isbn:'978-83-08-03217-9'},
+      {title:'Kroniki marsjańskie', author:'Ray Bradbury', available:true, isbn:'978-83-7469-885-6'},
+      {title:'Rok 1984', author:'George Orwell', available:false, borrowedBy:'Marek', isbn:'978-83-08-04654-1'},
+    ],
+    marek: [
+      {title:'Wojna polsko-ruska', author:'Dorota Masłowska', available:true, isbn:'978-83-08-04932-0'},
+      {title:'Popiół i diament', author:'Jerzy Andrzejewski', available:true},
+      {title:'Hobbit', author:'J.R.R. Tolkien', available:false, borrowedBy:'Kasia', isbn:'978-83-08-04672-5'},
+      {title:'Igrzyska śmierci', author:'Suzanne Collins', available:true, isbn:'978-83-08-04512-4'},
+    ]
+  };
+
+  function renderMyShelf(){
+    const shelf = document.getElementById('myShelf');
+    shelf.innerHTML = '';
+    myBooks.forEach(b => shelf.appendChild(buildSpine(b, {clickable:true})));
+  }
+
+  function renderFriendShelf(){
+    const friend = document.getElementById('friendPicker').value;
+    const query = document.getElementById('discoverSearch').value.trim().toLowerCase();
+    const shelf = document.getElementById('friendShelf');
+    shelf.innerHTML = '';
+    const books = friendShelves[friend].filter(b =>
+      b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query)
+    );
+    if(books.length === 0){
+      const note = document.createElement('div');
+      note.className = 'empty-note';
+      note.textContent = 'Brak książek pasujących do szukanej frazy.';
+      shelf.appendChild(note);
+      return;
+    }
+    books.forEach(b => {
+      const tag = b.available ? null : ('U: ' + b.borrowedBy);
+      shelf.appendChild(buildSpine(b, {clickable:true, tag}));
+    });
+  }
+
+  // ---------- drawer ----------
+  function openDrawer(book){
+    const s = spineStyleFor(book.title);
+    document.getElementById('drawerSpine').style.background = s.color;
+    document.getElementById('drawerTitle').textContent = book.title;
+    document.getElementById('drawerAuthor').textContent = book.author;
+
+    const isbnEl = document.getElementById('drawerIsbn');
+    if(book.isbn){
+      isbnEl.textContent = 'ISBN ' + book.isbn;
+      isbnEl.classList.remove('is-missing');
+    } else {
+      isbnEl.textContent = 'Brak numeru ISBN — dodano ręcznie';
+      isbnEl.classList.add('is-missing');
+    }
+
+    const statusEl = document.getElementById('drawerStatus');
+    const actionsEl = document.getElementById('drawerActions');
+    actionsEl.innerHTML = '';
+
+    if(book.available === undefined){
+      // it's one of "my" books
+      statusEl.innerHTML = '<span class="pill pill-mine">W Twojej kolekcji</span>';
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn btn-ghost';
+      editBtn.textContent = 'Edytuj dane książki';
+      editBtn.onclick = () => { closeDrawer(); openAddModal(book); };
+      actionsEl.appendChild(editBtn);
+    } else if(book.available){
+      statusEl.innerHTML = '<span class="pill pill-active">Dostępna</span>';
+      const reqBtn = document.createElement('button');
+      reqBtn.className = 'btn btn-primary';
+      reqBtn.textContent = 'Poproś o wypożyczenie';
+      reqBtn.onclick = () => {
+        reqBtn.textContent = 'Prośba wysłana ✓';
+        reqBtn.disabled = true;
+      };
+      actionsEl.appendChild(reqBtn);
+    } else {
+      statusEl.innerHTML = '<span class="pill pill-return-pending">Wypożyczona · ' + book.borrowedBy + '</span>';
+      const note = document.createElement('p');
+      note.style.fontSize = '12.5px';
+      note.style.color = 'var(--ink-faint)';
+      note.style.textAlign = 'center';
+      note.textContent = 'Będzie znów dostępna po zwrocie.';
+      actionsEl.appendChild(note);
+    }
+
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+  }
+  function closeDrawer(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+  }
+
+  // ---------- requests (biblioteka card) ----------
+  let pendingRequests = [
+    {who:'Ola Zielińska', avatarColor:'var(--blue-300)', initials:'OZ', book:'Solaris', requested:'2 dni temu'},
+    {who:'Marek Wiśniewski', avatarColor:'var(--green-500)', initials:'MW', book:'Cyberiada', requested:'dzisiaj'},
+  ];
+
+  function renderRequests(){
+    const stack = document.getElementById('requestStack');
+    stack.innerHTML = '';
+    document.getElementById('requestBadge').textContent = pendingRequests.length;
+    document.getElementById('requestBadge').style.display = pendingRequests.length ? '' : 'none';
+
+    if(pendingRequests.length === 0){
+      stack.innerHTML = '<div class="empty-note">Brak oczekujących próśb. Gdy ktoś poprosi o książkę, pojawi się tutaj.</div>';
+      return;
+    }
+    pendingRequests.forEach((r, idx) => {
+      const card = document.createElement('div');
+      card.className = 'lib-card';
+      card.innerHTML = `
+        <div class="lib-card-stamp"><span class="rot">Prośba</span></div>
+        <div class="lib-card-body">
+          <div class="lib-card-head">
+            <div>
+              <div class="lib-card-title">${r.book}</div>
+              <div class="lib-card-sub">${r.who} chce wypożyczyć tę książkę</div>
+            </div>
+            <span class="pill pill-active">Oczekuje</span>
+          </div>
+          <div class="lib-card-meta"><span>ZGŁOSZONO: ${r.requested.toUpperCase()}</span></div>
+          <div class="lib-card-actions">
+            <button class="btn btn-primary btn-sm" data-act="approve">Zatwierdź</button>
+            <button class="btn btn-decline btn-sm" data-act="decline">Odrzuć</button>
+          </div>
+        </div>
+      `;
+      card.querySelector('[data-act="approve"]').onclick = () => { pendingRequests.splice(idx,1); renderRequests(); renderLoans(); };
+      card.querySelector('[data-act="decline"]').onclick = () => { pendingRequests.splice(idx,1); renderRequests(); };
+      stack.appendChild(card);
+    });
+  }
+
+  // ---------- loans ----------
+  let loanedOut = [
+    {book:'Lalka', who:'Kasia Nowak', since:'12 lipca 2026', state:'active'},
+    {book:'Pan Tadeusz', who:'Marek Wiśniewski', since:'20 czerwca 2026', state:'return-pending'},
+  ];
+  let borrowedByMe = [
+    {book:'Blaszany bębenek', from:'Kasia Nowak', since:'30 lipca 2026'},
+  ];
+
+  function renderLoans(){
+    const outStack = document.getElementById('loanedOutStack');
+    outStack.innerHTML = '';
+    if(loanedOut.length === 0){
+      outStack.innerHTML = '<div class="empty-note">Nikt aktualnie nie wypożycza Twoich książek.</div>';
+    }
+    loanedOut.forEach((l, idx) => {
+      const isPending = l.state === 'return-pending';
+      const card = document.createElement('div');
+      card.className = 'lib-card' + (isPending ? ' is-pending-return' : '');
+      card.innerHTML = `
+        <div class="lib-card-stamp"><span class="rot">${isPending ? 'Zwrot' : 'Wypożyczono'}</span></div>
+        <div class="lib-card-body">
+          <div class="lib-card-head">
+            <div>
+              <div class="lib-card-title">${l.book}</div>
+              <div class="lib-card-sub">u ${l.who}</div>
+            </div>
+            <span class="pill ${isPending ? 'pill-return-pending' : 'pill-active'}">${isPending ? 'Zgłoszono zwrot' : 'Aktywne'}</span>
+          </div>
+          <div class="lib-card-meta"><span>OD: ${l.since.toUpperCase()}</span></div>
+          ${isPending ? `<div class="lib-card-actions"><button class="btn btn-primary btn-sm" data-act="confirm">Potwierdź odbiór</button></div>` : ''}
+        </div>
+      `;
+      if(isPending){
+        card.querySelector('[data-act="confirm"]').onclick = () => { loanedOut.splice(idx,1); renderLoans(); };
+      }
+      outStack.appendChild(card);
+    });
+
+    const inStack = document.getElementById('borrowedStack');
+    inStack.innerHTML = '';
+    if(borrowedByMe.length === 0){
+      inStack.innerHTML = '<div class="empty-note">Nie masz aktualnie żadnych książek od znajomych.</div>';
+    }
+    borrowedByMe.forEach((l, idx) => {
+      const card = document.createElement('div');
+      card.className = 'lib-card';
+      card.innerHTML = `
+        <div class="lib-card-stamp"><span class="rot">U Ciebie</span></div>
+        <div class="lib-card-body">
+          <div class="lib-card-head">
+            <div>
+              <div class="lib-card-title">${l.book}</div>
+              <div class="lib-card-sub">od ${l.from}</div>
+            </div>
+            <span class="pill pill-mine">U Ciebie</span>
+          </div>
+          <div class="lib-card-meta"><span>OD: ${l.since.toUpperCase()}</span></div>
+          <div class="lib-card-actions">
+            <button class="btn btn-outline-blue btn-sm" data-act="return">Oznacz jako zwrócone</button>
+          </div>
+        </div>
+      `;
+      card.querySelector('[data-act="return"]').onclick = (e) => {
+        e.target.textContent = 'Zgłoszono właścicielowi ✓';
+        e.target.disabled = true;
+      };
+      inStack.appendChild(card);
+    });
+  }
+
+  // ---------- nav ----------
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
+  });
+
+  // ---------- add/edit modal ----------
+  function openAddModal(book){
+    document.getElementById('modalTitle').textContent = book ? 'Edytuj książkę' : 'Dodaj książkę';
+    document.getElementById('isbnInput').value = '';
+    document.getElementById('isbnStatus').textContent = '';
+    document.getElementById('isbnStatus').className = 'isbn-status';
+    document.getElementById('titleInput').value = book ? book.title : '';
+    document.getElementById('authorInput').value = book ? book.author : '';
+    document.getElementById('addModal').classList.add('open');
+  }
+  function closeAddModal(){
+    document.getElementById('addModal').classList.remove('open');
+  }
+  function lookupIsbn(){
+    const status = document.getElementById('isbnStatus');
+    const isbn = document.getElementById('isbnInput').value.trim();
+    if(!isbn){
+      status.className = 'isbn-status notfound';
+      status.textContent = 'Podaj ISBN, aby wyszukać.';
+      return;
+    }
+    status.className = 'isbn-status';
+    status.innerHTML = '<span class="spinner"></span> Szukam w Open Library…';
+    setTimeout(() => {
+      // demo: deterministic pretend result, degrades gracefully if "not found"
+      const found = isbn.replace(/[^0-9]/g,'').length >= 10;
+      if(found){
+        document.getElementById('titleInput').value = 'Solaris';
+        document.getElementById('authorInput').value = 'Stanisław Lem';
+        status.className = 'isbn-status found';
+        status.textContent = '✓ Znaleziono — pola są nadal edytowalne.';
+      } else {
+        status.className = 'isbn-status notfound';
+        status.textContent = 'Nie znaleziono. Wpisz dane ręcznie.';
+      }
+    }, 700);
+  }
+
+  // ---------- init ----------
+  renderMyShelf();
+  renderFriendShelf();
+  renderRequests();
+  renderLoans();
+</script>
+</body>
+</html>
