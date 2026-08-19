@@ -29,6 +29,11 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Environment Variables
+
+- `DATABASE_URL`, `DATABASE_URL_UNPOOLED` — Neon Postgres connection strings (pooled / direct).
+- `OPENLIBRARY_CONTACT` — optional contact address sent as the `User-Agent` on Open Library ISBN lookups (`GET /api/isbn`). Identified requests get a 3 req/s rate limit instead of the anonymous 1 req/s; the request still works, just anonymously, when this is unset.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

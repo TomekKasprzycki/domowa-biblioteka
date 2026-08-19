@@ -3,7 +3,7 @@ change_id: isbn-lookup
 title: "S-07: ISBN Lookup — autofill title and author from ISBN, store the ISBN"
 status: implementing
 created: 2026-08-11
-updated: 2026-08-15
+updated: 2026-08-19
 archived_at: null
 roadmap_id: S-07
 prd_refs:

@@ -372,31 +372,31 @@ One additive, nullable column. Existing rows take NULL, which is a valid and des
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Specs pass: `npm test`
-- [x] 1.4 Migration applies cleanly: `npm run migration:run`
-- [x] 1.5 Migration reverts and re-applies cleanly: `npm run migration:revert` then `npm run migration:run`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — d2b2ca1
+- [x] 1.2 Linting passes: `npm run lint` — d2b2ca1
+- [x] 1.3 Specs pass: `npm test` — d2b2ca1
+- [x] 1.4 Migration applies cleanly: `npm run migration:run` — d2b2ca1
+- [x] 1.5 Migration reverts and re-applies cleanly: `npm run migration:revert` then `npm run migration:run` — d2b2ca1
 
 #### Manual
 
-- [x] 1.6 Migration file contains the `ALTER TABLE "books" ADD "isbn"` statement and existing rows show NULL
+- [x] 1.6 Migration file contains the `ALTER TABLE "books" ADD "isbn"` statement and existing rows show NULL — d2b2ca1
 
 ### Phase 2: Lookup Stack
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Specs pass: `npm test`
-- [ ] 2.4 No new dependency was added: `git diff package.json` is empty
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Specs pass: `npm test`
+- [x] 2.4 No new dependency was added: `git diff package.json` is empty
 
 #### Manual
 
-- [ ] 2.5 Signed in, a known ISBN returns `found: true` with title and author
-- [ ] 2.6 Broken check digit returns 400; unknown but valid ISBN returns `found: false`
-- [ ] 2.7 Signed out, the endpoint redirects to `/login` rather than returning 401
-- [ ] 2.8 `User-Agent` is sent when `OPENLIBRARY_CONTACT` is set; variable recorded in README and set on Vercel
+- [x] 2.5 Signed in, a known ISBN returns `found: true` with title and author
+- [x] 2.6 Broken check digit returns 400; unknown but valid ISBN returns `found: false`
+- [x] 2.7 Signed out, the endpoint redirects to `/login` rather than returning 401
+- [x] 2.8 `User-Agent` is sent when `OPENLIBRARY_CONTACT` is set; variable recorded in README and set on Vercel
 
 ### Phase 3: Dialog, Autofill and Confirmation Gate
 
