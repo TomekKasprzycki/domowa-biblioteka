@@ -386,35 +386,35 @@ One additive, nullable column. Existing rows take NULL, which is a valid and des
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Specs pass: `npm test`
-- [x] 2.4 No new dependency was added: `git diff package.json` is empty
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — 0188d41
+- [x] 2.2 Linting passes: `npm run lint` — 0188d41
+- [x] 2.3 Specs pass: `npm test` — 0188d41
+- [x] 2.4 No new dependency was added: `git diff package.json` is empty — 0188d41
 
 #### Manual
 
-- [x] 2.5 Signed in, a known ISBN returns `found: true` with title and author
-- [x] 2.6 Broken check digit returns 400; unknown but valid ISBN returns `found: false`
-- [x] 2.7 Signed out, the endpoint redirects to `/login` rather than returning 401
-- [x] 2.8 `User-Agent` is sent when `OPENLIBRARY_CONTACT` is set; variable recorded in README and set on Vercel
+- [x] 2.5 Signed in, a known ISBN returns `found: true` with title and author — 0188d41
+- [x] 2.6 Broken check digit returns 400; unknown but valid ISBN returns `found: false` — 0188d41
+- [x] 2.7 Signed out, the endpoint redirects to `/login` rather than returning 401 — 0188d41
+- [x] 2.8 `User-Agent` is sent when `OPENLIBRARY_CONTACT` is set; variable recorded in README and set on Vercel — 0188d41
 
 ### Phase 3: Dialog, Autofill and Confirmation Gate
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Full suite passes: `npm test`
-- [ ] 3.4 Production build passes: `npm run build`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Full suite passes: `npm test`
+- [x] 3.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 3.5 Look up fills title and author, both stay editable
-- [ ] 3.6 Submit is disabled until the confirmation checkbox is ticked, then saves
-- [ ] 3.7 Manual entry shows no checkbox and saves in one step
-- [ ] 3.8 Broken check digit reports not found with no network request
-- [ ] 3.9 Unknown valid ISBN reports not found and the form stays usable
-- [ ] 3.10 Reopening the dialog resets ISBN field, status line, checkbox and provenance
-- [ ] 3.11 Esc prompts only after the form has been touched
-- [ ] 3.12 After a duplicate error the typed values survive and Esc now prompts
-- [ ] 3.13 Layout holds at 375px
+- [x] 3.5 Look up fills title and author, both stay editable
+- [x] 3.6 Submit is disabled until the confirmation checkbox is ticked, then saves
+- [x] 3.7 Manual entry shows no checkbox and saves in one step
+- [x] 3.8 Broken check digit reports not found with no network request
+- [x] 3.9 Unknown valid ISBN reports not found and the form stays usable
+- [x] 3.10 Reopening the dialog resets ISBN field, status line, checkbox and provenance
+- [x] 3.11 Esc prompts only after the form has been touched
+- [x] 3.12 After a duplicate error the typed values survive and Esc now prompts
+- [x] 3.13 Layout holds at 375px

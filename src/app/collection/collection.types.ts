@@ -15,3 +15,12 @@ export type CollectionBook = {
     startedAt: Date | null;
   } | null;
 };
+
+// Outcome of an ISBN lookup against GET /api/isbn. "unauthenticated" is
+// distinct from "not-found" because middleware redirects a signed-out or
+// expired request to /login rather than reaching the route handler — telling
+// the user "not found" in that case would lie about why the lookup failed.
+export type IsbnLookupResult =
+  | { status: "found"; title: string; author: string | null }
+  | { status: "not-found" }
+  | { status: "unauthenticated" };
