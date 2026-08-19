@@ -186,6 +186,24 @@ describe("AddBookForm", () => {
     expect(screen.getByRole("status")).not.toHaveTextContent("Not found");
   });
 
+  it("shows a generic error message for an error result, not not-found or session-expired", async () => {
+    // given a lookup that resolves as a generic error
+    const user = userEvent.setup();
+    mockLookup.mockResolvedValue({ status: "error" });
+    render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
+    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+
+    // when
+    await user.click(screen.getByRole("button", { name: "Look up" }));
+
+    // then
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Something went wrong. Type the details in manually."
+    );
+    expect(screen.getByRole("status")).not.toHaveTextContent("session has expired");
+    expect(screen.getByLabelText("Title")).toBeEnabled();
+  });
+
   it("blocks submit until the confirmation checkbox is ticked after a lookup", async () => {
     // given a successful lookup
     const user = userEvent.setup();

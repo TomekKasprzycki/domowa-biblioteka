@@ -59,8 +59,8 @@ describe("lookupIsbn", () => {
     expect(result).toEqual({ status: "unauthenticated" });
   });
 
-  it("maps an unparseable body to the unauthenticated variant", async () => {
-    // given a 200 response whose body is not JSON
+  it("maps a non-redirected unparseable body to the error variant", async () => {
+    // given a 200 response whose body is not JSON, and not a login redirect
     global.fetch = jest.fn().mockResolvedValue(
       new Response("<html>not json</html>", {
         status: 200,
@@ -71,8 +71,8 @@ describe("lookupIsbn", () => {
     // when looking up an ISBN
     const result = await lookupIsbn("9780140328721");
 
-    // then it maps to the unauthenticated variant
-    expect(result).toEqual({ status: "unauthenticated" });
+    // then it maps to the error variant, not unauthenticated
+    expect(result).toEqual({ status: "error" });
   });
 
   it("maps a network error to the not-found variant", async () => {

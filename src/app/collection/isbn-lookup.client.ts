@@ -20,7 +20,9 @@ export async function lookupIsbn(raw: string): Promise<IsbnLookupResult> {
   try {
     body = await response.json();
   } catch {
-    return { status: "unauthenticated" };
+    // Not a redirect, so this isn't the /login-page shape — an unexpected
+    // non-JSON 200 from somewhere else in the stack (e.g. a proxy).
+    return { status: "error" };
   }
 
   if (!body.found) {

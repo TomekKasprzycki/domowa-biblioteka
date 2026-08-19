@@ -9,7 +9,7 @@ export async function lookupByIsbn(
   normalizedIsbn: string
 ): Promise<{ title: string; author: string | null } | null> {
   const bibkey = `ISBN:${normalizedIsbn}`;
-  const url = `https://openlibrary.org/api/books?bibkeys=${bibkey}&format=json&jscmd=data`;
+  const url = `https://openlibrary.org/api/books?bibkeys=${encodeURIComponent(bibkey)}&format=json&jscmd=data`;
 
   const contact = process.env.OPENLIBRARY_CONTACT;
   const headers: Record<string, string> = contact

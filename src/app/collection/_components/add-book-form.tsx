@@ -11,7 +11,8 @@ type LookupStatus =
   | "searching"
   | "found"
   | "not-found"
-  | "session-expired";
+  | "session-expired"
+  | "error";
 
 const STATUS_MESSAGES: Record<LookupStatus, string> = {
   idle: "",
@@ -20,6 +21,7 @@ const STATUS_MESSAGES: Record<LookupStatus, string> = {
   "not-found": "Not found. Type the details in manually.",
   "session-expired":
     "Your session has expired. Reload and sign in to look up an ISBN.",
+  error: "Something went wrong. Type the details in manually.",
 };
 
 export function AddBookForm({
@@ -61,6 +63,8 @@ export function AddBookForm({
       setLookupStatus("found");
     } else if (result.status === "unauthenticated") {
       setLookupStatus("session-expired");
+    } else if (result.status === "error") {
+      setLookupStatus("error");
     } else {
       setLookupStatus("not-found");
     }

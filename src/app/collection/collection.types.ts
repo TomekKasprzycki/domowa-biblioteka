@@ -20,7 +20,10 @@ export type CollectionBook = {
 // distinct from "not-found" because middleware redirects a signed-out or
 // expired request to /login rather than reaching the route handler — telling
 // the user "not found" in that case would lie about why the lookup failed.
+// "error" covers a body that fails to parse as JSON for any other reason
+// (e.g. a malformed proxy response) — also not the same claim as "not found".
 export type IsbnLookupResult =
   | { status: "found"; title: string; author: string | null }
   | { status: "not-found" }
-  | { status: "unauthenticated" };
+  | { status: "unauthenticated" }
+  | { status: "error" };

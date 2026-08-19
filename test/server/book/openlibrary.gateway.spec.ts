@@ -93,9 +93,11 @@ describe("lookupByIsbn", () => {
     // when looking it up
     await lookupByIsbn(isbn);
 
-    // then the request URL carries that exact bibkey
+    // then the request URL carries that exact bibkey, URL-encoded
     const requestedUrl = fetchSpy.mock.calls[0][0] as string;
-    expect(requestedUrl).toContain(`bibkeys=ISBN:${isbn}`);
+    expect(requestedUrl).toContain(
+      `bibkeys=${encodeURIComponent(`ISBN:${isbn}`)}`
+    );
   });
 
   it("sends a User-Agent header when OPENLIBRARY_CONTACT is set", async () => {
