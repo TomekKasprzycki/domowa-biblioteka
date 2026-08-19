@@ -402,19 +402,19 @@ One additive, nullable column. Existing rows take NULL, which is a valid and des
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Full suite passes: `npm test`
-- [x] 3.4 Production build passes: `npm run build`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 98f44e2
+- [x] 3.2 Linting passes: `npm run lint` — 98f44e2
+- [x] 3.3 Full suite passes: `npm test` — 98f44e2
+- [x] 3.4 Production build passes: `npm run build` — 98f44e2
 
 #### Manual
 
-- [x] 3.5 Look up fills title and author, both stay editable
-- [x] 3.6 Submit is disabled until the confirmation checkbox is ticked, then saves
-- [x] 3.7 Manual entry shows no checkbox and saves in one step
-- [x] 3.8 Broken check digit reports not found with no network request
-- [x] 3.9 Unknown valid ISBN reports not found and the form stays usable
-- [x] 3.10 Reopening the dialog resets ISBN field, status line, checkbox and provenance
-- [x] 3.11 Esc prompts only after the form has been touched
-- [x] 3.12 After a duplicate error the typed values survive and Esc now prompts
-- [x] 3.13 Layout holds at 375px
+- [x] 3.5 Look up fills title and author, both stay editable — 98f44e2
+- [x] 3.6 Submit is disabled until the confirmation checkbox is ticked, then saves — 98f44e2
+- [x] 3.7 Manual entry shows no checkbox and saves in one step — 98f44e2
+- [x] 3.8 Broken check digit reports not found with no network request — 98f44e2
+- [x] 3.9 Unknown valid ISBN reports not found and the form stays usable — 98f44e2
+- [x] 3.10 Reopening the dialog resets ISBN field, status line, checkbox and provenance — 98f44e2
+- [x] 3.11 Esc prompts only after the form has been touched — 98f44e2
+- [x] 3.12 After a duplicate error the typed values survive and Esc now prompts — 98f44e2
+- [x] 3.13 Layout holds at 375px — 98f44e2
