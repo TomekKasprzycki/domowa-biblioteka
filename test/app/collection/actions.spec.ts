@@ -280,4 +280,50 @@ describe("collection actions", () => {
       false
     );
   });
+
+  it("stores a normalized ISBN when a valid one is submitted", async () => {
+    // given a signed-in user and a valid ISBN
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+    const isbnTitle = `ISBN Action Book ${suffix}`;
+
+    // when adding a book with that ISBN
+    const result = await addBookAction(
+      null,
+      formData({
+        title: isbnTitle,
+        author,
+        notes: "",
+        isbn: "978-0-14-032872-1",
+      })
+    );
+
+    // then it succeeds and the normalized ISBN reaches the row
+    expect(result).toBeNull();
+    const books = await findByUserId(ownerId);
+    const created = books.find((b) => b.title === isbnTitle);
+    expect(created?.isbn).toBe("9780140328721");
+  });
+
+  it("rejects an ISBN with a broken check digit without touching the DB", async () => {
+    // given a signed-in user and an ISBN with a broken check digit
+    mockAuth.mockResolvedValue({ user: { id: ownerId } });
+    const invalidTitle = `Invalid ISBN Book ${suffix}`;
+
+    // when adding a book with that ISBN
+    const before = await findByUserId(ownerId);
+    const result = await addBookAction(
+      null,
+      formData({
+        title: invalidTitle,
+        author,
+        notes: "",
+        isbn: "9780140328722",
+      })
+    );
+
+    // then it is rejected and nothing is written
+    expect(result).toBe("That ISBN doesn't look right.");
+    const after = await findByUserId(ownerId);
+    expect(after.length).toBe(before.length);
+  });
 });

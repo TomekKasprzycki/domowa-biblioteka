@@ -8,6 +8,7 @@ export async function createBook(data: {
   title: string;
   author: string;
   notes?: string;
+  isbn?: string | null;
 }): Promise<BookEntity> {
   const ds = await getDataSource();
   const repo = ds.getRepository<BookEntity>("books");

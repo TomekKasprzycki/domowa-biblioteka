@@ -66,7 +66,24 @@ describe("bookRepository", () => {
     const book = await createBook({ userId: ownerId, title, author });
     expect(book.id).toMatch(UUID_REGEX);
     expect(book.title).toBe(title);
+    expect(book.isbn).toBeNull();
     bookId = book.id;
+  });
+
+  it("persists an ISBN when one is supplied", async () => {
+    // given an ISBN passed to createBook
+    const isbn = "9780140328721";
+
+    // when creating the book
+    const book = await createBook({
+      userId: ownerId,
+      title: `ISBN Book ${suffix}`,
+      author,
+      isbn,
+    });
+
+    // then it is persisted
+    expect(book.isbn).toBe(isbn);
   });
 
   it("finds books by userId", async () => {
