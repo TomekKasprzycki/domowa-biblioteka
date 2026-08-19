@@ -7,10 +7,15 @@ import { pressEscape } from "../../../shared/dialog.mock";
 jest.mock("@/app/collection/actions", () => ({
   addBookAction: jest.fn().mockResolvedValue(null),
 }));
+jest.mock("@/app/collection/isbn-lookup.client", () => ({
+  lookupIsbn: jest.fn(),
+}));
 import { addBookAction } from "@/app/collection/actions";
+import { lookupIsbn } from "@/app/collection/isbn-lookup.client";
 import { AddBookModal } from "@/app/collection/_components/add-book-modal";
 
 const mockAdd = addBookAction as jest.Mock;
+const mockLookup = lookupIsbn as jest.Mock;
 
 function getDialog(): HTMLDialogElement {
   return screen.getByRole("dialog", { hidden: true }) as HTMLDialogElement;
@@ -20,6 +25,7 @@ describe("AddBookModal", () => {
   beforeEach(() => {
     mockAdd.mockClear();
     mockAdd.mockResolvedValue(null);
+    mockLookup.mockReset();
   });
 
   afterEach(() => {
@@ -141,5 +147,59 @@ describe("AddBookModal", () => {
 
     // then
     expect(screen.getByLabelText("Title")).toHaveValue("");
+  });
+
+  it("closes without prompting when every field is cleared, even with the confirmation checkbox rendered", async () => {
+    // given a successful lookup that renders the checkbox, then every field
+    // cleared back to empty by hand — this is the case that discriminates a
+    // working isDirty from a permanently-true one, since the checkbox's
+    // .value is "on" regardless of checked state
+    const user = userEvent.setup();
+    const confirmSpy = jest.spyOn(window, "confirm");
+    mockLookup.mockResolvedValue({
+      status: "found",
+      title: "Solaris",
+      author: "Stanisław Lem",
+    });
+    render(<AddBookModal />);
+    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await screen.findByRole("checkbox");
+    await user.clear(screen.getByLabelText("ISBN (optional)"));
+    await user.clear(screen.getByLabelText("Title"));
+    await user.clear(screen.getByLabelText("Author"));
+
+    // when
+    pressEscape(getDialog());
+
+    // then
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(getDialog().open).toBe(false);
+  });
+
+  it("prompts on Esc after a failed submit, since the retained values are now dirty", async () => {
+    // given a failed submit whose typed values survive (React 19 would
+    // otherwise blank an uncontrolled form here)
+    const user = userEvent.setup();
+    mockAdd.mockResolvedValue(
+      "You already have a book with this title and author."
+    );
+    render(<AddBookModal />);
+    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.type(screen.getByLabelText("Title"), "Solaris");
+    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.click(screen.getByRole("button", { name: "Add" }));
+    await screen.findByRole("alert");
+    jest.spyOn(window, "confirm").mockReturnValue(true);
+
+    // when
+    pressEscape(getDialog());
+
+    // then the retained values are dirty, so the discard prompt fires
+    expect(window.confirm).toHaveBeenCalledWith(
+      "Discard this book? What you've typed will be lost."
+    );
+    expect(getDialog().open).toBe(false);
   });
 });

@@ -37,6 +37,13 @@
 - **Rule**: When writing a plan, every item in "What We're NOT Doing" must be checked against the phase bodies for the same subject matter under different wording; when reviewing a plan, treat this cross-check as mandatory rather than pattern-matching on identical phrasing. If a phase genuinely needs to do a thing the guardrail excludes, amend the guardrail rather than leaving both.
 - **Applies to**: plan authoring and plan review; strongest where a plan touches a feature carrying known debt
 
+## msw cannot be adopted here as a one-line devDependency
+
+- **Context**: `jest.config.ts` + `test/tsconfig.json` — ts-jest preset, CommonJS (no `"type": "module"`), `testEnvironment: "node"`, and a `transform` matching only `^.+\.tsx?$`.
+- **Problem**: AGENTS.md:45 mandates msw for HTTP mocking, and the S-07 plan budgeted it as one pinned devDependency with no config change. A spike against the project's exact versions refuted that: importing `msw` — not only `msw/node` — throws `SyntaxError: Cannot use import statement outside a module` from `rettime/build/index.mjs`. msw 2.15.0 ships a CJS build itself, but roughly 37 transitive packages declare `"type": "module"` and some (`rettime`) expose no `require` condition at all. Adding `transformIgnorePatterns` alone changes nothing, because the repo's `transform` matches only `.ts`/`.tsx`, so an un-ignored `.mjs` file reaches no transformer and fails identically.
+- **Rule**: A working msw setup here needs four coordinated changes — a `.mjs`/`.js` transform entry, a `transformIgnorePatterns` allow-list, `moduleFileExtensions`, and a second tsconfig with `allowJs` — plus a ~341-package install and an allow-list that npm hoisting can silently invalidate on a lockfile refresh. Never plan msw as a small dependency addition. For one or two outbound calls, stub `global.fetch` with `jest.spyOn` and say so explicitly in "What We're NOT Doing"; treat a real msw adoption as its own tooling change with its own plan. The same caution applies to any ESM-only test dependency in this repo.
+- **Applies to**: plan authoring and plan review wherever HTTP mocking or a new test dependency is proposed; AGENTS.md:45
+
 ## Component specs: UI test infra is installed — write specs going forward
 
 - **Context**: src/app/**/_components/*.tsx and src/app/**/*.tsx — React components. Infra added during S-02 (friend-connections).

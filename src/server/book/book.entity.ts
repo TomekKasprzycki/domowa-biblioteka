@@ -26,6 +26,9 @@ export class BookEntity {
   @Column({ type: "varchar", nullable: true })
   notes!: string | null;
 
+  @Column({ type: "varchar", nullable: true })
+  isbn!: string | null;
+
   @Column({ type: "uuid" })
   userId!: string;
 

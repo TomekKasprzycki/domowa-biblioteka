@@ -12,13 +12,15 @@ export function AddBookModal() {
 
   const close = useCallback(() => setOpen(false), []);
 
-  // Read the live DOM rather than mirroring every field in state: the form's
-  // inputs are uncontrolled, and a dirty check is the only thing that needs
-  // their values.
+  // Read the live DOM for the dirty check rather than tracking it separately.
+  // Checkboxes are excluded: a checkbox's .value is the string "on"
+  // regardless of checked state, so the confirmation checkbox added in S-07
+  // would otherwise read as permanent dirt and fire the discard prompt on
+  // every dismissal, even an untouched one.
   const isDirty = useCallback(() => {
     const fields = formRef.current?.querySelectorAll<
       HTMLInputElement | HTMLTextAreaElement
-    >("input, textarea");
+    >("input:not([type=checkbox]), textarea");
     return Array.from(fields ?? []).some((field) => field.value.trim() !== "");
   }, []);
 
@@ -42,8 +44,9 @@ export function AddBookModal() {
       </button>
 
       <Modal open={open} onClose={close} title="Add book" canClose={canClose}>
-        {/* Remounted on every open so a reopened dialog starts empty — the
-            form is uncontrolled, so nothing else resets its fields. */}
+        {/* Remounted on every open so a reopened dialog starts empty. Title,
+            author and ISBN are controlled state now (S-07), and notes stays
+            uncontrolled; the remount resets both kinds alike. */}
         <div ref={formRef} key={String(open)}>
           <AddBookForm onSaved={close} onCancel={requestClose} />
         </div>

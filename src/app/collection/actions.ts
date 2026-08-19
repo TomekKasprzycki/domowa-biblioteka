@@ -17,6 +17,7 @@ import {
   isDuplicateError,
   isForeignKeyViolation,
 } from "@/lib/db-error.utils";
+import { normalizeIsbn } from "@/lib/normalize-isbn.utils";
 
 const titleSchema = z.string().trim().min(1, "Title is required").max(255);
 const authorSchema = z.string().trim().min(1, "Author is required").max(255);
@@ -29,6 +30,7 @@ const DUPLICATE_MESSAGE =
   "You already have a book with this title and author.";
 const ON_LOAN_MESSAGE =
   "This book is currently on loan and can't be deleted.";
+const INVALID_ISBN_MESSAGE = "That ISBN doesn't look right.";
 // Covers every non-open loan row: pending requests, declines and closed loans
 // alike. All of them are referenced by the FK, so none can be deleted.
 const HAS_HISTORY_MESSAGE =
@@ -61,12 +63,24 @@ export async function addBookAction(
   // Add is a fresh row: an empty notes field just means "don't set notes".
   const notes = parsedNotes.data === "" ? undefined : parsedNotes.data;
 
+  const rawIsbn = formData.get("isbn");
+  const trimmedIsbn = typeof rawIsbn === "string" ? rawIsbn.trim() : "";
+  let isbn: string | null = null;
+  if (trimmedIsbn !== "") {
+    const normalizedIsbn = normalizeIsbn(trimmedIsbn);
+    if (!normalizedIsbn) {
+      return INVALID_ISBN_MESSAGE;
+    }
+    isbn = normalizedIsbn;
+  }
+
   try {
     await createBook({
       userId: session.user.id,
       title: parsedTitle.data,
       author: parsedAuthor.data,
       notes,
+      isbn,
     });
   } catch (error) {
     if (isDuplicateError(error)) {

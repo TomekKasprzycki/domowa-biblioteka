@@ -1,9 +1,9 @@
 ---
 change_id: isbn-lookup
 title: "S-07: ISBN Lookup — autofill title and author from ISBN, store the ISBN"
-status: new
+status: impl_reviewed
 created: 2026-08-11
-updated: 2026-08-11
+updated: 2026-08-19
 archived_at: null
 roadmap_id: S-07
 prd_refs:
@@ -32,6 +32,35 @@ Decisions (2026-08-11):
   empty-result all degrade to "not found" with the form still usable.
 - First change needing `msw`, which AGENTS.md mandates for HTTP mocking but
   which is not yet installed. Pin it, no `^`.
+
+### Confirmation gate after a lookup (decided 2026-08-15)
+
+Research verified that the lookup can return a *plausible but wrong* book:
+practically any well-formed 13-digit string resolves to some record in Open
+Library (`9999999999999` returns a real title), and a found record may carry no
+`authors` key at all. Autofilled data is therefore untrusted input.
+
+**Rule: a save that follows a lookup must be preceded by an explicit user
+confirmation.** Autofill never leads straight to a write. The user reviews what
+came back, corrects a wrong match or completes a missing author, and only then
+confirms. The fetched fields stay fully editable throughout — the confirmation
+is an acknowledgement step, not a lock.
+
+Consequences:
+
+- The gate is **conditional on a lookup having happened**. A book typed in
+  entirely by hand keeps the current one-step submit; nothing about the manual
+  path gets slower. The add form therefore has to track whether the current
+  field values were machine-filled.
+- This makes "found, but no author" a normal, well-handled outcome rather than
+  an edge case: title fills, author stays empty, and the user cannot confirm
+  without supplying it (`author` is a required field).
+- It does not replace ISBN checksum validation. The checksum stops a typo
+  *before* the request goes out; the confirmation catches a wrong match that
+  still looks well-formed. They defend different failures — decide on the
+  checksum separately.
+- The gate is client-side and pre-submit, so the server action contract and
+  `useActionSuccess` are unaffected.
 
 ### Display: deferred to S-09 (revised 2026-08-11)
 
