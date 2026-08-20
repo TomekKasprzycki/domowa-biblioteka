@@ -598,24 +598,24 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Full suite passes: `npm test`
-- [x] 1.4 Production build passes: `npm run build`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — 7cdf0df
+- [x] 1.2 Linting passes: `npm run lint` — 7cdf0df
+- [x] 1.3 Full suite passes: `npm test` — 7cdf0df
+- [x] 1.4 Production build passes: `npm run build` — 7cdf0df
 
 #### Manual
 
-- [ ] 1.5 Body background/text use the new paper/ink tokens; Inter renders as the default font
-- [ ] 1.6 No console warnings about fonts
+- [x] 1.5 Body background/text use the new paper/ink tokens; Inter renders as the default font
+- [x] 1.6 No console warnings about fonts
 
 ### Phase 2: Design System Primitives
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Full suite passes: `npm test`
-- [ ] 2.4 Production build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Full suite passes: `npm test`
+- [x] 2.4 Production build passes: `npm run build`
 
 ### Phase 3: App Shell — Sidebar Nav + Route Groups + Modal
 
