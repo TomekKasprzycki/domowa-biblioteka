@@ -681,28 +681,28 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 7.1 Type checking passes: `npx tsc --noEmit`
-- [x] 7.2 Linting passes: `npm run lint`
-- [x] 7.3 Full suite passes: `npm test`
-- [x] 7.4 Production build passes: `npm run build`
+- [x] 7.1 Type checking passes: `npx tsc --noEmit` — 12ff2fc
+- [x] 7.2 Linting passes: `npm run lint` — 12ff2fc
+- [x] 7.3 Full suite passes: `npm test` — 12ff2fc
+- [x] 7.4 Production build passes: `npm run build` — 12ff2fc
 
 #### Manual
 
-- [x] 7.5 Approve/decline a request, confirm a pending return — LibraryCard stamp/tone correct per state
-- [x] 7.6 Mark a borrowed book returned; past-loans disclosure works
-- [x] 7.7 Layout holds at 375px, including LibraryCard's two-column structure
+- [x] 7.5 Approve/decline a request, confirm a pending return — LibraryCard stamp/tone correct per state — 12ff2fc
+- [x] 7.6 Mark a borrowed book returned; past-loans disclosure works — 12ff2fc
+- [x] 7.7 Layout holds at 375px, including LibraryCard's two-column structure — 12ff2fc
 
 ### Phase 8: Auth & Home + Final Visual Sweep
 
 #### Automated
 
-- [ ] 8.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 8.2 Linting passes: `npm run lint`
-- [ ] 8.3 Full suite passes: `npm test`
-- [ ] 8.4 Production build passes: `npm run build`
+- [x] 8.1 Type checking passes: `npx tsc --noEmit`
+- [x] 8.2 Linting passes: `npm run lint`
+- [x] 8.3 Full suite passes: `npm test`
+- [x] 8.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 8.5 Sign in, register, navigate home — no sidebar, behavior identical
-- [ ] 8.6 Full 8-page visual sweep at desktop and 375px: consistent tokens/fonts/primitives, no leftover ad-hoc classes, both intentional behavior additions work correctly
-- [ ] 8.7 Full regression confirmed (every pre-existing spec passes)
+- [x] 8.5 Sign in, register, navigate home — no sidebar, behavior identical
+- [x] 8.6 Full 8-page visual sweep at desktop and 375px: consistent tokens/fonts/primitives, no leftover ad-hoc classes, both intentional behavior additions work correctly
+- [x] 8.7 Full regression confirmed (every pre-existing spec passes)
