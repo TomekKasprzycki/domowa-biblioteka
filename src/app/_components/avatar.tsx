@@ -1,3 +1,5 @@
+import { hashString } from "@/lib/hash-string.utils";
+
 const PALETTE = [
   "bg-green-700 text-white",
   "bg-green-600 text-white",
@@ -12,17 +14,6 @@ function getInitials(name: string): string {
   if (words.length === 0) return "";
   if (words.length === 1) return words[0][0].toUpperCase();
   return (words[0][0] + words[1][0]).toUpperCase();
-}
-
-// Mirrors the mockup's own hashStr()/spinePalette pattern (design.html:697-701)
-// for "deterministic color from a name" — same person, same color, no config.
-function hashString(value: string): number {
-  let hash = 0;
-  for (let i = 0; i < value.length; i++) {
-    hash = (hash << 5) - hash + value.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
 }
 
 export function Avatar({ name }: { name: string }) {
