@@ -1,4 +1,5 @@
 import { PendingReturnRow } from "@/app/(app)/requests/_components/pending-return-row";
+import { Section } from "@/app/_components/section";
 import type { PendingReturn } from "@/app/(app)/requests/requests.types";
 
 export function PendingReturnsList({
@@ -13,10 +14,7 @@ export function PendingReturnsList({
   }
 
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-medium text-zinc-900">
-        Awaiting your confirmation
-      </h2>
+    <Section title="Awaiting your confirmation" collapsible={false}>
       <ul className="flex flex-col gap-3">
         {pendingReturns.map((pendingReturn) => (
           <PendingReturnRow
@@ -25,6 +23,6 @@ export function PendingReturnsList({
           />
         ))}
       </ul>
-    </section>
+    </Section>
   );
 }

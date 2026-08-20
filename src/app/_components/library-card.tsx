@@ -31,7 +31,7 @@ export function LibraryCard({
   stampLabel: string;
   tone: LibraryCardTone;
   title: string;
-  subtitle: string;
+  subtitle: ReactNode;
   metaLabel?: string;
   pill?: ReactNode;
   actions?: ReactNode;

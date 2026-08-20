@@ -1,4 +1,5 @@
 import { BorrowingRow } from "@/app/(app)/borrowing/_components/borrowing-row";
+import { EmptyNote } from "@/app/_components/empty-note";
 import type { OutgoingLoan } from "@/app/(app)/borrowing/borrowing.types";
 
 // Terminal states: nothing the borrower does can move these on. Everything else
@@ -11,9 +12,7 @@ const PAST_STATUSES: ReadonlySet<OutgoingLoan["status"]> = new Set([
 export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
   if (loans.length === 0) {
     return (
-      <p className="text-sm text-zinc-500">
-        You have no borrow requests or active loans.
-      </p>
+      <EmptyNote>You have no borrow requests or active loans.</EmptyNote>
     );
   }
 
@@ -33,8 +32,8 @@ export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
       {/* A native disclosure keeps history available without client state and
           without pushing live loans below the fold. */}
       {past.length > 0 && (
-        <details className="rounded-lg border border-zinc-200 p-4">
-          <summary className="cursor-pointer text-sm font-medium text-zinc-700">
+        <details className="rounded-card border border-line bg-paper-card p-4">
+          <summary className="cursor-pointer text-sm font-medium text-ink-soft">
             Past loans ({past.length})
           </summary>
           <ul className="mt-3 flex flex-col gap-3">

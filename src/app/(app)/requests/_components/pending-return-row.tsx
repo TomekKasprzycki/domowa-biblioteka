@@ -2,6 +2,8 @@
 
 import { useActionState } from "react";
 import { confirmReturnAction } from "@/app/borrow/actions";
+import { LibraryCard } from "@/app/_components/library-card";
+import { Button } from "@/app/_components/button";
 import type { PendingReturn } from "@/app/(app)/requests/requests.types";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
@@ -18,34 +20,32 @@ export function PendingReturnRow({
   const [error, action, isPending] = useActionState(confirmReturnAction, null);
 
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-zinc-200 p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="font-medium text-zinc-900">
-            {pendingReturn.book.title}
-          </p>
-          <p className="text-sm text-zinc-600">{pendingReturn.book.author}</p>
-          <p className="mt-1 text-sm text-zinc-500">
-            {pendingReturn.requester.name} says they returned it
-            {pendingReturn.startedAt &&
-              ` · borrowed since ${dateFormat.format(pendingReturn.startedAt)}`}
-          </p>
-        </div>
-        <div className="shrink-0">
+    <li>
+      <LibraryCard
+        stampLabel="Return"
+        tone="pending-return"
+        title={pendingReturn.book.title}
+        subtitle={
+          <>
+            <span className="block">{pendingReturn.book.author}</span>
+            <span className="block">
+              {pendingReturn.requester.name} says they returned it
+              {pendingReturn.startedAt &&
+                ` · borrowed since ${dateFormat.format(pendingReturn.startedAt)}`}
+            </span>
+          </>
+        }
+        actions={
           <form action={action}>
             <input type="hidden" name="loanId" value={pendingReturn.id} />
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
-            >
+            <Button type="submit" variant="primary" size="sm" disabled={isPending}>
               I received it back
-            </button>
+            </Button>
           </form>
-        </div>
-      </div>
+        }
+      />
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="mt-2 text-sm text-red-600">
           {error}
         </p>
       )}

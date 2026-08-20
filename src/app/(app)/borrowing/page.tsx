@@ -17,13 +17,16 @@ export default async function BorrowingPage() {
   }));
 
   return (
-    <main className="flex flex-1 flex-col items-center px-4 py-10">
-      <div className="flex w-full max-w-2xl flex-col gap-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+    <div className="flex flex-col gap-7">
+      <div>
+        <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
+          Loan status
+        </span>
+        <h1 className="font-display text-[30px] font-semibold text-ink">
           Borrowing
         </h1>
-        <BorrowingList loans={plainLoans} />
       </div>
-    </main>
+      <BorrowingList loans={plainLoans} />
+    </div>
   );
 }

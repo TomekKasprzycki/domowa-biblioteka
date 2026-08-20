@@ -5,6 +5,7 @@ import {
 } from "@/server/loan/loan.repository";
 import { RequestsList } from "@/app/(app)/requests/_components/requests-list";
 import { PendingReturnsList } from "@/app/(app)/requests/_components/pending-returns-list";
+import { Section } from "@/app/_components/section";
 import type {
   IncomingRequest,
   PendingReturn,
@@ -34,19 +35,21 @@ export default async function RequestsPage() {
   }));
 
   return (
-    <main className="flex flex-1 flex-col items-center px-4 py-10">
-      <div className="flex w-full max-w-2xl flex-col gap-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+    <div className="flex flex-col gap-7">
+      <div>
+        <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
+          Request inbox
+        </span>
+        <h1 className="font-display text-[30px] font-semibold text-ink">
           Requests
         </h1>
-        {/* Returns first: a pending return keeps a book locked out of
-            circulation, so it is the more urgent of the two. */}
-        <PendingReturnsList pendingReturns={plainPendingReturns} />
-        <section className="flex flex-col gap-3">
-          <h2 className="text-lg font-medium text-zinc-900">Borrow requests</h2>
-          <RequestsList requests={plainRequests} />
-        </section>
       </div>
-    </main>
+      {/* Returns first: a pending return keeps a book locked out of
+          circulation, so it is the more urgent of the two. */}
+      <PendingReturnsList pendingReturns={plainPendingReturns} />
+      <Section title="Borrow requests" collapsible={false}>
+        <RequestsList requests={plainRequests} />
+      </Section>
+    </div>
   );
 }

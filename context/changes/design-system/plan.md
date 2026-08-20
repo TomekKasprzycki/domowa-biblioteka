@@ -667,30 +667,30 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 6.1 Type checking passes: `npx tsc --noEmit`
-- [x] 6.2 Linting passes: `npm run lint`
-- [x] 6.3 Full suite passes: `npm test`
-- [x] 6.4 Production build passes: `npm run build`
+- [x] 6.1 Type checking passes: `npx tsc --noEmit` — ed65099
+- [x] 6.2 Linting passes: `npm run lint` — ed65099
+- [x] 6.3 Full suite passes: `npm test` — ed65099
+- [x] 6.4 Production build passes: `npm run build` — ed65099
 
 #### Manual
 
-- [x] 6.5 Search, filter, borrow — restyled; availability states stay distinguishable via label text
-- [x] 6.6 Layout holds at 375px
+- [x] 6.5 Search, filter, borrow — restyled; availability states stay distinguishable via label text — ed65099
+- [x] 6.6 Layout holds at 375px — ed65099
 
 ### Phase 7: Requests & Borrowing
 
 #### Automated
 
-- [ ] 7.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 7.2 Linting passes: `npm run lint`
-- [ ] 7.3 Full suite passes: `npm test`
-- [ ] 7.4 Production build passes: `npm run build`
+- [x] 7.1 Type checking passes: `npx tsc --noEmit`
+- [x] 7.2 Linting passes: `npm run lint`
+- [x] 7.3 Full suite passes: `npm test`
+- [x] 7.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 7.5 Approve/decline a request, confirm a pending return — LibraryCard stamp/tone correct per state
-- [ ] 7.6 Mark a borrowed book returned; past-loans disclosure works
-- [ ] 7.7 Layout holds at 375px, including LibraryCard's two-column structure
+- [x] 7.5 Approve/decline a request, confirm a pending return — LibraryCard stamp/tone correct per state
+- [x] 7.6 Mark a borrowed book returned; past-loans disclosure works
+- [x] 7.7 Layout holds at 375px, including LibraryCard's two-column structure
 
 ### Phase 8: Auth & Home + Final Visual Sweep
 

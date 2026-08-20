@@ -1,9 +1,10 @@
 import { RequestRow } from "@/app/(app)/requests/_components/request-row";
+import { EmptyNote } from "@/app/_components/empty-note";
 import type { IncomingRequest } from "@/app/(app)/requests/requests.types";
 
 export function RequestsList({ requests }: { requests: IncomingRequest[] }) {
   if (requests.length === 0) {
-    return <p className="text-sm text-zinc-500">No pending requests.</p>;
+    return <EmptyNote>No pending requests.</EmptyNote>;
   }
 
   return (
