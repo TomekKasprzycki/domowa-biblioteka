@@ -5,6 +5,7 @@ import { BookRow } from "@/app/(app)/collection/_components/book-row";
 import { EditBookModal } from "@/app/(app)/collection/_components/edit-book-modal";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
 import { EmptyNote } from "@/app/_components/empty-note";
+import { Shelf } from "@/app/_components/shelf";
 
 export function BookList({ books }: { books: CollectionBook[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -19,7 +20,7 @@ export function BookList({ books }: { books: CollectionBook[] }) {
 
   return (
     <>
-      <ul className="flex flex-col gap-3">
+      <Shelf>
         {books.map((book) => (
           <BookRow
             key={book.id}
@@ -27,7 +28,7 @@ export function BookList({ books }: { books: CollectionBook[] }) {
             onEdit={() => setEditingId(book.id)}
           />
         ))}
-      </ul>
+      </Shelf>
 
       {/* Keyed by book so switching rows remounts the form with the new
           defaultValues — the inputs are uncontrolled. */}

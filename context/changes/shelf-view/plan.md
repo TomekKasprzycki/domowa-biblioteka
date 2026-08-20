@@ -283,24 +283,24 @@ Not applicable — no schema change. `isbn` is an existing column; this plan onl
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Full suite passes: `npm test`
-- [x] 1.4 Production build passes: `npm run build`
+- [x] 1.1 Type checking passes: `npx tsc --noEmit` — a19c771
+- [x] 1.2 Linting passes: `npm run lint` — a19c771
+- [x] 1.3 Full suite passes: `npm test` — a19c771
+- [x] 1.4 Production build passes: `npm run build` — a19c771
 
 ### Phase 2: Collection
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Full suite passes: `npm test`
-- [ ] 2.4 Production build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Full suite passes: `npm test`
+- [x] 2.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.5 Shelf renders, spine colors/sizes correct, drawer opens with correct info (incl. no-ISBN case), Edit opens EditBookModal, Delete works (incl. loan-guard)
-- [ ] 2.6 Layout holds at 375px
+- [x] 2.5 Shelf renders, spine colors/sizes correct, drawer opens with correct info (incl. no-ISBN case), Edit opens EditBookModal, Delete works (incl. loan-guard)
+- [x] 2.6 Layout holds at 375px
 
 ### Phase 3: Discover
 

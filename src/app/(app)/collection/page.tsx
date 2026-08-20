@@ -26,6 +26,7 @@ export default async function CollectionPage() {
       title: b.title,
       author: b.author,
       notes: b.notes,
+      isbn: b.isbn,
       createdAt: b.createdAt,
       loan: loan
         ? {

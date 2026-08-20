@@ -8,6 +8,7 @@ export type CollectionBook = {
   title: string;
   author: string;
   notes: string | null;
+  isbn: string | null;
   createdAt: Date;
   loan: {
     status: LoanStatus;

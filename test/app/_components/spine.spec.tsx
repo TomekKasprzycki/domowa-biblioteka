@@ -55,6 +55,66 @@ describe("Spine", () => {
     expect(screen.queryByText("On loan")).not.toBeInTheDocument();
   });
 
+  it("shows a title/author tooltip when no ISBN is given", () => {
+    // given / when
+    render(
+      <Spine title="Solaris" author="Stanisław Lem" onClick={jest.fn()} />
+    );
+
+    // then
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "title",
+      "Solaris — Stanisław Lem"
+    );
+  });
+
+  it("includes the ISBN in the tooltip when given", () => {
+    // given / when
+    render(
+      <Spine
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn="978-83-08-07725-4"
+        onClick={jest.fn()}
+      />
+    );
+
+    // then
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "title",
+      "Solaris — Stanisław Lem · ISBN 978-83-08-07725-4"
+    );
+  });
+
+  it("splits a long title into two columns, with ellipsis only on the second", () => {
+    // given a title well past the 35-character 2-column threshold
+    const longTitle =
+      "Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Lambda Mu Nu Xi Omicron";
+
+    // when
+    const { container } = render(
+      <Spine title={longTitle} author="Some Author" onClick={jest.fn()} />
+    );
+    const columns = container.querySelectorAll("button > span > span");
+
+    // then
+    expect(columns).toHaveLength(2);
+    expect(columns[0].className).not.toContain("text-ellipsis");
+    expect(columns[1].className).toContain("text-ellipsis");
+  });
+
+  it("renders a short title as a single column with ellipsis", () => {
+    // given / when
+    const { container } = render(
+      <Spine title="Solaris" author="Stanisław Lem" onClick={jest.fn()} />
+    );
+    const columns = container.querySelectorAll("button > span > span");
+
+    // then
+    expect(columns).toHaveLength(1);
+    expect(columns[0].className).toContain("text-ellipsis");
+  });
+
   it("gives the same title the same rendered style across renders", () => {
     // given
     const { container: first } = render(

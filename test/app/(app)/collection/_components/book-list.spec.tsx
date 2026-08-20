@@ -16,6 +16,7 @@ const solaris: CollectionBook = {
   title: "Solaris",
   author: "Stanisław Lem",
   notes: null,
+  isbn: null,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   loan: null,
 };
@@ -35,12 +36,17 @@ describe("BookList", () => {
     expect(screen.getByText("Your collection is empty.")).toBeInTheDocument();
   });
 
-  it("renders one row per book", () => {
+  it("renders one spine per book", () => {
     // given / when
     render(<BookList books={[solaris, cyberiad]} />);
 
     // then
-    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(
+      screen.getByRole("button", { name: /^View Solaris,/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /^View Cyberiada,/ })
+    ).toBeInTheDocument();
   });
 
   it("keeps the edit dialog closed until a row's Edit is clicked", () => {
@@ -48,7 +54,7 @@ describe("BookList", () => {
     render(<BookList books={[solaris, cyberiad]} />);
 
     // then
-    expect(screen.queryByRole("dialog", { hidden: true })).toBeNull();
+    expect(screen.queryByLabelText("Title")).toBeNull();
   });
 
   it("opens the edit dialog for the book whose Edit was clicked", async () => {
@@ -57,7 +63,10 @@ describe("BookList", () => {
     render(<BookList books={[solaris, cyberiad]} />);
 
     // when
-    await user.click(screen.getAllByRole("button", { name: "Edit" })[1]);
+    await user.click(
+      screen.getByRole("button", { name: /^View Cyberiada,/ })
+    );
+    await user.click(screen.getByRole("button", { name: "Edit" }));
 
     // then
     expect(screen.getByLabelText("Title")).toHaveValue("Cyberiada");
@@ -67,12 +76,13 @@ describe("BookList", () => {
     // given
     const user = userEvent.setup();
     render(<BookList books={[solaris]} />);
+    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
     await user.click(screen.getByRole("button", { name: "Edit" }));
 
     // when
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     // then
-    expect(screen.queryByRole("dialog", { hidden: true })).toBeNull();
+    expect(screen.queryByLabelText("Title")).toBeNull();
   });
 });

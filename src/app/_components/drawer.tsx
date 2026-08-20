@@ -48,7 +48,7 @@ export function Drawer({
         if (event.target !== dialogRef.current) return;
         onClose();
       }}
-      className="fixed inset-y-0 right-0 m-0 w-[340px] max-w-[90vw] rounded-none border-0 bg-white p-0 shadow-panel transition-transform duration-200 ease-out starting:translate-x-full motion-reduce:transition-none backdrop:bg-[rgba(16,36,26,0.3)]"
+      className="fixed inset-y-0 left-auto right-0 m-0 w-[340px] max-w-[90vw] rounded-none border-0 bg-white p-0 shadow-panel transition-transform duration-200 ease-out starting:translate-x-full motion-reduce:transition-none backdrop:bg-[rgba(16,36,26,0.3)]"
     >
       <div className="flex h-full flex-col gap-4 px-6 py-[26px]">
         <button

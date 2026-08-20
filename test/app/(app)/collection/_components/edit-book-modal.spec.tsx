@@ -18,6 +18,7 @@ const book: CollectionBook = {
   title: "Solaris",
   author: "Stanisław Lem",
   notes: "Paperback",
+  isbn: null,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   loan: null,
 };

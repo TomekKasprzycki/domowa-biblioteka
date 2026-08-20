@@ -1,6 +1,8 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import "../../../shared/dialog.mock";
 
 jest.mock("@/auth", () => ({ auth: jest.fn() }));
 jest.mock("@/server/book/book.repository", () => ({
@@ -62,6 +64,7 @@ describe("CollectionPage", () => {
 
   it("folds the open loan onto the book it belongs to", async () => {
     // given
+    const user = userEvent.setup();
     mockAuth.mockResolvedValue({ user: { id: "owner-1" } });
     mockFindByUserId.mockResolvedValue([lentBook, shelvedBook]);
     mockFindOpenLoansForOwner.mockResolvedValue([
@@ -72,9 +75,11 @@ describe("CollectionPage", () => {
         requester: { name: "Ania" },
       },
     ]);
+    render(await CollectionPage());
 
     // when
-    render(await CollectionPage());
+    // The loan line now lives in the book's drawer, not directly on the shelf.
+    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
 
     // then
     expect(
@@ -84,6 +89,7 @@ describe("CollectionPage", () => {
 
   it("leaves books without an open loan unmarked", async () => {
     // given
+    const user = userEvent.setup();
     mockAuth.mockResolvedValue({ user: { id: "owner-1" } });
     mockFindByUserId.mockResolvedValue([lentBook, shelvedBook]);
     mockFindOpenLoansForOwner.mockResolvedValue([
@@ -94,23 +100,32 @@ describe("CollectionPage", () => {
         requester: { name: "Ania" },
       },
     ]);
+    render(await CollectionPage());
 
     // when
-    render(await CollectionPage());
+    // Delete lives in each book's drawer; open both to compare.
+    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(
+      screen.getByRole("button", { name: /^View Clean Code,/ })
+    );
 
     // then
     // only the lent book carries a loan line, so exactly one Delete is hidden
     expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(1);
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
   });
 
   it("shows no loan lines when nothing is out", async () => {
     // given
+    const user = userEvent.setup();
     mockAuth.mockResolvedValue({ user: { id: "owner-1" } });
     mockFindByUserId.mockResolvedValue([lentBook, shelvedBook]);
+    render(await CollectionPage());
 
     // when
-    render(await CollectionPage());
+    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(
+      screen.getByRole("button", { name: /^View Clean Code,/ })
+    );
 
     // then
     expect(
