@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DiscoverBookRow } from "@/app/(app)/discover/_components/discover-book-row";
+import { EmptyNote } from "@/app/_components/empty-note";
 import type { DiscoverBook, DiscoverFriend } from "@/app/(app)/discover/discover.types";
 
 export function DiscoverSearch({
@@ -20,10 +21,10 @@ export function DiscoverSearch({
 
   if (friends.length === 0) {
     return (
-      <p className="text-sm text-zinc-500">
-        You have no confirmed friends yet. Connect with friends to browse their
-        collections.
-      </p>
+      <EmptyNote>
+        You have no confirmed friends yet. Connect with friends to browse
+        their collections.
+      </EmptyNote>
     );
   }
 
@@ -47,13 +48,13 @@ export function DiscoverSearch({
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by title or author"
           aria-label="Search by title or author"
-          className="flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-500 focus:outline-none"
+          className="flex-1 rounded-lg border border-line bg-paper-card px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-green-500 focus:outline-none"
         />
         <select
           value={friendFilter ?? ""}
           onChange={(e) => setFriendFilter(e.target.value || null)}
           aria-label="Filter by friend"
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none"
+          className="rounded-lg border border-line bg-paper-card px-3 py-2 text-sm text-ink focus:border-green-500 focus:outline-none"
         >
           <option value="">All friends</option>
           {friends.map((friend) => (
@@ -65,9 +66,7 @@ export function DiscoverSearch({
       </div>
 
       {matches.length === 0 ? (
-        <p className="text-sm text-zinc-500">
-          No books match your search.
-        </p>
+        <EmptyNote>No books match your search.</EmptyNote>
       ) : (
         <ul className="flex flex-col gap-3">
           {matches.map((book) => (

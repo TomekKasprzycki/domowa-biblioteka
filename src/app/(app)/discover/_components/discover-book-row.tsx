@@ -2,6 +2,9 @@
 
 import { useActionState } from "react";
 import { requestBorrowAction } from "@/app/borrow/actions";
+import { Card } from "@/app/_components/card";
+import { Pill } from "@/app/_components/pill";
+import { Button } from "@/app/_components/button";
 import type { DiscoverBook } from "@/app/(app)/discover/discover.types";
 
 export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
@@ -12,15 +15,15 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
   const { status, borrowedByViewer, requestedByViewer } = book.availability;
 
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-zinc-200 p-4">
+    <Card as="li" className="flex flex-col gap-2">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-medium text-zinc-900">{book.title}</p>
-          <p className="text-sm text-zinc-600">{book.author}</p>
+          <p className="font-medium text-ink">{book.title}</p>
+          <p className="text-sm text-ink-soft">{book.author}</p>
           {book.notes && (
-            <p className="mt-1 text-sm text-zinc-500">{book.notes}</p>
+            <p className="mt-1 text-sm text-ink-faint">{book.notes}</p>
           )}
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-ink-faint">
             Owned by {book.owner.name}
           </p>
         </div>
@@ -30,28 +33,23 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
               else must still read as "On loan", not "Requested". */}
           {status === "on_loan" ? (
             borrowedByViewer ? (
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-                Borrowed by you
-              </span>
+              <Pill tone="pending">Borrowed by you</Pill>
             ) : (
-              <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
-                On loan
-              </span>
+              <Pill tone="pending">On loan</Pill>
             )
           ) : requestedByViewer ? (
-            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
-              Requested
-            </span>
+            <Pill tone="pending">Requested</Pill>
           ) : (
             <form action={action}>
               <input type="hidden" name="bookId" value={book.id} />
-              <button
+              <Button
                 type="submit"
+                variant="primary"
+                size="sm"
                 disabled={isPending}
-                className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
               >
                 Borrow
-              </button>
+              </Button>
             </form>
           )}
         </div>
@@ -61,6 +59,6 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
           {error}
         </p>
       )}
-    </li>
+    </Card>
   );
 }

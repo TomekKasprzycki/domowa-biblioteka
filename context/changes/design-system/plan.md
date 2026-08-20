@@ -653,29 +653,29 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 5.1 Type checking passes: `npx tsc --noEmit`
-- [x] 5.2 Linting passes: `npm run lint`
-- [x] 5.3 Full suite passes: `npm test`
-- [x] 5.4 Production build passes: `npm run build`
+- [x] 5.1 Type checking passes: `npx tsc --noEmit` — 9238bb4
+- [x] 5.2 Linting passes: `npm run lint` — 9238bb4
+- [x] 5.3 Full suite passes: `npm test` — 9238bb4
+- [x] 5.4 Production build passes: `npm run build` — 9238bb4
 
 #### Manual
 
-- [x] 5.5 Send, accept, reject, view sent, remove — restyled, behavior identical
-- [x] 5.6 Layout holds at 375px
+- [x] 5.5 Send, accept, reject, view sent, remove — restyled, behavior identical — 9238bb4
+- [x] 5.6 Layout holds at 375px — 9238bb4
 
 ### Phase 6: Discover
 
 #### Automated
 
-- [ ] 6.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 6.2 Linting passes: `npm run lint`
-- [ ] 6.3 Full suite passes: `npm test`
-- [ ] 6.4 Production build passes: `npm run build`
+- [x] 6.1 Type checking passes: `npx tsc --noEmit`
+- [x] 6.2 Linting passes: `npm run lint`
+- [x] 6.3 Full suite passes: `npm test`
+- [x] 6.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 6.5 Search, filter, borrow — restyled; availability states stay distinguishable via label text
-- [ ] 6.6 Layout holds at 375px
+- [x] 6.5 Search, filter, borrow — restyled; availability states stay distinguishable via label text
+- [x] 6.6 Layout holds at 375px
 
 ### Phase 7: Requests & Borrowing
 

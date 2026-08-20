@@ -7,6 +7,7 @@ import {
   findRequestedLoansForBooksByRequester,
 } from "@/server/loan/loan.repository";
 import { DiscoverSearch } from "@/app/(app)/discover/_components/discover-search";
+import { AvailabilityLegendItem } from "@/app/(app)/discover/_components/availability-legend-item";
 import type { DiscoverBook } from "@/app/(app)/discover/discover.types";
 
 interface DiscoverPageProps {
@@ -63,17 +64,24 @@ export default async function DiscoverPage({
   });
 
   return (
-    <main className="flex flex-1 flex-col items-center px-4 py-10">
-      <div className="flex w-full max-w-2xl flex-col gap-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+    <div className="flex flex-col gap-7">
+      <div>
+        <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
+          Their shelf
+        </span>
+        <h1 className="font-display text-[30px] font-semibold text-ink">
           Discover
         </h1>
-        <DiscoverSearch
-          books={plainBooks}
-          friends={friends}
-          initialFriendId={initialFriendId}
-        />
       </div>
-    </main>
+      <div className="flex flex-wrap gap-[18px] text-[12.5px] text-ink-soft">
+        <AvailabilityLegendItem tone="available">Available</AvailabilityLegendItem>
+        <AvailabilityLegendItem tone="unavailable">Unavailable</AvailabilityLegendItem>
+      </div>
+      <DiscoverSearch
+        books={plainBooks}
+        friends={friends}
+        initialFriendId={initialFriendId}
+      />
+    </div>
   );
 }
