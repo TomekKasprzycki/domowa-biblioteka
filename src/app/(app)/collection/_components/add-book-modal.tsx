@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import { Modal } from "@/app/_components/modal";
 import { AddBookForm } from "@/app/(app)/collection/_components/add-book-form";
+import { Button } from "@/app/_components/button";
 
 const DISCARD_PROMPT = "Discard this book? What you've typed will be lost.";
 
@@ -35,13 +36,9 @@ export function AddBookModal() {
 
   return (
     <div className="self-start">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
-      >
+      <Button type="button" variant="primary" onClick={() => setOpen(true)}>
         Add book
-      </button>
+      </Button>
 
       <Modal open={open} onClose={close} title="Add book" canClose={canClose}>
         {/* Remounted on every open so a reopened dialog starts empty. Title,

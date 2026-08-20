@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { deleteBookAction } from "@/app/(app)/collection/actions";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
+import { Card } from "@/app/_components/card";
+import { Button } from "@/app/_components/button";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
@@ -32,13 +34,13 @@ export function BookRow({
   );
 
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-zinc-200 p-4">
+    <Card as="li" className="flex flex-col gap-2">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-medium text-zinc-900">{book.title}</p>
-          <p className="text-sm text-zinc-600">{book.author}</p>
+          <p className="font-medium text-ink">{book.title}</p>
+          <p className="text-sm text-ink-soft">{book.author}</p>
           {book.notes && (
-            <p className="mt-1 text-sm text-zinc-500">{book.notes}</p>
+            <p className="mt-1 text-sm text-ink-faint">{book.notes}</p>
           )}
           {book.loan && (
             <p className="mt-1 text-sm font-medium text-blue-700">
@@ -46,32 +48,29 @@ export function BookRow({
             </p>
           )}
         </div>
-        <div className="flex shrink-0 gap-3">
-          <button
-            type="button"
-            onClick={onEdit}
-            className="text-sm font-medium text-zinc-900 hover:underline"
-          >
+        <div className="flex shrink-0 gap-2">
+          <Button type="button" variant="ghost" size="sm" onClick={onEdit}>
             Edit
-          </button>
+          </Button>
           {/* Deleting a book that is out would orphan the borrower's loan row,
               and the FK refuses it anyway. Hiding the control makes the rule
               visible; the server action is what actually enforces it. */}
           {!book.loan && (
             <form action={deleteAction}>
               <input type="hidden" name="bookId" value={book.id} />
-              <button
+              <Button
                 type="submit"
+                variant="decline"
+                size="sm"
                 disabled={isPending}
                 onClick={(e) => {
                   if (!window.confirm(`Delete "${book.title}"?`)) {
                     e.preventDefault();
                   }
                 }}
-                className="text-sm font-medium text-red-600 hover:underline disabled:opacity-50"
               >
                 Delete
-              </button>
+              </Button>
             </form>
           )}
         </div>
@@ -81,6 +80,6 @@ export function BookRow({
           {error}
         </p>
       )}
-    </li>
+    </Card>
   );
 }

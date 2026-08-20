@@ -621,33 +621,33 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Full suite passes: `npm test`
-- [x] 3.4 Production build passes: `npm run build`
-- [x] 3.5 Every route resolves to its original URL after the `(app)` move
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 2eeb79e
+- [x] 3.2 Linting passes: `npm run lint` — 2eeb79e
+- [x] 3.3 Full suite passes: `npm test` — 2eeb79e
+- [x] 3.4 Production build passes: `npm run build` — 2eeb79e
+- [x] 3.5 Every route resolves to its original URL after the `(app)` move — 2eeb79e
 
 #### Manual
 
-- [x] 3.6 Signed-in sidebar renders on all 5 authenticated pages with correct active-route highlight and counts
-- [x] 3.7 Signed-out pages (`/`, `/login`, `/register`) render with no sidebar
-- [x] 3.8 Sign-out from the sidebar works and redirects to `/`
-- [x] 3.9 Modal visually matches the new Card language
-- [x] 3.10 Sidebar collapses correctly at 375px
+- [x] 3.6 Signed-in sidebar renders on all 5 authenticated pages with correct active-route highlight and counts — 2eeb79e
+- [x] 3.7 Signed-out pages (`/`, `/login`, `/register`) render with no sidebar — 2eeb79e
+- [x] 3.8 Sign-out from the sidebar works and redirects to `/` — 2eeb79e
+- [x] 3.9 Modal visually matches the new Card language — 2eeb79e
+- [x] 3.10 Sidebar collapses correctly at 375px — 2eeb79e
 
 ### Phase 4: Collection
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 4.2 Linting passes: `npm run lint`
-- [ ] 4.3 Full suite passes: `npm test`
-- [ ] 4.4 Production build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npx tsc --noEmit`
+- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.3 Full suite passes: `npm test`
+- [x] 4.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 4.5 Add (with and without ISBN lookup), edit, delete a book — restyled, behavior identical
-- [ ] 4.6 Layout holds at 375px
+- [x] 4.5 Add (with and without ISBN lookup), edit, delete a book — restyled, behavior identical
+- [x] 4.6 Layout holds at 375px
 
 ### Phase 5: Friends
 

@@ -4,12 +4,13 @@ import { useState } from "react";
 import { BookRow } from "@/app/(app)/collection/_components/book-row";
 import { EditBookModal } from "@/app/(app)/collection/_components/edit-book-modal";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
+import { EmptyNote } from "@/app/_components/empty-note";
 
 export function BookList({ books }: { books: CollectionBook[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   if (books.length === 0) {
-    return <p className="text-sm text-zinc-500">Your collection is empty.</p>;
+    return <EmptyNote>Your collection is empty.</EmptyNote>;
   }
 
   // Resolved from the current books rather than held in state, so an edited

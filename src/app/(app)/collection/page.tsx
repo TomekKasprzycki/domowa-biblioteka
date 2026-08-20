@@ -38,14 +38,19 @@ export default async function CollectionPage() {
   });
 
   return (
-    <main className="flex flex-1 flex-col items-center px-4 py-10">
-      <div className="flex w-full max-w-2xl flex-col gap-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-          Your collection
-        </h1>
+    <div className="flex flex-col gap-7">
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div>
+          <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
+            Your shelf
+          </span>
+          <h1 className="font-display text-[30px] font-semibold text-ink">
+            Your collection
+          </h1>
+        </div>
         <AddBookModal />
-        <BookList books={plainBooks} />
       </div>
-    </main>
+      <BookList books={plainBooks} />
+    </div>
   );
 }

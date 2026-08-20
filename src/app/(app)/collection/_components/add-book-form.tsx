@@ -5,6 +5,8 @@ import { addBookAction } from "@/app/(app)/collection/actions";
 import { lookupIsbn } from "@/app/(app)/collection/isbn-lookup.client";
 import { useActionSuccess } from "@/lib/use-action-success.utils";
 import { normalizeIsbn } from "@/lib/normalize-isbn.utils";
+import { Field } from "@/app/_components/field";
+import { Button } from "@/app/_components/button";
 
 type LookupStatus =
   | "idle"
@@ -73,77 +75,59 @@ export function AddBookForm({
   const submitDisabled = isPending || (isFromLookup && !confirmed);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="isbn" className="text-sm font-medium text-zinc-700">
+    <form action={formAction} className="flex flex-col gap-1">
+      <div className="mb-3.5">
+        <label
+          htmlFor="isbn"
+          className="mb-1.5 block font-mono text-[11.5px] font-semibold uppercase tracking-wide text-ink-soft"
+        >
           ISBN (optional)
         </label>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <input
             id="isbn"
             type="text"
             name="isbn"
             value={isbn}
             onChange={(e) => setIsbn(e.target.value)}
-            className="flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+            className="flex-1 rounded-[7px] border border-line px-3 py-2.5 text-sm text-ink focus:border-green-500 focus:outline-none"
           />
-          <button
+          <Button
             type="button"
+            variant="outline-blue"
+            size="sm"
             onClick={handleLookup}
-            className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
           >
             Look up
-          </button>
+          </Button>
         </div>
-        <p role="status" className="min-h-4 text-xs text-zinc-500">
+        <p role="status" className="mt-1.5 min-h-4 text-xs text-ink-faint">
           {STATUS_MESSAGES[lookupStatus]}
         </p>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="title" className="text-sm font-medium text-zinc-700">
-          Title
-        </label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-        />
-      </div>
+      <Field
+        label="Title"
+        id="title"
+        name="title"
+        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="author" className="text-sm font-medium text-zinc-700">
-          Author
-        </label>
-        <input
-          id="author"
-          type="text"
-          name="author"
-          required
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-        />
-      </div>
+      <Field
+        label="Author"
+        id="author"
+        name="author"
+        required
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+      />
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="notes" className="text-sm font-medium text-zinc-700">
-          Notes (optional)
-        </label>
-        <textarea
-          id="notes"
-          name="notes"
-          rows={2}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-        />
-      </div>
+      <Field as="textarea" label="Notes (optional)" id="notes" name="notes" rows={2} />
 
       {isFromLookup && (
-        <label className="flex items-center gap-2 text-sm text-zinc-700">
+        <label className="mb-2 flex items-center gap-2 text-sm text-ink">
           <input
             type="checkbox"
             checked={confirmed}
@@ -154,26 +138,18 @@ export function AddBookForm({
       )}
 
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="mb-2 text-sm text-red-600">
           {error}
         </p>
       )}
 
       <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={submitDisabled}
-          className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
-        >
+        <Button type="submit" variant="primary" disabled={submitDisabled}>
           {isPending ? "Adding…" : "Add"}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
-        >
+        </Button>
+        <Button type="button" variant="ghost" onClick={onCancel}>
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );

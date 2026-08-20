@@ -5,6 +5,8 @@ import { Modal } from "@/app/_components/modal";
 import { updateBookAction } from "@/app/(app)/collection/actions";
 import { useActionSuccess } from "@/lib/use-action-success.utils";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
+import { Field } from "@/app/_components/field";
+import { Button } from "@/app/_components/button";
 
 const DISCARD_PROMPT = "Discard your changes to this book?";
 
@@ -44,80 +46,47 @@ export function EditBookModal({
 
   return (
     <Modal open onClose={onClose} title="Edit book" canClose={canClose}>
-      <form ref={formRef} action={formAction} className="flex flex-col gap-3">
+      <form ref={formRef} action={formAction} className="flex flex-col gap-1">
         <input type="hidden" name="bookId" value={book.id} />
 
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor={`title-${book.id}`}
-            className="text-sm font-medium text-zinc-700"
-          >
-            Title
-          </label>
-          <input
-            id={`title-${book.id}`}
-            type="text"
-            name="title"
-            required
-            defaultValue={book.title}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-          />
-        </div>
+        <Field
+          label="Title"
+          id={`title-${book.id}`}
+          name="title"
+          required
+          defaultValue={book.title}
+        />
 
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor={`author-${book.id}`}
-            className="text-sm font-medium text-zinc-700"
-          >
-            Author
-          </label>
-          <input
-            id={`author-${book.id}`}
-            type="text"
-            name="author"
-            required
-            defaultValue={book.author}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-          />
-        </div>
+        <Field
+          label="Author"
+          id={`author-${book.id}`}
+          name="author"
+          required
+          defaultValue={book.author}
+        />
 
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor={`notes-${book.id}`}
-            className="text-sm font-medium text-zinc-700"
-          >
-            Notes (optional)
-          </label>
-          <textarea
-            id={`notes-${book.id}`}
-            name="notes"
-            rows={2}
-            defaultValue={book.notes ?? ""}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
-          />
-        </div>
+        <Field
+          as="textarea"
+          label="Notes (optional)"
+          id={`notes-${book.id}`}
+          name="notes"
+          rows={2}
+          defaultValue={book.notes ?? ""}
+        />
 
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <p role="alert" className="mb-2 text-sm text-red-600">
             {error}
           </p>
         )}
 
         <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
-          >
+          <Button type="submit" variant="primary" disabled={isPending}>
             {isPending ? "Saving…" : "Save"}
-          </button>
-          <button
-            type="button"
-            onClick={requestClose}
-            className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
-          >
+          </Button>
+          <Button type="button" variant="ghost" onClick={requestClose}>
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>
