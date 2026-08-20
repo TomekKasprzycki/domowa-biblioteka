@@ -1,7 +1,7 @@
 ---
 change_id: design-system
 title: "S-08: Design System — tokens, fonts, sidebar shell, reusable primitives"
-status: implementing
+status: implemented
 created: 2026-08-11
 updated: 2026-08-20
 archived_at: null

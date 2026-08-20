@@ -696,13 +696,13 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 8.1 Type checking passes: `npx tsc --noEmit`
-- [x] 8.2 Linting passes: `npm run lint`
-- [x] 8.3 Full suite passes: `npm test`
-- [x] 8.4 Production build passes: `npm run build`
+- [x] 8.1 Type checking passes: `npx tsc --noEmit` — 920e87f
+- [x] 8.2 Linting passes: `npm run lint` — 920e87f
+- [x] 8.3 Full suite passes: `npm test` — 920e87f
+- [x] 8.4 Production build passes: `npm run build` — 920e87f
 
 #### Manual
 
-- [x] 8.5 Sign in, register, navigate home — no sidebar, behavior identical
-- [x] 8.6 Full 8-page visual sweep at desktop and 375px: consistent tokens/fonts/primitives, no leftover ad-hoc classes, both intentional behavior additions work correctly
-- [x] 8.7 Full regression confirmed (every pre-existing spec passes)
+- [x] 8.5 Sign in, register, navigate home — no sidebar, behavior identical — 920e87f
+- [x] 8.6 Full 8-page visual sweep at desktop and 375px: consistent tokens/fonts/primitives, no leftover ad-hoc classes, both intentional behavior additions work correctly — 920e87f
+- [x] 8.7 Full regression confirmed (every pre-existing spec passes) — 920e87f
