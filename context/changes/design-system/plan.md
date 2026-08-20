@@ -612,28 +612,28 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Full suite passes: `npm test`
-- [x] 2.4 Production build passes: `npm run build`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit` — f9bf3c6
+- [x] 2.2 Linting passes: `npm run lint` — f9bf3c6
+- [x] 2.3 Full suite passes: `npm test` — f9bf3c6
+- [x] 2.4 Production build passes: `npm run build` — f9bf3c6
 
 ### Phase 3: App Shell — Sidebar Nav + Route Groups + Modal
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Full suite passes: `npm test`
-- [ ] 3.4 Production build passes: `npm run build`
-- [ ] 3.5 Every route resolves to its original URL after the `(app)` move
+- [x] 3.1 Type checking passes: `npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Full suite passes: `npm test`
+- [x] 3.4 Production build passes: `npm run build`
+- [x] 3.5 Every route resolves to its original URL after the `(app)` move
 
 #### Manual
 
-- [ ] 3.6 Signed-in sidebar renders on all 5 authenticated pages with correct active-route highlight and counts
-- [ ] 3.7 Signed-out pages (`/`, `/login`, `/register`) render with no sidebar
-- [ ] 3.8 Sign-out from the sidebar works and redirects to `/`
-- [ ] 3.9 Modal visually matches the new Card language
-- [ ] 3.10 Sidebar collapses correctly at 375px
+- [x] 3.6 Signed-in sidebar renders on all 5 authenticated pages with correct active-route highlight and counts
+- [x] 3.7 Signed-out pages (`/`, `/login`, `/register`) render with no sidebar
+- [x] 3.8 Sign-out from the sidebar works and redirects to `/`
+- [x] 3.9 Modal visually matches the new Card language
+- [x] 3.10 Sidebar collapses correctly at 375px
 
 ### Phase 4: Collection
 

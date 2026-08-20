@@ -5,6 +5,7 @@ import {
   findByOwnerIds,
   updateBook,
   deleteBook,
+  countBooksForUser,
 } from "@/server/book/book.repository";
 import { BookEntity } from "@/server/book/book.entity";
 import { createUser } from "@/server/user/user.repository";
@@ -89,6 +90,26 @@ describe("bookRepository", () => {
   it("finds books by userId", async () => {
     const books = await findByUserId(ownerId);
     expect(books.some((b) => b.id === bookId)).toBe(true);
+  });
+
+  it("counts a user's books", async () => {
+    // given ownerId has the two books created above
+
+    // when
+    const count = await countBooksForUser(ownerId);
+
+    // then
+    expect(count).toBe(2);
+  });
+
+  it("returns 0 for a user with no books", async () => {
+    // given excludedId has no books yet
+
+    // when
+    const count = await countBooksForUser(excludedId);
+
+    // then
+    expect(count).toBe(0);
   });
 
   it("returns [] for an empty ownerIds array without querying", async () => {

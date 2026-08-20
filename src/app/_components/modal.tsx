@@ -59,10 +59,10 @@ export function Modal({
       // May fire again from the effect's own close() call, so onClose must be
       // safe to run when the dialog is already considered shut.
       onClose={onClose}
-      className="m-auto w-full max-w-lg rounded-lg border border-zinc-200 bg-white p-0 backdrop:bg-black/50 sm:w-auto sm:min-w-lg"
+      className="m-auto w-full max-w-lg rounded-card border border-line bg-paper-card p-0 shadow-card backdrop:bg-[rgba(16,36,26,0.45)] sm:w-auto sm:min-w-lg"
     >
       <div className="flex flex-col gap-4 p-4 sm:p-6">
-        <h2 id={titleId} className="text-lg font-semibold text-zinc-900">
+        <h2 id={titleId} className="font-display text-lg font-semibold text-ink">
           {title}
         </h2>
         {children}
