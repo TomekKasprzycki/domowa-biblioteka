@@ -3,6 +3,10 @@
 import { useActionState } from "react";
 import { acceptInviteAction, rejectInviteAction } from "@/app/(app)/friends/actions";
 import type { ReceivedInvite } from "@/app/(app)/friends/friends.types";
+import { Card } from "@/app/_components/card";
+import { Avatar } from "@/app/_components/avatar";
+import { Pill } from "@/app/_components/pill";
+import { Button } from "@/app/_components/button";
 
 export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
   const [acceptError, acceptAction, isAccepting] = useActionState(
@@ -15,34 +19,40 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
   );
 
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-zinc-200 p-4">
+    <Card as="li" className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="font-medium text-zinc-900">{invite.otherUser.name}</p>
-          <p className="text-sm text-zinc-600">{invite.otherUser.email}</p>
+        <div className="flex items-center gap-3">
+          <Avatar name={invite.otherUser.name} />
+          <div>
+            <p className="font-medium text-ink">{invite.otherUser.name}</p>
+            <p className="text-sm text-ink-faint">{invite.otherUser.email}</p>
+          </div>
         </div>
-        <div className="flex shrink-0 gap-3">
-          <form action={acceptAction}>
-            <input type="hidden" name="connectionId" value={invite.id} />
-            <button
-              type="submit"
-              disabled={isAccepting || isRejecting}
-              className="text-sm font-medium text-zinc-900 hover:underline disabled:opacity-50"
-            >
-              Accept
-            </button>
-          </form>
-          <form action={rejectAction}>
-            <input type="hidden" name="connectionId" value={invite.id} />
-            <button
-              type="submit"
-              disabled={isAccepting || isRejecting}
-              className="text-sm font-medium text-red-600 hover:underline disabled:opacity-50"
-            >
-              Reject
-            </button>
-          </form>
-        </div>
+        <Pill tone="pending">Pending</Pill>
+      </div>
+      <div className="flex shrink-0 gap-2">
+        <form action={acceptAction}>
+          <input type="hidden" name="connectionId" value={invite.id} />
+          <Button
+            type="submit"
+            variant="primary"
+            size="sm"
+            disabled={isAccepting || isRejecting}
+          >
+            Accept
+          </Button>
+        </form>
+        <form action={rejectAction}>
+          <input type="hidden" name="connectionId" value={invite.id} />
+          <Button
+            type="submit"
+            variant="decline"
+            size="sm"
+            disabled={isAccepting || isRejecting}
+          >
+            Reject
+          </Button>
+        </form>
       </div>
       {acceptError && (
         <p role="alert" className="text-sm text-red-600">
@@ -54,6 +64,6 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
           {rejectError}
         </p>
       )}
-    </li>
+    </Card>
   );
 }

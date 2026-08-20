@@ -639,29 +639,29 @@ Not applicable — no data migration. The one schema-adjacent change (`countBook
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npx tsc --noEmit`
-- [x] 4.2 Linting passes: `npm run lint`
-- [x] 4.3 Full suite passes: `npm test`
-- [x] 4.4 Production build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npx tsc --noEmit` — e5e8d1f
+- [x] 4.2 Linting passes: `npm run lint` — e5e8d1f
+- [x] 4.3 Full suite passes: `npm test` — e5e8d1f
+- [x] 4.4 Production build passes: `npm run build` — e5e8d1f
 
 #### Manual
 
-- [x] 4.5 Add (with and without ISBN lookup), edit, delete a book — restyled, behavior identical
-- [x] 4.6 Layout holds at 375px
+- [x] 4.5 Add (with and without ISBN lookup), edit, delete a book — restyled, behavior identical — e5e8d1f
+- [x] 4.6 Layout holds at 375px — e5e8d1f
 
 ### Phase 5: Friends
 
 #### Automated
 
-- [ ] 5.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 5.2 Linting passes: `npm run lint`
-- [ ] 5.3 Full suite passes: `npm test`
-- [ ] 5.4 Production build passes: `npm run build`
+- [x] 5.1 Type checking passes: `npx tsc --noEmit`
+- [x] 5.2 Linting passes: `npm run lint`
+- [x] 5.3 Full suite passes: `npm test`
+- [x] 5.4 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 5.5 Send, accept, reject, view sent, remove — restyled, behavior identical
-- [ ] 5.6 Layout holds at 375px
+- [x] 5.5 Send, accept, reject, view sent, remove — restyled, behavior identical
+- [x] 5.6 Layout holds at 375px
 
 ### Phase 6: Discover
 

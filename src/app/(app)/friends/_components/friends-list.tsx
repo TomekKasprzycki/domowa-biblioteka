@@ -1,9 +1,10 @@
 import { FriendRow } from "@/app/(app)/friends/_components/friend-row";
 import type { Friend } from "@/app/(app)/friends/friends.types";
+import { EmptyNote } from "@/app/_components/empty-note";
 
 export function FriendsList({ friends }: { friends: Friend[] }) {
   if (friends.length === 0) {
-    return <p className="text-sm text-zinc-500">You have no friends yet.</p>;
+    return <EmptyNote>You have no friends yet.</EmptyNote>;
   }
 
   return (

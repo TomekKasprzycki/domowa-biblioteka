@@ -4,6 +4,12 @@ export type ReceivedInvite = {
   createdAt: Date;
 };
 
+export type SentInvite = {
+  id: string;
+  otherUser: { email: string; name: string };
+  createdAt: Date;
+};
+
 export type Friend = {
   id: string;
   otherUser: { id: string; email: string; name: string };

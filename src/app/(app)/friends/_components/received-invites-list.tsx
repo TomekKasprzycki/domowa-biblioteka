@@ -1,5 +1,6 @@
 import { ReceivedInviteRow } from "@/app/(app)/friends/_components/received-invite-row";
 import type { ReceivedInvite } from "@/app/(app)/friends/friends.types";
+import { EmptyNote } from "@/app/_components/empty-note";
 
 export function ReceivedInvitesList({
   invites,
@@ -7,9 +8,7 @@ export function ReceivedInvitesList({
   invites: ReceivedInvite[];
 }) {
   if (invites.length === 0) {
-    return (
-      <p className="text-sm text-zinc-500">No pending invitations.</p>
-    );
+    return <EmptyNote>No pending invitations.</EmptyNote>;
   }
 
   return (
