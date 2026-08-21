@@ -22,6 +22,12 @@ export async function findByUserId(userId: string): Promise<BookEntity[]> {
   return repo.find({ where: { userId }, order: { createdAt: "DESC" } });
 }
 
+export async function countBooksForUser(userId: string): Promise<number> {
+  const ds = await getDataSource();
+  const repo = ds.getRepository<BookEntity>("books");
+  return repo.count({ where: { userId } });
+}
+
 export async function findBookById(id: string): Promise<BookEntity | null> {
   const ds = await getDataSource();
   const repo = ds.getRepository<BookEntity>("books");

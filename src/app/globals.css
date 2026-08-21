@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: #F7F8F2;
+  --color-paper-card: #FFFFFF;
+  --color-ink: #14231A;
+  --color-ink-soft: #4C5C51;
+  --color-ink-faint: #646D66;
+  --color-line: #DFE6DB;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-green-950: #10241A;
+  --color-green-800: #17402C;
+  --color-green-700: #1E5138;
+  --color-green-600: #276A47;
+  --color-green-500: #3C8759;
+  --color-green-300: #A6CFAF;
+  --color-green-150: #DCEEDF;
+  --color-green-100: #ECF5EC;
+
+  --color-blue-700: #285B7E;
+  --color-blue-500: #447B9F;
+  --color-blue-300: #ABCEE2;
+  --color-blue-100: #E7F2F8;
+
+  --color-amber-700: #8A5A3D;
+  --color-amber-200: #E3D2C4;
+
+  --font-display: var(--font-fraunces), serif;
+  --font-sans: var(--font-inter), -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  --radius-card: 10px;
+
+  --shadow-card: 0 1px 2px rgba(16, 36, 26, 0.06), 0 6px 20px -8px rgba(16, 36, 26, 0.12);
+  --shadow-panel: -8px 0 30px -10px rgba(16, 36, 26, 0.18);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
