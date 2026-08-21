@@ -1,9 +1,9 @@
 ---
 change_id: shelf-view
 title: "S-09: Shelf View — books as spines on a shelf, actions in a detail drawer"
-status: implementing
+status: implemented
 created: 2026-08-11
-updated: 2026-08-20
+updated: 2026-08-21
 archived_at: null
 roadmap_id: S-09
 prd_refs:

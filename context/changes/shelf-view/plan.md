@@ -306,12 +306,12 @@ Not applicable — no schema change. `isbn` is an existing column; this plan onl
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Full suite passes: `npm test`
-- [x] 3.4 Production build passes: `npm run build`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 33272bd
+- [x] 3.2 Linting passes: `npm run lint` — 33272bd
+- [x] 3.3 Full suite passes: `npm test` — 33272bd
+- [x] 3.4 Production build passes: `npm run build` — 33272bd
 
 #### Manual
 
-- [x] 3.5 Shelf renders per friend, search narrows it, spine tags correct for all 4 availability states, drawer status/action correct per state, borrow works end-to-end
-- [x] 3.6 Layout holds at 375px
+- [x] 3.5 Shelf renders per friend, search narrows it, spine tags correct for all 4 availability states, drawer status/action correct per state, borrow works end-to-end — 33272bd
+- [x] 3.6 Layout holds at 375px — 33272bd
