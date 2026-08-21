@@ -53,6 +53,7 @@ export default async function DiscoverPage({
       title: b.title,
       author: b.author,
       notes: b.notes,
+      isbn: b.isbn,
       createdAt: b.createdAt,
       owner: { id: b.owner.id, name: b.owner.name, email: b.owner.email },
       availability: {

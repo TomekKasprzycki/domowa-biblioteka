@@ -2,6 +2,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import "../../../../shared/dialog.mock";
 
 jest.mock("@/app/borrow/actions", () => ({
   requestBorrowAction: jest.fn(),
@@ -27,10 +28,17 @@ function makeBook(
     title: "The Pragmatic Programmer",
     author: "Andy Hunt",
     notes: "Borrowed once",
+    isbn: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     owner,
     availability,
   };
+}
+
+async function openDrawer(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(
+    screen.getByRole("button", { name: /^View The Pragmatic Programmer,/ })
+  );
 }
 
 describe("DiscoverBookRow", () => {
@@ -39,25 +47,7 @@ describe("DiscoverBookRow", () => {
     mockRequestBorrowAction.mockResolvedValue(null);
   });
 
-  it("renders the title, author and owner name", () => {
-    // given
-    render(
-      <DiscoverBookRow
-        book={makeBook({
-          status: "available",
-          borrowedByViewer: false,
-          requestedByViewer: false,
-        })}
-      />
-    );
-
-    // when / then
-    expect(screen.getByText("The Pragmatic Programmer")).toBeInTheDocument();
-    expect(screen.getByText("Andy Hunt")).toBeInTheDocument();
-    expect(screen.getByText(/Owned by Friendly Person/)).toBeInTheDocument();
-  });
-
-  it("shows a Borrow button for an available book and fires the action on submit", async () => {
+  it("renders the title and author", async () => {
     // given
     const user = userEvent.setup();
     render(
@@ -71,14 +61,40 @@ describe("DiscoverBookRow", () => {
     );
 
     // when
+    await openDrawer(user);
+
+    // then
+    expect(
+      screen.getAllByText("The Pragmatic Programmer").length
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByText("Andy Hunt").length).toBeGreaterThan(0);
+  });
+
+  it("shows Available and a Borrow button for an available book, and fires the action on submit", async () => {
+    // given
+    const user = userEvent.setup();
+    render(
+      <DiscoverBookRow
+        book={makeBook({
+          status: "available",
+          borrowedByViewer: false,
+          requestedByViewer: false,
+        })}
+      />
+    );
+    await openDrawer(user);
+
+    // when
+    expect(screen.getByText("Available")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Borrow" }));
 
     // then
     expect(mockRequestBorrowAction).toHaveBeenCalled();
   });
 
-  it("shows Requested when the viewer has a pending request", () => {
+  it("tags the spine and shows Requested when the viewer has a pending request", async () => {
     // given
+    const user = userEvent.setup();
     render(
       <DiscoverBookRow
         book={makeBook({
@@ -89,15 +105,19 @@ describe("DiscoverBookRow", () => {
       />
     );
 
-    // when / then
-    expect(screen.getByText("Requested")).toBeInTheDocument();
+    // when
+    await openDrawer(user);
+
+    // then
+    expect(screen.getAllByText("Requested").length).toBeGreaterThan(0);
     expect(
       screen.queryByRole("button", { name: "Borrow" })
     ).not.toBeInTheDocument();
   });
 
-  it("shows Borrowed by you when the viewer is the active borrower", () => {
+  it("shows Borrowed by you with no note when the viewer is the active borrower", async () => {
     // given
+    const user = userEvent.setup();
     render(
       <DiscoverBookRow
         book={makeBook({
@@ -108,14 +128,21 @@ describe("DiscoverBookRow", () => {
       />
     );
 
-    // when / then
-    expect(screen.getByText("Borrowed by you")).toBeInTheDocument();
+    // when
+    await openDrawer(user);
+
+    // then
+    expect(screen.getAllByText("Borrowed by you").length).toBeGreaterThan(0);
+    expect(
+      screen.queryByText(/will be available again/i)
+    ).not.toBeInTheDocument();
   });
 
-  it("prefers On loan over Requested when the book was lent to someone else", () => {
+  it("prefers On loan over Requested when the book was lent to someone else", async () => {
     // given
     // the viewer has a leftover pending request, but the owner approved
     // a different friend in the meantime
+    const user = userEvent.setup();
     render(
       <DiscoverBookRow
         book={makeBook({
@@ -126,13 +153,17 @@ describe("DiscoverBookRow", () => {
       />
     );
 
-    // when / then
-    expect(screen.getByText("On loan")).toBeInTheDocument();
+    // when
+    await openDrawer(user);
+
+    // then
+    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
     expect(screen.queryByText("Requested")).not.toBeInTheDocument();
   });
 
-  it("shows a generic On loan state with no borrower name for a third friend", () => {
+  it("shows a generic On loan state with an availability note for a third friend", async () => {
     // given
+    const user = userEvent.setup();
     render(
       <DiscoverBookRow
         book={makeBook({
@@ -143,7 +174,36 @@ describe("DiscoverBookRow", () => {
       />
     );
 
-    // when / then
-    expect(screen.getByText("On loan")).toBeInTheDocument();
+    // when
+    await openDrawer(user);
+
+    // then
+    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/will be available again once it's returned/i)
+    ).toBeInTheDocument();
+  });
+
+  it("shows ISBN when present", async () => {
+    // given
+    const user = userEvent.setup();
+    render(
+      <DiscoverBookRow
+        book={{
+          ...makeBook({
+            status: "available",
+            borrowedByViewer: false,
+            requestedByViewer: false,
+          }),
+          isbn: "9788308077254",
+        }}
+      />
+    );
+
+    // when
+    await openDrawer(user);
+
+    // then
+    expect(screen.getByText("ISBN 9788308077254")).toBeInTheDocument();
   });
 });

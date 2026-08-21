@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DiscoverBookRow } from "@/app/(app)/discover/_components/discover-book-row";
 import { EmptyNote } from "@/app/_components/empty-note";
+import { Shelf } from "@/app/_components/shelf";
 import type { DiscoverBook, DiscoverFriend } from "@/app/(app)/discover/discover.types";
 
 export function DiscoverSearch({
@@ -68,11 +69,11 @@ export function DiscoverSearch({
       {matches.length === 0 ? (
         <EmptyNote>No books match your search.</EmptyNote>
       ) : (
-        <ul className="flex flex-col gap-3">
+        <Shelf>
           {matches.map((book) => (
             <DiscoverBookRow key={book.id} book={book} />
           ))}
-        </ul>
+        </Shelf>
       )}
     </div>
   );

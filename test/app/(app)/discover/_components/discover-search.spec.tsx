@@ -27,12 +27,17 @@ const availableToViewer = {
   requestedByViewer: false,
 };
 
+function spineFor(title: string) {
+  return new RegExp(`^View ${title},`);
+}
+
 const books: DiscoverBook[] = [
   {
     id: "1",
     title: "Clean Code",
     author: "Robert Martin",
     notes: null,
+    isbn: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     owner: alice,
     availability: availableToViewer,
@@ -42,6 +47,7 @@ const books: DiscoverBook[] = [
     title: "Refactoring",
     author: "Martin Fowler",
     notes: null,
+    isbn: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     owner: bob,
     availability: availableToViewer,
@@ -72,8 +78,8 @@ describe("DiscoverSearch", () => {
     );
 
     // when / then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
-    expect(screen.getByText("Refactoring")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Clean Code") })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
   });
 
   it("filters by title as the user types", async () => {
@@ -94,8 +100,10 @@ describe("DiscoverSearch", () => {
     );
 
     // then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
-    expect(screen.queryByText("Refactoring")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Clean Code") })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: spineFor("Refactoring") })
+    ).not.toBeInTheDocument();
   });
 
   it("filters by author as the user types", async () => {
@@ -116,8 +124,10 @@ describe("DiscoverSearch", () => {
     );
 
     // then
-    expect(screen.getByText("Refactoring")).toBeInTheDocument();
-    expect(screen.queryByText("Clean Code")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: spineFor("Clean Code") })
+    ).not.toBeInTheDocument();
   });
 
   it("narrows to a single friend when one is selected", async () => {
@@ -135,8 +145,10 @@ describe("DiscoverSearch", () => {
     await user.selectOptions(screen.getByLabelText(/filter by friend/i), bob.id);
 
     // then
-    expect(screen.getByText("Refactoring")).toBeInTheDocument();
-    expect(screen.queryByText("Clean Code")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: spineFor("Clean Code") })
+    ).not.toBeInTheDocument();
   });
 
   it("restores the full list when search and filter are cleared", async () => {
@@ -156,8 +168,8 @@ describe("DiscoverSearch", () => {
     await user.clear(search);
 
     // then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
-    expect(screen.getByText("Refactoring")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Clean Code") })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
   });
 
   it("pre-scopes to the initial friend id when supplied", () => {
@@ -171,7 +183,9 @@ describe("DiscoverSearch", () => {
     );
 
     // when / then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
-    expect(screen.queryByText("Refactoring")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: spineFor("Clean Code") })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: spineFor("Refactoring") })
+    ).not.toBeInTheDocument();
   });
 });

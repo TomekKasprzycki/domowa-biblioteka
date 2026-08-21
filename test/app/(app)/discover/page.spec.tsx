@@ -1,6 +1,7 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "../../../shared/dialog.mock";
 
 jest.mock("@/auth", () => ({ auth: jest.fn() }));
 jest.mock("@/server/friend-connection/friend-connection.repository", () => ({
@@ -51,6 +52,7 @@ const book = {
   title: "Clean Code",
   author: "Robert Martin",
   notes: null,
+  isbn: null,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   owner: friend,
 };
@@ -60,6 +62,7 @@ const onLoanBook = {
   title: "Refactoring",
   author: "Martin Fowler",
   notes: null,
+  isbn: null,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   owner: friend,
 };
@@ -87,7 +90,9 @@ describe("DiscoverPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /^View Clean Code,/ })
+    ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
@@ -101,12 +106,13 @@ describe("DiscoverPage", () => {
     // when
     const ui = await DiscoverPage({ searchParams: Promise.resolve({}) });
     render(ui);
+    fireEvent.click(
+      screen.getByRole("button", { name: /^View Clean Code,/ })
+    );
 
     // then
-    expect(
-      screen.getByRole("button", { name: "Borrow" })
-    ).toBeInTheDocument();
-    expect(screen.getByText("On loan")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
   });
 
   it("pre-scopes when the friend param matches a confirmed friend", async () => {
@@ -119,7 +125,9 @@ describe("DiscoverPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText("Clean Code")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /^View Clean Code,/ })
+    ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 

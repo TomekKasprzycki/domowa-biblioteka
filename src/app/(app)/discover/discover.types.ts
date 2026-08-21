@@ -11,6 +11,7 @@ export type DiscoverBook = {
   title: string;
   author: string;
   notes: string | null;
+  isbn: string | null;
   createdAt: Date;
   owner: { id: string; name: string; email: string };
   availability: DiscoverBookAvailability;
