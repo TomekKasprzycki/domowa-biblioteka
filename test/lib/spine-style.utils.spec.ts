@@ -3,6 +3,20 @@ import {
   splitTitleForTwoColumns,
   SPINE_MIN_HEIGHT,
 } from "@/lib/spine-style.utils";
+import { hashString } from "@/lib/hash-string.utils";
+
+const PALETTE_SIZE = 12;
+
+// Finds a title whose spineStyleFor color lands on a specific palette index,
+// without duplicating the (unexported) palette itself — brute-forces titles
+// until one hashes to the target slot.
+function titleForPaletteIndex(index: number): string {
+  for (let i = 0; i < 1000; i++) {
+    const candidate = `Palette probe ${i}`;
+    if (hashString(candidate) % PALETTE_SIZE === index) return candidate;
+  }
+  throw new Error(`No probe title found for palette index ${index}`);
+}
 
 describe("spineStyleFor", () => {
   it("gives the same title the same style across calls", () => {
@@ -33,6 +47,33 @@ describe("spineStyleFor", () => {
     }
     expect(styles.some((s) => s.onPaper)).toBe(true);
     expect(styles.some((s) => !s.onPaper)).toBe(true);
+  });
+
+  // Impl review F10a (2026-08-21): pins onPaper against real WCAG contrast
+  // for specific palette slots, not just internal consistency, so a future
+  // palette edit that flips a color's classification the wrong way fails a
+  // test instead of shipping unnoticed.
+  it("keeps dark text off the darkest and near-mid palette entries", () => {
+    // given palette index 0 (near-black) and 4 (green-500, the borderline
+    // contrast case flagged in impl review — white text still contrasts
+    // better against it than the dark-text alternative does)
+    const darkest = titleForPaletteIndex(0);
+    const midGreen = titleForPaletteIndex(4);
+
+    // when / then
+    expect(spineStyleFor(darkest).onPaper).toBe(false);
+    expect(spineStyleFor(midGreen).onPaper).toBe(false);
+  });
+
+  it("switches to dark text on the near-white palette entries", () => {
+    // given palette index 7 (#ECF5EC, the mockup's original sole on-paper
+    // entry) and index 11 (the palette's lightest blue)
+    const nearWhiteGreen = titleForPaletteIndex(7);
+    const nearWhiteBlue = titleForPaletteIndex(11);
+
+    // when / then
+    expect(spineStyleFor(nearWhiteGreen).onPaper).toBe(true);
+    expect(spineStyleFor(nearWhiteBlue).onPaper).toBe(true);
   });
 
   it("keeps width within the mockup's formula range", () => {

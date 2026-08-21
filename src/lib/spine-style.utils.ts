@@ -20,7 +20,10 @@ const SPINE_PALETTE = [
   "#E7F2F8", // blue-100
 ] as const;
 
-const ONPAPER_LUMINANCE_THRESHOLD = 0.6;
+// `text-green-800` (spine.tsx's TitleColumn) — the dark-text candidate for a
+// light spine, same token as SPINE_PALETTE's own green-800 entry above.
+const DARK_TEXT_COLOR = "#17402C";
+const WHITE_LUMINANCE = 1;
 
 // Clearance below the top decorative line and above the bottom one that the
 // title's rotated text must fit inside (see spine.tsx) — exported so both
@@ -53,12 +56,32 @@ const RANDOM_HEIGHT_RANGE = 65;
 const TWO_COLUMN_TITLE_LENGTH = 35;
 const SPINE_MAX_WIDTH = 32 + 8; // matches the width formula's own max (32 + hash%9)
 
+// WCAG 2.x relative luminance (impl review F10a, 2026-08-21): the naive
+// version this replaced averaged raw sRGB channel values, which is a
+// brightness estimate, not luminance — it happened to classify every current
+// palette entry the same way the real formula does, but the margin was
+// accidental, not guaranteed for a future palette edit.
+function srgbChannelToLinear(channel: number): number {
+  return channel <= 0.03928
+    ? channel / 12.92
+    : ((channel + 0.055) / 1.055) ** 2.4;
+}
+
 function relativeLuminance(hex: string): number {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const r = srgbChannelToLinear(parseInt(hex.slice(1, 3), 16) / 255);
+  const g = srgbChannelToLinear(parseInt(hex.slice(3, 5), 16) / 255);
+  const b = srgbChannelToLinear(parseInt(hex.slice(5, 7), 16) / 255);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
+
+// WCAG contrast ratio between two relative luminances.
+function contrastRatio(l1: number, l2: number): number {
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+const DARK_TEXT_LUMINANCE = relativeLuminance(DARK_TEXT_COLOR);
 
 function heightFor(title: string, hash: number, columns: 1 | 2): number {
   const randomHeight = SPINE_MIN_HEIGHT + (hash % RANDOM_HEIGHT_RANGE);
@@ -114,6 +137,13 @@ export function spineStyleFor(title: string): {
   const color = SPINE_PALETTE[hash % SPINE_PALETTE.length];
   const height = heightFor(title, hash, columns);
   const width = columns === 2 ? SPINE_MAX_WIDTH : 32 + (hash % 9);
-  const onPaper = relativeLuminance(color) > ONPAPER_LUMINANCE_THRESHOLD;
+  // Pick whichever text color gives better contrast against this specific
+  // background, rather than testing luminance against a fixed threshold —
+  // that way a future palette entry can't silently end up under AA for
+  // both text colors without at least getting the better of the two.
+  const bgLuminance = relativeLuminance(color);
+  const onPaper =
+    contrastRatio(bgLuminance, DARK_TEXT_LUMINANCE) >
+    contrastRatio(bgLuminance, WHITE_LUMINANCE);
   return { color, height, width, onPaper, columns };
 }

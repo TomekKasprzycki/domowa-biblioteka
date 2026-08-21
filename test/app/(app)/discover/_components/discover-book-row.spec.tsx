@@ -70,6 +70,28 @@ describe("DiscoverBookRow", () => {
     expect(screen.getAllByText("Andy Hunt").length).toBeGreaterThan(0);
   });
 
+  it("names the owner on the spine and in the drawer", async () => {
+    // given
+    const user = userEvent.setup();
+    render(
+      <DiscoverBookRow
+        book={makeBook({
+          status: "available",
+          borrowedByViewer: false,
+          requestedByViewer: false,
+        })}
+      />
+    );
+
+    // when / then
+    expect(
+      screen.getByRole("button", { name: /owned by Friendly Person/ })
+    ).toBeInTheDocument();
+
+    await openDrawer(user);
+    expect(screen.getByText("Owned by Friendly Person")).toBeInTheDocument();
+  });
+
   it("shows Available and a Borrow button for an available book, and fires the action on submit", async () => {
     // given
     const user = userEvent.setup();

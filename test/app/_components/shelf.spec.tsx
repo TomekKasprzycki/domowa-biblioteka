@@ -19,4 +19,16 @@ describe("Shelf", () => {
       screen.getByRole("button", { name: "Cyberiada" })
     ).toBeInTheDocument();
   });
+
+  it("exposes itself as a list, excluding the decorative ledge", () => {
+    // given / when
+    render(
+      <Shelf>
+        <button>Solaris</button>
+      </Shelf>
+    );
+
+    // then
+    expect(screen.getByRole("list")).toBeInTheDocument();
+  });
 });

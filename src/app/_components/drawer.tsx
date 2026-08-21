@@ -42,7 +42,11 @@ export function Drawer({
     <dialog
       ref={dialogRef}
       aria-labelledby={titleId}
-      onCancel={onClose}
+      // No onCancel handler: unlike Modal, Drawer has no dirty-form guard to
+      // veto Escape with, so the browser's default cancel->close sequence is
+      // left alone and onClose fires exactly once, from the `close` event
+      // below (impl review F10b — this used to also wire onCancel={onClose},
+      // firing onClose twice per Escape).
       onClose={onClose}
       onClick={(event) => {
         if (event.target !== dialogRef.current) return;
@@ -64,9 +68,9 @@ export function Drawer({
           className="mx-auto h-[180px] w-14 rounded-t-[3px] shadow-[inset_-6px_0_10px_-6px_rgba(0,0,0,0.35)]"
         />
 
-        <div id={titleId} className="text-center font-display text-lg">
+        <h2 id={titleId} className="text-center font-display text-lg">
           {title}
-        </div>
+        </h2>
         <div className="text-center text-[13.5px] text-ink-soft">
           {author}
         </div>

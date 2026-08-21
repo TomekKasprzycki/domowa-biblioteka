@@ -45,6 +45,23 @@ describe("Spine", () => {
     expect(screen.getByText("On loan")).toBeInTheDocument();
   });
 
+  it("folds the tag into the accessible name, since aria-label hides visible content from assistive tech", () => {
+    // given / when
+    render(
+      <Spine
+        title="Rok 1984"
+        author="George Orwell"
+        tag="On loan"
+        onClick={jest.fn()}
+      />
+    );
+
+    // then
+    expect(
+      screen.getByRole("button", { name: "View Rok 1984, George Orwell, On loan" })
+    ).toBeInTheDocument();
+  });
+
   it("omits the tag when not provided", () => {
     // given / when
     render(
@@ -84,6 +101,25 @@ describe("Spine", () => {
       "title",
       "Solaris — Stanisław Lem · ISBN 978-83-08-07725-4"
     );
+  });
+
+  it("folds the owner into the accessible name and tooltip when given", () => {
+    // given / when
+    render(
+      <Spine
+        title="Solaris"
+        author="Stanisław Lem"
+        owner="Kasia"
+        onClick={jest.fn()}
+      />
+    );
+
+    // then
+    expect(
+      screen.getByRole("button", {
+        name: "View Solaris, Stanisław Lem, owned by Kasia",
+      })
+    ).toHaveAttribute("title", "Solaris — Stanisław Lem · owned by Kasia");
   });
 
   it("splits a long title into two columns, with ellipsis only on the second", () => {

@@ -37,7 +37,12 @@ export function BookRow({
   );
 
   return (
-    <>
+    // Shelf renders as role="list" (see shelf.tsx); each row is one
+    // listitem so assistive tech announces the book count and each
+    // book's position, matching the <ul>/<li> semantics the previous
+    // Card-row layout had for free. The Drawer's <dialog> is
+    // position:fixed and unaffected by this wrapper.
+    <div role="listitem">
       <Spine
         title={book.title}
         author={book.author}
@@ -108,6 +113,6 @@ export function BookRow({
           </>
         }
       />
-    </>
+    </div>
   );
 }

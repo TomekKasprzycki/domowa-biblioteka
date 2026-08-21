@@ -2,7 +2,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import "../../shared/dialog.mock";
+import { pressEscape } from "../../shared/dialog.mock";
 import { Drawer } from "@/app/_components/drawer";
 
 function getDialog(): HTMLDialogElement {
@@ -115,6 +115,105 @@ describe("Drawer", () => {
 
     // then
     expect(screen.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
+  });
+
+  it("omits the actions slot when absent", () => {
+    // given / when
+    render(
+      <Drawer
+        open
+        onClose={jest.fn()}
+        spineColor="#17402C"
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn={null}
+      />
+    );
+
+    // then
+    expect(screen.queryByRole("button", { name: "Borrow" })).not.toBeInTheDocument();
+  });
+
+  it("labels the dialog with its title", () => {
+    // given / when
+    render(
+      <Drawer
+        open
+        onClose={jest.fn()}
+        spineColor="#17402C"
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn={null}
+      />
+    );
+
+    // then
+    expect(getDialog()).toHaveAccessibleName("Solaris");
+  });
+
+  it("calls onClose when the backdrop is clicked", async () => {
+    // given
+    const user = userEvent.setup();
+    const onClose = jest.fn();
+    render(
+      <Drawer
+        open
+        onClose={onClose}
+        spineColor="#17402C"
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn={null}
+      />
+    );
+
+    // when
+    await user.click(getDialog());
+
+    // then
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("ignores clicks on its content", async () => {
+    // given
+    const user = userEvent.setup();
+    const onClose = jest.fn();
+    render(
+      <Drawer
+        open
+        onClose={onClose}
+        spineColor="#17402C"
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn={null}
+      />
+    );
+
+    // when
+    await user.click(screen.getByText("Solaris"));
+
+    // then
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("calls onClose when Escape is pressed", () => {
+    // given
+    const onClose = jest.fn();
+    render(
+      <Drawer
+        open
+        onClose={onClose}
+        spineColor="#17402C"
+        title="Solaris"
+        author="Stanisław Lem"
+        isbn={null}
+      />
+    );
+
+    // when
+    pressEscape(getDialog());
+
+    // then
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("calls onClose when the close button is clicked", async () => {

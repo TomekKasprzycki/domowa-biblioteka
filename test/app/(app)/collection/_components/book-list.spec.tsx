@@ -49,6 +49,15 @@ describe("BookList", () => {
     ).toBeInTheDocument();
   });
 
+  it("exposes the shelf as a list with one item per book", () => {
+    // given / when
+    render(<BookList books={[solaris, cyberiad]} />);
+
+    // then
+    expect(screen.getByRole("list")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+  });
+
   it("keeps the edit dialog closed until a row's Edit is clicked", () => {
     // given / when
     render(<BookList books={[solaris, cyberiad]} />);

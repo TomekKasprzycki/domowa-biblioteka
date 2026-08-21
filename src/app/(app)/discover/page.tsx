@@ -7,7 +7,6 @@ import {
   findRequestedLoansForBooksByRequester,
 } from "@/server/loan/loan.repository";
 import { DiscoverSearch } from "@/app/(app)/discover/_components/discover-search";
-import { AvailabilityLegendItem } from "@/app/(app)/discover/_components/availability-legend-item";
 import type { DiscoverBook } from "@/app/(app)/discover/discover.types";
 
 interface DiscoverPageProps {
@@ -74,10 +73,12 @@ export default async function DiscoverPage({
           Discover
         </h1>
       </div>
-      <div className="flex flex-wrap gap-[18px] text-[12.5px] text-ink-soft">
-        <AvailabilityLegendItem tone="available">Available</AvailabilityLegendItem>
-        <AvailabilityLegendItem tone="unavailable">Unavailable</AvailabilityLegendItem>
-      </div>
+      {/* No availability legend here (removed per impl review F4, 2026-08-21):
+          it mapped green/blue to available/unavailable back when rows
+          carried green/blue Pills. Spine color is now hash-derived from the
+          title and unrelated to availability, so a legend keyed to color
+          would actively mislead. Availability now lives on the spine's tag
+          chip and the drawer's status pill instead. */}
       <DiscoverSearch
         books={plainBooks}
         friends={friends}

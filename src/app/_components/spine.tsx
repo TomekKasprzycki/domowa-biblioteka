@@ -40,12 +40,18 @@ export function Spine({
   title,
   author,
   isbn,
+  owner,
   tag,
   onClick,
 }: {
   title: string;
   author: string;
   isbn?: string | null;
+  // Friend's-shelf spines only (see discover-book-row.tsx) — folded into the
+  // tooltip and accessible name so a mixed "All friends" shelf still says
+  // whose book each spine is, without adding a visible label to the spine
+  // itself (the drawer's statusSlot carries that).
+  owner?: string;
   tag?: string;
   onClick: () => void;
 }) {
@@ -54,7 +60,7 @@ export function Spine({
     0,
     height - SPINE_TITLE_TOP_CLEARANCE - SPINE_TITLE_BOTTOM_CLEARANCE
   );
-  const tooltip = `${title} — ${author}${isbn ? ` · ISBN ${isbn}` : ""}`;
+  const tooltip = `${title} — ${author}${isbn ? ` · ISBN ${isbn}` : ""}${owner ? ` · owned by ${owner}` : ""}`;
   const titleParts =
     columns === 2
       ? splitTitleForTwoColumns(title, titleMaxHeight)
@@ -65,7 +71,10 @@ export function Spine({
       type="button"
       onClick={onClick}
       title={tooltip}
-      aria-label={`View ${title}, ${author}`}
+      // aria-label replaces the button's whole accessible content, so the
+      // visible tag chip below (rendered inside this button) must be folded
+      // in here too — otherwise assistive tech never announces it.
+      aria-label={`View ${title}, ${author}${owner ? `, owned by ${owner}` : ""}${tag ? `, ${tag}` : ""}`}
       style={{
         height,
         width,

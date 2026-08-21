@@ -82,6 +82,21 @@ describe("DiscoverSearch", () => {
     expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
   });
 
+  it("exposes the shelf as a list with one item per matching book", () => {
+    // given / when
+    render(
+      <DiscoverSearch
+        books={books}
+        friends={[alice, bob]}
+        initialFriendId={null}
+      />
+    );
+
+    // then
+    expect(screen.getByRole("list")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+  });
+
   it("filters by title as the user types", async () => {
     // given
     const user = userEvent.setup();

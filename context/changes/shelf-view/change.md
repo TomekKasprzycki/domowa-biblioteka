@@ -1,7 +1,7 @@
 ---
 change_id: shelf-view
 title: "S-09: Shelf View — books as spines on a shelf, actions in a detail drawer"
-status: implemented
+status: impl_reviewed
 created: 2026-08-11
 updated: 2026-08-21
 archived_at: null
