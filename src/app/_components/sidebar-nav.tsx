@@ -11,6 +11,7 @@ const NAV_ROUTES = [
   { href: "/discover", icon: "🔎", label: "Discover" },
   { href: "/requests", icon: "✉️", label: "Requests" },
   { href: "/borrowing", icon: "🔁", label: "Borrowing" },
+  { href: "/account", icon: "⚙️", label: "Account" },
 ] as const;
 
 export function SidebarNav({
@@ -65,6 +66,12 @@ export function SidebarNav({
           Sign out
         </button>
       </form>
+      <Link
+        href="/privacy"
+        className="whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#CFE3D5] transition-colors hover:bg-white/[0.06] hover:text-white"
+      >
+        Privacy
+      </Link>
     </nav>
   );
 }

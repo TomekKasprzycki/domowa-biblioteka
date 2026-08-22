@@ -88,6 +88,7 @@ Aplikacja deployuje się na Hobby bez problemów. W tygodniu 3 deweloper udostę
 | Logs 1h retention uniemożliwia post-incident debug | Devil's advocate | M | L | Dodaj zewnętrzne logowanie (Axiom free tier lub Sentry) jako uzupełnienie Vercel logs |
 | Vercel Postgres/KV deprecated | Research finding | — | L | Używaj Neon (Postgres) i Upstash (Redis) przez Marketplace CLI od początku; nie instaluj @vercel/postgres ani @vercel/kv |
 | `NEXT_PUBLIC_*` vars wymagają rebuildu | Unknown unknowns | L | L | Traktuj publiczne env vars jako stałe; zmienialne wartości przenoś na API endpoint lub server-side |
+| Neon DB w `us-east-1` (USA) vs Vercel functions w `cdg1` (EU) — niedokumentowany transfer danych osobowych poza EOG | `context/changes/gdpr-assessment/research.md` | M | M | Udokumentowane w privacy notice (`/privacy`) jako świadoma decyzja; docelowa mitygacja to migracja Neon do regionu EU (np. `eu-central-1`), jako osobna zmiana infrastrukturalna — nie część `gdpr-assessment` |
 
 ## Getting Started
 

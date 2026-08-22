@@ -302,16 +302,16 @@ The new `account_deletion_log` table is additive only — no existing data is to
 
 #### Automated
 
-- [x] 2.1 New actions test passes: auth failure, mismatch, blocked, success
-- [x] 2.2 npm test passes
-- [x] 2.3 npm run build passes
-- [x] 2.4 npm run lint passes
+- [x] 2.1 New actions test passes: auth failure, mismatch, blocked, success — 5dae0c3
+- [x] 2.2 npm test passes — 5dae0c3
+- [x] 2.3 npm run build passes — 5dae0c3
+- [x] 2.4 npm run lint passes — 5dae0c3
 
 #### Manual
 
-- [x] 2.5 Mismatched confirmation rejected without deleting anything
-- [x] 2.6 Correct confirmation deletes the account and ends the session
-- [x] 2.7 Active-loan account shows the blocking message
+- [x] 2.5 Mismatched confirmation rejected without deleting anything — 5dae0c3
+- [x] 2.6 Correct confirmation deletes the account and ends the session — 5dae0c3
+- [x] 2.7 Active-loan account shows the blocking message — 5dae0c3
 
 ### Phase 3: UI, Notice Content & Docs
 
@@ -325,7 +325,7 @@ The new `account_deletion_log` table is additive only — no existing data is to
 
 #### Manual
 
-- [ ] 3.6 /privacy reachable signed-out from /login and /register
-- [ ] 3.7 /account reachable signed-in from the sidebar
-- [ ] 3.8 End-to-end deletion shows the / confirmation banner
-- [ ] 3.9 /account and /privacy render correctly at mobile width
+- [x] 3.6 /privacy reachable signed-out from /login and /register
+- [x] 3.7 /account reachable signed-in from the sidebar
+- [x] 3.8 End-to-end deletion shows the / confirmation banner
+- [x] 3.9 /account and /privacy render correctly at mobile width

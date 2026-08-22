@@ -3,7 +3,7 @@ id: gdpr-assessment
 title: "S-10: Privacy & Data Rights (RODO) — notice + right-to-erasure"
 status: implementing
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-08-23
 roadmap_id: S-10
 prd_refs:
   - Access Control
