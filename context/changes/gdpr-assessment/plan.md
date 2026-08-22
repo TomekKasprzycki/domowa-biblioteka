@@ -289,39 +289,39 @@ The new `account_deletion_log` table is additive only — no existing data is to
 
 #### Automated
 
-- [x] 1.1 New integration test passes: cascade, blocking, atomicity, audit log
-- [x] 1.2 npm test passes
-- [x] 1.3 npm run build passes
-- [x] 1.4 npm run lint passes
+- [x] 1.1 New integration test passes: cascade, blocking, atomicity, audit log — 71a8987
+- [x] 1.2 npm test passes — 71a8987
+- [x] 1.3 npm run build passes — 71a8987
+- [x] 1.4 npm run lint passes — 71a8987
 
 #### Manual
 
-- [x] 1.5 Migration creates `account_deletion_log` table with expected columns
+- [x] 1.5 Migration creates `account_deletion_log` table with expected columns — 71a8987
 
 ### Phase 2: Server Actions & Auth Wiring
 
 #### Automated
 
-- [ ] 2.1 New actions test passes: auth failure, mismatch, blocked, success
-- [ ] 2.2 npm test passes
-- [ ] 2.3 npm run build passes
-- [ ] 2.4 npm run lint passes
+- [x] 2.1 New actions test passes: auth failure, mismatch, blocked, success
+- [x] 2.2 npm test passes
+- [x] 2.3 npm run build passes
+- [x] 2.4 npm run lint passes
 
 #### Manual
 
-- [ ] 2.5 Mismatched confirmation rejected without deleting anything
-- [ ] 2.6 Correct confirmation deletes the account and ends the session
-- [ ] 2.7 Active-loan account shows the blocking message
+- [x] 2.5 Mismatched confirmation rejected without deleting anything
+- [x] 2.6 Correct confirmation deletes the account and ends the session
+- [x] 2.7 Active-loan account shows the blocking message
 
 ### Phase 3: UI, Notice Content & Docs
 
 #### Automated
 
-- [ ] 3.1 delete-account-form spec passes
-- [ ] 3.2 sidebar-nav spec passes for new entries
-- [ ] 3.3 npm test passes
-- [ ] 3.4 npm run build passes
-- [ ] 3.5 npm run lint passes
+- [x] 3.1 delete-account-form spec passes
+- [x] 3.2 sidebar-nav spec passes for new entries
+- [x] 3.3 npm test passes
+- [x] 3.4 npm run build passes
+- [x] 3.5 npm run lint passes
 
 #### Manual
 
