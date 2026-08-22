@@ -317,15 +317,15 @@ The new `account_deletion_log` table is additive only — no existing data is to
 
 #### Automated
 
-- [x] 3.1 delete-account-form spec passes
-- [x] 3.2 sidebar-nav spec passes for new entries
-- [x] 3.3 npm test passes
-- [x] 3.4 npm run build passes
-- [x] 3.5 npm run lint passes
+- [x] 3.1 delete-account-form spec passes — 4a2b8f6
+- [x] 3.2 sidebar-nav spec passes for new entries — 4a2b8f6
+- [x] 3.3 npm test passes — 4a2b8f6
+- [x] 3.4 npm run build passes — 4a2b8f6
+- [x] 3.5 npm run lint passes — 4a2b8f6
 
 #### Manual
 
-- [x] 3.6 /privacy reachable signed-out from /login and /register
-- [x] 3.7 /account reachable signed-in from the sidebar
-- [x] 3.8 End-to-end deletion shows the / confirmation banner
-- [x] 3.9 /account and /privacy render correctly at mobile width
+- [x] 3.6 /privacy reachable signed-out from /login and /register — 4a2b8f6
+- [x] 3.7 /account reachable signed-in from the sidebar — 4a2b8f6
+- [x] 3.8 End-to-end deletion shows the / confirmation banner — 4a2b8f6
+- [x] 3.9 /account and /privacy render correctly at mobile width — 4a2b8f6
