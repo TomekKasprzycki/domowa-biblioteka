@@ -71,7 +71,7 @@ Progress↔Phase mechanical contract: PASS — one `## Progress` heading, all 3 
 - **Location**: Critical Implementation Details ("Token storage is hash-only") × Phase 2, Change #4
 - **Detail**: Critical Implementation Details states "Never log the raw token or return it from any other function — the emailed URL is its only other home." Phase 2 Change #4's contract only says "catching and logging any send failure" for `requestPasswordResetAction` — it doesn't specify what to log, and doesn't warn against including `resetUrl` (which contains the raw token) in that log call. An implementer debugging a delivery failure could reasonably `console.error("send failed", { to, resetUrl, error })` for context, silently violating the plan's own stated invariant.
 - **Fix**: Add one clause to Phase 2 Change #4's contract: the caught error must be logged as `console.error("password reset email send failed", error)` only — never include `resetUrl` or the raw token in the log call.
-- **Decision**: PENDING
+- **Decision**: FIXED — folded into F1's edit to Critical Implementation Details' enumeration-safety paragraph.
 
 ### F4 — Expired, never-used token rows have no documented cleanup story
 
@@ -81,4 +81,4 @@ Progress↔Phase mechanical contract: PASS — one `## Progress` heading, all 3 
 - **Location**: "What We're NOT Doing"
 - **Detail**: A token that's requested, never clicked, and never superseded by a later request (and whose user never deletes their account) has no cleanup path — it sits in `password_reset_tokens` past its `expiresAt` forever. Negligible at this app's scale, but every other deferred-risk category (rate limiting, session invalidation, HTML email, timing attacks) is explicitly named in "What We're NOT Doing" — this one isn't.
 - **Fix**: Add a bullet to "What We're NOT Doing": cleanup of expired, never-used token rows is out of scope — they remain until superseded by a new request or removed via account deletion; negligible at this app's scale.
-- **Decision**: PENDING
+- **Decision**: FIXED — bullet added to "What We're NOT Doing".

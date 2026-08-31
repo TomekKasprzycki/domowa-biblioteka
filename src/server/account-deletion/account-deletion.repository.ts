@@ -80,6 +80,8 @@ export async function deleteAccount(
 
       await manager.delete(BookEntity, { userId });
 
+      await manager.delete("password_reset_tokens", { userId });
+
       const log = manager.getRepository(AccountDeletionLogEntity).create({
         id: generateId(),
         deletedUserIdHash: createHash("sha256").update(userId).digest("hex"),

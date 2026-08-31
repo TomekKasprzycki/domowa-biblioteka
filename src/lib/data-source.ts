@@ -5,6 +5,7 @@ import { BookEntity } from "@/server/book/book.entity";
 import { FriendConnectionEntity } from "@/server/friend-connection/friend-connection.entity";
 import { LoanEntity } from "@/server/loan/loan.entity";
 import { AccountDeletionLogEntity } from "@/server/account-deletion/account-deletion-log.entity";
+import { PasswordResetTokenEntity } from "@/server/password-reset/password-reset-token.entity";
 
 const g = global as typeof global & {
   _typeormDataSource?: DataSource;
@@ -23,6 +24,7 @@ function createDataSource(): DataSource {
       FriendConnectionEntity,
       LoanEntity,
       AccountDeletionLogEntity,
+      PasswordResetTokenEntity,
     ],
     ssl:
       process.env.DATABASE_URL?.includes("sslmode=require") ||

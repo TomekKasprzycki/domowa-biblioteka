@@ -34,6 +34,13 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
         autoComplete="current-password"
       />
 
+      <a
+        href="/forgot-password"
+        className="mb-3.5 -mt-2 text-right text-xs font-medium text-green-700 underline"
+      >
+        Forgot password?
+      </a>
+
       {error && (
         <p role="alert" className="mb-3.5 text-sm text-red-600">
           {error}
