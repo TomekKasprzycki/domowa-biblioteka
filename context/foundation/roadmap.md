@@ -3,7 +3,7 @@ project: Domowa Biblioteka
 version: 1
 status: draft
 created: 2026-06-09
-updated: 2026-08-11  <!-- S-08 + S-09 added (Stream D, from context/design/design.html); i18n parked -->
+updated: 2026-08-22  <!-- S-10 (RODO), S-11 (forgot-password), S-12 (ux-polish), S-13 (polish-localization) added; i18n unparked into S-13 -->
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -40,6 +40,10 @@ Gwiazda przewodnia — pierwszy slice, którego ukończenie udowadnia, że produ
 | S-07 | isbn-lookup           | autofill title and author by ISBN when adding a book                              | S-06             | FR-003, Guardrails             | proposed |
 | S-08 | design-system         | see the app in its designed visual identity                                       | S-06             | NFR (usable, responsive)       | proposed |
 | S-09 | shelf-view            | browse books as spines on a shelf and act on one via a detail drawer              | S-08             | FR-004, FR-007                 | proposed |
+| S-10 | gdpr-assessment        | read a privacy notice and permanently delete their account, cascading across books, friends, and loans | F-02, S-01, S-02, S-04 | Access Control, Non-Goals | proposed |
+| S-11 | forgot-password        | reset a forgotten password via an emailed link                                    | F-02              | FR-002, Access Control          | proposed |
+| S-12 | ux-polish              | land on their collection right after sign-in, use accessible icon buttons, and read a reorganized friends list | S-09              | NFR (usable, responsive)    | proposed |
+| S-13 | polish-localization    | use the app in Polish                                                             | S-09, S-10, S-11, S-12 | NFR (usable)                | proposed |
 
 ## Streams
 
@@ -50,7 +54,10 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | A      | Pętla wypożyczeń | `F-01` → `F-02` → `S-01` → `S-03` → `S-04` → `S-05` | Główna must-have path; prowadzi do gwiazdy przewodniej S-04. S-02 dołącza przy S-03. |
 | B      | Graf znajomych   | `F-02` → `S-02`                                      | Równolegle z S-01; dołącza do Stream A przy S-03.                   |
 | C      | UX kolekcji      | `S-01` → `S-06` → `S-07`                             | Dodane 2026-08-11 po ukończeniu Stream A. Nie blokuje nic w A ani B — czysto usprawnienie dodawania książek. |
-| D      | Warstwa wizualna | `S-06` → `S-08` → `S-09`                             | Dodane 2026-08-11 na podstawie `context/design/design.html`. S-08 to czysty re-skin; S-09 zmienia sposób prezentacji książek. Kolejność względem S-07: buduj S-07 najpierw, bo modal z makiety zawiera już pole ISBN. |
+| D      | Warstwa wizualna | `S-06` → `S-08` → `S-09` → `S-12`                    | Dodane 2026-08-11 na podstawie `context/design/design.html`. S-08 to czysty re-skin; S-09 zmienia sposób prezentacji książek. Kolejność względem S-07: buduj S-07 najpierw, bo modal z makiety zawiera już pole ISBN. S-12 dołączony 2026-08-22 jako kontynuacja tej samej warstwy (`context/design/todo.md`). |
+| E      | Zgodność (RODO)  | `F-02, S-01, S-02, S-04` → `S-10`                    | Dodane 2026-08-22 po `context/changes/gdpr-assessment/research.md`. Nie blokuje A/B/C/D — wymaga tylko encji, które już istnieją. |
+| F      | Auth — reset hasła | `F-02` → `S-11`                                    | Dodane 2026-08-22 z `context/design/todo.md`. Niezależne od reszty; pierwsza funkcja wysyłająca e-mail w projekcie. |
+| G      | Lokalizacja      | `S-09, S-10, S-11, S-12` → `S-13`                    | Dodane 2026-08-22 — unpark pozycji "Polish UI / i18n" (patrz Parked). Celowo ostatni w kolejności, żeby tłumaczyć nowe UI z S-10/S-11/S-12 tylko raz. |
 
 ## Baseline
 
@@ -203,6 +210,57 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Depends on S-07 for data:** the drawer renders ISBN (added to the mockup 2026-08-11), including a designed missing state for hand-entered books. This slice also has to thread `isbn` through `DiscoverBook`, since the drawer shows it for a friend's books and S-07 deliberately stays out of `/discover`. If S-07 has not landed, the drawer's ISBN line has no source — sequence accordingly.
 - **Status:** proposed
 
+### S-10: Privacy & Data Rights (RODO)
+
+- **Outcome:** User can read a privacy notice explaining what personal data is collected and why, and can permanently delete their own account — cascading the deletion across their books, friend connections, and loan history.
+- **Change ID:** gdpr-assessment
+- **PRD refs:** Access Control, Non-Goals (gap — no existing FR covers data rights yet; see Open Roadmap Questions #3)
+- **Prerequisites:** F-02, S-01, S-02, S-04
+- **Parallel with:** S-11, S-12
+- **Blockers:** —
+- **Unknowns:** Data export (GDPR Art. 15/20) is out of scope for this slice's first cut — ships notice + deletion only; export is a fast-follow if ever requested. Owner: developer. Block: no.
+- **Risk:** Account deletion must cascade correctly across `BookEntity`, `FriendConnectionEntity`, and `LoanEntity` — an incomplete cascade leaves orphaned rows referencing a deleted user, or silently fails to remove a friend's visibility into the deleted user's data. A book currently on loan complicates deletion — decide during planning whether deletion is blocked while an active loan exists or the loan is force-closed. Separately, `context/changes/gdpr-assessment/research.md` found the Neon database region (`us-east-1`, USA) doesn't match the deliberately-chosen Vercel function region (`cdg1`, EU) — an undocumented cross-border data transfer. Resolving that (migrate the DB to an EU Neon region, or document a legal transfer basis) is part of fully closing this slice's risk, not just the notice/deletion UI.
+- **Status:** proposed
+
+### S-11: Forgot Password
+
+- **Outcome:** A user who forgot their password can request a reset link by email and set a new password, without contacting the app owner.
+- **Change ID:** forgot-password
+- **PRD refs:** FR-002 (extends sign-in/session), Access Control
+- **Prerequisites:** F-02
+- **Parallel with:** S-10, S-12
+- **Blockers:** —
+- **Unknowns:** Which transactional-email provider to use — this is the first outbound-email requirement in the codebase (S-07's ISBN lookup is inbound HTTP only). Resolve via a real Marketplace integration during `/10x-plan` rather than hand-rolling SMTP. Owner: developer. Block: no.
+- **Risk:** A password-reset token must be single-use, time-limited, and validated server-side before the new password is accepted — a reused or unexpired token is an account-takeover vector. First slice touching security-sensitive email delivery; treat provider setup (API key, sender domain/DNS) as part of the plan, not an afterthought.
+- **Status:** proposed
+- **Source:** `context/design/todo.md` (developer note: "dodaj opcję: zapomniałem hasła. wyślij link na mail z linkiem do resetu")
+
+### S-12: Post-Launch UX Polish
+
+- **Outcome:** After signing in, a user lands directly on their collection instead of a welcome page; every icon-only action button (edit, delete, …) is reachable by keyboard and screen reader with a specific label (e.g. "Delete The Left Hand of Darkness", not just "Delete"); and the friends list shows each friend's shelf size instead of their email, with administrative actions collapsed by default and a two-column layout on large screens, matching `context/design/design.html`.
+- **Change ID:** ux-polish
+- **PRD refs:** NFR (usable, responsive), Guardrails
+- **Prerequisites:** S-09
+- **Parallel with:** S-10, S-11
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** `IconButton` is a new primitive added to `src/app/_components/design-system.types.ts`'s variant set and gets adopted by every existing delete/edit action across collection and friends — same "any existing spec that breaks is evidence of an accidental behaviour change" caveat that applied to S-08 applies here, since this is presentation-plus-navigation, not new business logic. The friends-list change (email → book count) needs a `countBooksForUser`-style query per friend card, mirroring the pattern already used for the sidebar's own book count (added during S-08 planning).
+- **Status:** proposed
+- **Source:** `context/design/todo.md` (developer notes, captured 2026-08-22: post-login redirect, IconButton, friends admin-section collapse + 2-col layout, book count instead of email, narrower friend cards)
+
+### S-13: Polish Localization
+
+- **Outcome:** The app's UI copy — page text, buttons, server-action error messages — is in Polish instead of English, matching the design mockup's language and the PRD's Polish-speaking persona.
+- **Change ID:** polish-localization
+- **PRD refs:** NFR (usable), Vision & Problem Statement (Polish persona)
+- **Prerequisites:** S-09, S-10, S-11, S-12
+- **Parallel with:** —
+- **Blockers:** —
+- **Unknowns:** Scope is a one-off string sweep to Polish, not a full i18n system — no locale routing, no message catalogue, no runtime language switching. If multi-locale support (e.g. keeping an English option) is wanted later, that's a separate, larger decision needing locale routing and a message catalogue, and would touch most existing specs since they assert on English text today. Owner: developer. Block: no.
+- **Risk:** The widest-reaching change since S-08 — nearly every component and spec asserts on English user-facing text. Sequenced last among the new slices specifically so each string is translated once, after S-10/S-11/S-12 land their own new UI copy (privacy notice, delete-account flow, reset-password screen, IconButton labels, friends-list copy) rather than translating twice.
+- **Status:** proposed
+- **Source:** `context/design/todo.md` (developer note: "przetłumaczyć na polski"); unparks the "Polish UI / i18n" item below.
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID             | Suggested issue title                                       | Ready for `/10x-plan` | Notes                                 |
@@ -218,19 +276,24 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-07       | isbn-lookup           | Collection: autofill title and author from ISBN             | yes                   | S-06 merged (PR #9)                   |
 | S-08       | design-system         | Design: tokens, fonts, sidebar shell, reusable primitives   | yes                   | Build after S-07 — see Streams note   |
 | S-09       | shelf-view            | Design: book-spine shelf and per-book detail drawer         | no                    | Awaits S-08                           |
+| S-10       | gdpr-assessment        | Privacy: notice + right-to-erasure (account deletion)       | yes                   | Run `/10x-plan gdpr-assessment` — research done, see `context/changes/gdpr-assessment/research.md` |
+| S-11       | forgot-password        | Auth: forgot-password email reset flow                      | yes                   | Run `/10x-plan forgot-password` — pick an email provider first (see Unknowns) |
+| S-12       | ux-polish              | UX: icon buttons, post-login redirect, friends list layout  | yes                   | Run `/10x-plan ux-polish` — source: `context/design/todo.md` |
+| S-13       | polish-localization    | i18n: one-off Polish string sweep                            | no                    | Awaits S-10, S-11, S-12 (translates their new UI copy too) |
 
 ## Open Roadmap Questions
 
 1. **OAuth scope (FR-001)** — Implement Google/GitHub OAuth at launch alongside email + password, or defer OAuth to v1.5? Owner: developer. Block: F-02 partially — email + password path is unblocked; OAuth is additive. **Status 2026-08-11:** deferred in practice — `auth-scaffold` shipped credentials-only and its plan defers `@auth/typeorm-adapter` plus the `accounts`/`sessions` tables to a future OAuth slice. FR-001 is the only must-have PRD requirement not yet delivered; no roadmap item covers it.
 2. **Book identity / deduplication (PRD Open Question 2)** — S-07 stores an ISBN, which is a *partial* answer only. Books added manually (no ISBN) still have no canonical identity, and two users can enter the same title with different spellings. Promoting FR-012 (reviews) to must-have still needs a real dedup strategy. Owner: developer. Block: no.
+3. **PRD has no Privacy/Legal section (RODO)** — S-10 (`gdpr-assessment`) covers the buildable part (notice + account deletion), but `prd.md` itself has no FR/NFR naming a legal basis for processing, a data-retention policy, or the Neon US-region data-residency gap found during research. Owner: developer. Block: no — S-10 can proceed without a PRD amendment, but the PRD should eventually name this explicitly. See `context/changes/gdpr-assessment/research.md` §Gaps for the full list.
 
 ## Parked
 
 - **Book cover images / photo uploads** — Why parked: PRD §Non-Goals — image storage infrastructure cost disproportionate to v1 value.
-- **Push / email notifications** — Why parked: PRD §Non-Goals — separate infrastructure concern; users check app manually in v1.
+- **Push / email notifications** — Why parked: PRD §Non-Goals — separate infrastructure concern; users check app manually in v1. Does not cover S-11's password-reset email — that's a single transactional/security message, not a product notification (loan reminders, borrow alerts, etc.), and stays out of scope here.
 - **Public profiles** — Why parked: PRD §Non-Goals — privacy requirement; catalog never visible outside confirmed friend circle.
 - **Native mobile app** — Why parked: PRD §Non-Goals — responsive web is the delivery target for v1.
-- **Polish UI / i18n** — Why parked: the design mockup (`context/design/design.html`) is written in Polish and the PRD persona is Polish-speaking, but the app ships English throughout, including server-action error messages. Decided 2026-08-11 to keep S-08/S-09 purely visual and treat the mockup's Polish as placeholder copy. Promoting this needs a real i18n approach (locale routing, message catalogue) rather than a one-off string sweep — and it would touch nearly every spec, since most assert on English user-facing text.
+- ~~**Polish UI / i18n**~~ — **Unparked 2026-08-22.** Promoted to S-13 (`polish-localization`) per developer request (`context/design/todo.md`). Scope is narrower than a full i18n system: a one-off string sweep to Polish across UI copy and server-action messages — no locale routing, no message catalogue, no runtime language switching. Why it was parked originally still applies to a *future* multi-locale ask: the design mockup (`context/design/design.html`) is written in Polish and the PRD persona is Polish-speaking, but the app shipped English throughout including server-action error messages; 2026-08-11 decided to keep S-08/S-09 purely visual and treat the mockup's Polish as placeholder copy. If multi-locale (not just single-locale Polish) is ever wanted, that remains a separate, larger future decision requiring locale routing and a message catalogue.
 - **Public feed / activity stream** — Why parked: PRD §Non-Goals — private utility, not a social platform.
 - **Wishlist / "want to read" catalog** — Why parked: PRD §Non-Goals — only owned books in scope.
 - ~~**ISBN lookup / external book enrichment**~~ — **Unparked 2026-08-11.** Promoted to S-07 (`isbn-lookup`) by developer decision. Scope is narrower than the original parked item: lookup of title + author by ISBN and storage of the ISBN itself, nothing else. Cover images and full bibliographic enrichment (publisher, year, page count) stay out of scope. `prd.md` §Non-Goals was amended to match — see PRD note dated 2026-08-11.

@@ -9,8 +9,7 @@ import { FriendConnectionEntity } from "@/server/friend-connection/friend-connec
 import { LoanEntity } from "@/server/loan/loan.entity";
 import { OPEN_LOAN_STATUSES } from "@/server/loan/loan.types";
 import { AccountDeletionLogEntity } from "@/server/account-deletion/account-deletion-log.entity";
-
-export type DeleteAccountResult = "blocked" | "conflict" | "deleted";
+import { DeleteAccountResult } from "@/server/account-deletion/account-deletion.types";
 
 // Every query in this module must go through the manager passed in, not
 // getDataSource().getRepository(...). No existing repository function
@@ -48,6 +47,12 @@ export async function deleteAccount(
   const ds = await getDataSource();
   try {
     return await ds.transaction(async (manager) => {
+      // ownedBookIds is a snapshot taken once, before the open-loan check and
+      // reused for the cascade delete below. A book added by this user on a
+      // concurrent connection mid-transaction is invisible to both — but if
+      // that book later gets an open loan, deleting it still fails on the
+      // same ON DELETE NO ACTION FK and is caught by the isForeignKeyViolation
+      // handler below, same as the concurrent-loan race that comment covers.
       const ownedBooks = await manager.find(BookEntity, {
         where: { userId },
         select: { id: true },
