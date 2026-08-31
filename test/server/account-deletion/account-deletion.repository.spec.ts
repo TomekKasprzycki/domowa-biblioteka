@@ -17,6 +17,8 @@ import {
   markReturned,
   confirmReturn,
 } from "@/server/loan/loan.repository";
+import { PasswordResetTokenEntity } from "@/server/password-reset/password-reset-token.entity";
+import { createPasswordResetToken } from "@/server/password-reset/password-reset.repository";
 
 describe("deleteAccount", () => {
   const suffix = Date.now();
@@ -61,6 +63,7 @@ describe("deleteAccount", () => {
           .getRepository(FriendConnectionEntity)
           .delete({ addresseeId: id });
         await ds.getRepository(BookEntity).delete({ userId: id });
+        await ds.getRepository(PasswordResetTokenEntity).delete({ userId: id });
       }
       for (const id of userIds) {
         await ds.getRepository(UserEntity).delete({ id });
@@ -294,6 +297,28 @@ describe("deleteAccount", () => {
     expect(user).not.toBeNull();
     const book = await ds.getRepository(BookEntity).findOne({ where: { id: bookF1.id } });
     expect(book).not.toBeNull();
+  });
+
+  it("deletes an account with a live, unused password reset token instead of leaving it FK-blocked", async () => {
+    // given
+    const userH = await makeUser("reset-token-h");
+    await createPasswordResetToken(userH);
+    const tokenRowsBefore = await ds
+      .getRepository(PasswordResetTokenEntity)
+      .find({ where: { userId: userH } });
+    expect(tokenRowsBefore).toHaveLength(1);
+
+    // when
+    const result = await deleteAccount(userH);
+
+    // then
+    expect(result).toBe("deleted");
+    const user = await ds.getRepository(UserEntity).findOne({ where: { id: userH } });
+    expect(user).toBeNull();
+    const tokenRowsAfter = await ds
+      .getRepository(PasswordResetTokenEntity)
+      .find({ where: { userId: userH } });
+    expect(tokenRowsAfter).toHaveLength(0);
   });
 
   it("returns deleted for a user with no books, connections, or loans at all", async () => {

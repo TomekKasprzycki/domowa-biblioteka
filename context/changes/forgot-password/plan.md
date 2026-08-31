@@ -300,15 +300,15 @@ The new `password_reset_tokens` table is additive only. No existing data is touc
 
 #### Automated
 
-- [ ] 1.1 New repository integration test passes: create/consume, single-use, expiry, per-user invalidation
-- [ ] 1.2 Account-deletion cascade test passes: live token no longer blocks deleteAccount
-- [ ] 1.3 npm test passes
-- [ ] 1.4 npm run build passes
-- [ ] 1.5 npm run lint passes
+- [x] 1.1 New repository integration test passes: create/consume, single-use, expiry, per-user invalidation
+- [x] 1.2 Account-deletion cascade test passes: live token no longer blocks deleteAccount
+- [x] 1.3 npm test passes
+- [x] 1.4 npm run build passes
+- [x] 1.5 npm run lint passes
 
 #### Manual
 
-- [ ] 1.6 Migration creates `password_reset_tokens` table with expected columns and FK
+- [x] 1.6 Migration creates `password_reset_tokens` table with expected columns and FK
 
 ### Phase 2: Email Integration & Request-Reset Action
 
