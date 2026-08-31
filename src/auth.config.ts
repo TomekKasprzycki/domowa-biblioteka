@@ -19,6 +19,7 @@ export default {
         "/register",
         "/privacy",
         "/forgot-password",
+        "/reset-password",
       ];
       const isPublic =
         publicPaths.includes(nextUrl.pathname) ||

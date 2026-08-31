@@ -10,7 +10,6 @@ import { LoanEntity } from "@/server/loan/loan.entity";
 import { OPEN_LOAN_STATUSES } from "@/server/loan/loan.types";
 import { AccountDeletionLogEntity } from "@/server/account-deletion/account-deletion-log.entity";
 import { DeleteAccountResult } from "@/server/account-deletion/account-deletion.types";
-import { PasswordResetTokenEntity } from "@/server/password-reset/password-reset-token.entity";
 
 // Every query in this module must go through the manager passed in, not
 // getDataSource().getRepository(...). No existing repository function
@@ -81,7 +80,7 @@ export async function deleteAccount(
 
       await manager.delete(BookEntity, { userId });
 
-      await manager.delete(PasswordResetTokenEntity, { userId });
+      await manager.delete("password_reset_tokens", { userId });
 
       const log = manager.getRepository(AccountDeletionLogEntity).create({
         id: generateId(),

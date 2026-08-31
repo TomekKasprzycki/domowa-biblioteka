@@ -1,0 +1,9 @@
+-> przetłumaczyć na polski
+-> po zalogowaniu automatycznie przejść do własnej kolekcji (usunąć welcome page)
+-> dodaj opcję: zapomniałem hasła. wyślij link na mail z linkiem do resetu.
+-> dodać stronę administrowania własnym kontem -> update (ale nie email) + delete
+-> przy rejestracji dwa razy podać hasło (sprawdzić czy użytkownik podał takie hasło jakie chciał, a nie że przez przypadek zrobił np. literówkę)
+-> używać IconButton (buttona z ikoną zmiast tekstu). Ten komponent powinien mieć aria-label i tooltip przy hover z nazwą buttona. Nazwa powinna nie tylko opisywać funkcję ale mieć też kontekst. np. button do usuwania książki powinien mieć label: usuń + tytuł książki. to samo z edytuj.
+-> w /friends => domyślnie zamknięte sprawy admninistracyjne; w widoku l i xl po prawej stronie (jako 2 kolumna)
+-> w /friends => zamiast email ma być info o ilości książek na półce
+-> w /friends => karty z przyjaciółmi powinny być tak jak na design (mniejsza szerokość)

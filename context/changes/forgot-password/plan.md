@@ -314,29 +314,29 @@ The new `password_reset_tokens` table is additive only. No existing data is touc
 
 #### Automated
 
-- [x] 2.1 New actions test passes: validation error, known-email send, unknown-email identical response
-- [x] 2.2 forgot-password-form spec passes
-- [x] 2.3 npm test passes
-- [x] 2.4 npm run build passes
-- [x] 2.5 npm run lint passes
+- [x] 2.1 New actions test passes: validation error, known-email send, unknown-email identical response — 1cbda2a
+- [x] 2.2 forgot-password-form spec passes — 1cbda2a
+- [x] 2.3 npm test passes — 1cbda2a
+- [x] 2.4 npm run build passes — 1cbda2a
+- [x] 2.5 npm run lint passes — 1cbda2a
 
 #### Manual
 
-- [x] 2.6 Real reset email received, sent from domowa.biblioteka.v1@gmail.com via Gmail SMTP
-- [x] 2.7 Unregistered-email request shows the identical confirmation message
+- [x] 2.6 Real reset email received, sent from domowa.biblioteka.v1@gmail.com via Gmail SMTP — 1cbda2a
+- [x] 2.7 Unregistered-email request shows the identical confirmation message — 1cbda2a
 
 ### Phase 3: Reset-Password Action & UI Wiring
 
 #### Automated
 
-- [ ] 3.1 New reset actions test passes: success, mismatch, expired, reused, missing-token
-- [ ] 3.2 reset-password-form spec passes
-- [ ] 3.3 npm test passes
-- [ ] 3.4 npm run build passes
-- [ ] 3.5 npm run lint passes
+- [x] 3.1 New reset actions test passes: success, mismatch, expired, reused, missing-token
+- [x] 3.2 reset-password-form spec passes
+- [x] 3.3 npm test passes
+- [x] 3.4 npm run build passes
+- [x] 3.5 npm run lint passes
 
 #### Manual
 
-- [ ] 3.6 Full request → email → mismatch-rejected → success → /login?reset=1 → sign-in loop verified
-- [ ] 3.7 Reused and missing-token links both show the generic invalid-link message
-- [ ] 3.8 "Forgot password?" reachable from /login while signed out
+- [x] 3.6 Full request → email → mismatch-rejected → success → /login?reset=1 → sign-in loop verified
+- [x] 3.7 Reused and missing-token links both show the generic invalid-link message
+- [x] 3.8 "Forgot password?" reachable from /login while signed out
