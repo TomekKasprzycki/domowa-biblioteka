@@ -1,7 +1,7 @@
 ---
 id: forgot-password
 title: "S-11: Forgot Password — emailed reset link"
-status: implemented
+status: impl_reviewed
 created: 2026-08-22
 updated: 2026-08-31
 roadmap_id: S-11

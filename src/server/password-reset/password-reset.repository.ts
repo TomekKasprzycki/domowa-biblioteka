@@ -42,7 +42,12 @@ export async function resetPasswordWithToken(
       { where: { tokenHash } }
     );
 
-    if (!row || row.expiresAt.getTime() < Date.now()) {
+    if (!row) {
+      return "invalid";
+    }
+
+    if (row.expiresAt.getTime() < Date.now()) {
+      await manager.delete("password_reset_tokens", { userId: row.userId });
       return "invalid";
     }
 

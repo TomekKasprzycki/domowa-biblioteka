@@ -95,7 +95,7 @@ describe("password-reset repository", () => {
       expect(result).toBe("invalid");
     });
 
-    it("returns invalid for an expired token", async () => {
+    it("returns invalid for an expired token and deletes the expired row", async () => {
       // given
       const userId = await makeUser("expired");
       const rawToken = "expired-raw-token-value";
@@ -115,6 +115,10 @@ describe("password-reset repository", () => {
         .getRepository(UserEntity)
         .findOne({ where: { id: userId } });
       expect(user?.passwordHash).toBe("original_hashed_password");
+      const rows = await ds
+        .getRepository(PasswordResetTokenEntity)
+        .find({ where: { userId } });
+      expect(rows).toHaveLength(0);
     });
 
     it("returns invalid when the same token is replayed after being consumed", async () => {
