@@ -329,14 +329,14 @@ The new `password_reset_tokens` table is additive only. No existing data is touc
 
 #### Automated
 
-- [x] 3.1 New reset actions test passes: success, mismatch, expired, reused, missing-token
-- [x] 3.2 reset-password-form spec passes
-- [x] 3.3 npm test passes
-- [x] 3.4 npm run build passes
-- [x] 3.5 npm run lint passes
+- [x] 3.1 New reset actions test passes: success, mismatch, expired, reused, missing-token — 5da3a9c
+- [x] 3.2 reset-password-form spec passes — 5da3a9c
+- [x] 3.3 npm test passes — 5da3a9c
+- [x] 3.4 npm run build passes — 5da3a9c
+- [x] 3.5 npm run lint passes — 5da3a9c
 
 #### Manual
 
-- [x] 3.6 Full request → email → mismatch-rejected → success → /login?reset=1 → sign-in loop verified
-- [x] 3.7 Reused and missing-token links both show the generic invalid-link message
-- [x] 3.8 "Forgot password?" reachable from /login while signed out
+- [x] 3.6 Full request → email → mismatch-rejected → success → /login?reset=1 → sign-in loop verified — 5da3a9c
+- [x] 3.7 Reused and missing-token links both show the generic invalid-link message — 5da3a9c
+- [x] 3.8 "Forgot password?" reachable from /login while signed out — 5da3a9c
