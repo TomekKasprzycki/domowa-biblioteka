@@ -300,30 +300,30 @@ The new `password_reset_tokens` table is additive only. No existing data is touc
 
 #### Automated
 
-- [x] 1.1 New repository integration test passes: create/consume, single-use, expiry, per-user invalidation
-- [x] 1.2 Account-deletion cascade test passes: live token no longer blocks deleteAccount
-- [x] 1.3 npm test passes
-- [x] 1.4 npm run build passes
-- [x] 1.5 npm run lint passes
+- [x] 1.1 New repository integration test passes: create/consume, single-use, expiry, per-user invalidation — f5c9256
+- [x] 1.2 Account-deletion cascade test passes: live token no longer blocks deleteAccount — f5c9256
+- [x] 1.3 npm test passes — f5c9256
+- [x] 1.4 npm run build passes — f5c9256
+- [x] 1.5 npm run lint passes — f5c9256
 
 #### Manual
 
-- [x] 1.6 Migration creates `password_reset_tokens` table with expected columns and FK
+- [x] 1.6 Migration creates `password_reset_tokens` table with expected columns and FK — f5c9256
 
 ### Phase 2: Email Integration & Request-Reset Action
 
 #### Automated
 
-- [ ] 2.1 New actions test passes: validation error, known-email send, unknown-email identical response
-- [ ] 2.2 forgot-password-form spec passes
-- [ ] 2.3 npm test passes
-- [ ] 2.4 npm run build passes
-- [ ] 2.5 npm run lint passes
+- [x] 2.1 New actions test passes: validation error, known-email send, unknown-email identical response
+- [x] 2.2 forgot-password-form spec passes
+- [x] 2.3 npm test passes
+- [x] 2.4 npm run build passes
+- [x] 2.5 npm run lint passes
 
 #### Manual
 
-- [ ] 2.6 Real reset email received, sent from domowa.biblioteka.v1@gmail.com via Gmail SMTP
-- [ ] 2.7 Unregistered-email request shows the identical confirmation message
+- [x] 2.6 Real reset email received, sent from domowa.biblioteka.v1@gmail.com via Gmail SMTP
+- [x] 2.7 Unregistered-email request shows the identical confirmation message
 
 ### Phase 3: Reset-Password Action & UI Wiring
 

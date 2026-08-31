@@ -13,7 +13,13 @@ export default {
   callbacks: {
     authorized({ auth: session, request: { nextUrl } }) {
       const isLoggedIn = !!session?.user;
-      const publicPaths = ["/", "/login", "/register", "/privacy"];
+      const publicPaths = [
+        "/",
+        "/login",
+        "/register",
+        "/privacy",
+        "/forgot-password",
+      ];
       const isPublic =
         publicPaths.includes(nextUrl.pathname) ||
         nextUrl.pathname.startsWith("/api/auth/");
