@@ -1,8 +1,13 @@
 import { auth } from "@/auth";
 import { Button } from "@/app/_components/button";
 
-export default async function Home() {
+interface HomeProps {
+  searchParams: Promise<{ accountDeleted?: string }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
   const session = await auth();
+  const { accountDeleted } = await searchParams;
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-16">
@@ -10,6 +15,15 @@ export default async function Home() {
         <h1 className="font-display text-3xl font-semibold text-ink">
           Domowa Biblioteka
         </h1>
+
+        {accountDeleted === "1" && (
+          <p
+            role="status"
+            className="rounded-lg border border-green-300 bg-green-50 px-4 py-2.5 text-sm text-green-800"
+          >
+            Your account has been deleted.
+          </p>
+        )}
 
         {session?.user ? (
           <>

@@ -4,6 +4,7 @@ import { UserEntity } from "@/server/user/user.entity";
 import { BookEntity } from "@/server/book/book.entity";
 import { FriendConnectionEntity } from "@/server/friend-connection/friend-connection.entity";
 import { LoanEntity } from "@/server/loan/loan.entity";
+import { AccountDeletionLogEntity } from "@/server/account-deletion/account-deletion-log.entity";
 
 const g = global as typeof global & {
   _typeormDataSource?: DataSource;
@@ -16,7 +17,13 @@ function createDataSource(): DataSource {
     url: process.env.DATABASE_URL,
     synchronize: process.env.NODE_ENV === "development",
     logging: process.env.NODE_ENV === "development",
-    entities: [UserEntity, BookEntity, FriendConnectionEntity, LoanEntity],
+    entities: [
+      UserEntity,
+      BookEntity,
+      FriendConnectionEntity,
+      LoanEntity,
+      AccountDeletionLogEntity,
+    ],
     ssl:
       process.env.DATABASE_URL?.includes("sslmode=require") ||
       process.env.DATABASE_URL?.includes("sslmode=verify-full")

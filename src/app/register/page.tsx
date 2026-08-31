@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { RegisterForm } from "./_components/register-form";
 
 export default function RegisterPage() {
@@ -8,6 +9,12 @@ export default function RegisterPage() {
           Create account
         </h1>
         <RegisterForm />
+        <Link
+          href="/privacy"
+          className="text-sm font-medium text-green-700 underline"
+        >
+          Privacy notice
+        </Link>
       </div>
     </main>
   );

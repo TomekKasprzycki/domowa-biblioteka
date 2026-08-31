@@ -2,7 +2,12 @@
 
 > Append-only register of recurring rules and patterns. Re-read at start by /10x-frame, /10x-research, /10x-plan, /10x-plan-review, /10x-implement, /10x-impl-review.
 
-## TypeORM SWC constraint applies only to @Column(), not specialized decorators
+## A written provider/scope instruction can be wrong once a concrete requirement lands — surface the conflict, don't silently pick a side
+
+- **Context**: `context/changes/forgot-password/change.md` (S-11) — the change's own notes said "use a real Vercel Marketplace transactional-email integration rather than hand-rolling SMTP."
+- **Problem**: During `/10x-plan`, Resend was installed via Marketplace per that instruction. The developer then asked for reset emails to send *from* a specific Gmail address — a requirement Resend structurally cannot meet (sending "from" a domain requires DNS-verified ownership of it, and nobody can verify `gmail.com`). The written instruction and the concrete requirement now contradicted each other, and neither "just follow the instruction" (ignores what the developer actually needs) nor "just do what's asked" (silently drops a deliberate architectural constraint someone wrote down for a reason) was correct on its own.
+- **Rule**: When a concrete, specific requirement conflicts with an existing written instruction (a change.md note, a lesson, an AGENTS.md rule), don't resolve it unilaterally in either direction. Name the conflict explicitly, explain *why* they're incompatible (not just that they are), and ask the developer to confirm the override before implementing it. Once confirmed, record the override and its reasoning back into the artifact that carried the original instruction (here, `change.md`'s Notes) so a future reader doesn't mistake the deviation for an oversight.
+- **Applies to**: plan authoring and research whenever a change's own upstream notes (change.md, frame.md) prescribe a specific technical approach; strongest for provider/vendor choices and other decisions with real switching cost.
 
 - **Context**: src/server/user/user.entity.ts — TypeORM entity under Next.js with SWC compiler
 - **Problem**: Plans for this constraint said "all columns must have explicit type: options", causing confusion about @PrimaryGeneratedColumn, @CreateDateColumn, @UpdateDateColumn which don't need it.

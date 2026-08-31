@@ -73,4 +73,34 @@ describe("SidebarNav", () => {
     // then
     expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
   });
+
+  it("renders an Account nav link", () => {
+    // given
+    mockUsePathname.mockReturnValue("/collection");
+
+    // when
+    render(
+      <SidebarNav pendingRequestCount={0} pendingReturnCount={0} />
+    );
+
+    // then
+    expect(
+      screen.getByRole("link", { name: /Account/ })
+    ).toHaveAttribute("href", "/account");
+  });
+
+  it("renders a Privacy link pointing at the public privacy notice", () => {
+    // given
+    mockUsePathname.mockReturnValue("/collection");
+
+    // when
+    render(
+      <SidebarNav pendingRequestCount={0} pendingReturnCount={0} />
+    );
+
+    // then
+    expect(
+      screen.getByRole("link", { name: /Privacy/ })
+    ).toHaveAttribute("href", "/privacy");
+  });
 });

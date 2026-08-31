@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LoginForm } from "./_components/login-form";
 
 interface LoginPageProps {
@@ -14,6 +15,12 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           Sign in
         </h1>
         <LoginForm callbackUrl={callbackUrl ?? "/"} />
+        <Link
+          href="/privacy"
+          className="text-sm font-medium text-green-700 underline"
+        >
+          Privacy notice
+        </Link>
       </div>
     </main>
   );
