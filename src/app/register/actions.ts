@@ -43,7 +43,7 @@ export async function registerAction(
   }
 
   try {
-    await signIn("credentials", { email, password, redirectTo: "/" });
+    await signIn("credentials", { email, password, redirectTo: "/collection" });
   } catch (error) {
     if (error instanceof AuthError) {
       return "Account created, but sign-in failed. Please sign in manually.";

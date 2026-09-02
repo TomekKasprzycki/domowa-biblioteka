@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Button } from "@/app/_components/button";
 
@@ -7,6 +8,10 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const session = await auth();
+  if (session?.user) {
+    redirect("/collection");
+  }
+
   const { accountDeleted } = await searchParams;
 
   return (
@@ -25,34 +30,18 @@ export default async function Home({ searchParams }: HomeProps) {
           </p>
         )}
 
-        {session?.user ? (
-          <>
-            <p className="text-lg text-ink-soft">
-              Welcome back, {session.user.name ?? session.user.email}.
-            </p>
-            <a
-              href="/collection"
-              className="text-sm font-medium text-green-700 underline"
-            >
-              Go to your collection
-            </a>
-          </>
-        ) : (
-          <>
-            <p className="text-lg text-ink-soft">
-              Browse your friends&apos; bookshelves and borrow without the
-              awkward ask.
-            </p>
-            <div className="flex flex-col gap-3 w-full sm:flex-row sm:justify-center">
-              <Button href="/register" variant="primary">
-                Create account
-              </Button>
-              <Button href="/login" variant="ghost">
-                Sign in
-              </Button>
-            </div>
-          </>
-        )}
+        <p className="text-lg text-ink-soft">
+          Browse your friends&apos; bookshelves and borrow without the
+          awkward ask.
+        </p>
+        <div className="flex flex-col gap-3 w-full sm:flex-row sm:justify-center">
+          <Button href="/register" variant="primary">
+            Create account
+          </Button>
+          <Button href="/login" variant="ghost">
+            Sign in
+          </Button>
+        </div>
       </div>
     </main>
   );
