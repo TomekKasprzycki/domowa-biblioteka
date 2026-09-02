@@ -187,6 +187,8 @@ Convert `FriendRow`'s "Remove" action to `IconButton` and swap confirmed friends
 - **Destructive-action guards** (friend-row, book-row, borrowing-row): the trigger `Button`/`IconButton` changes from `type="submit"` with an `onClick` guard to `type="button"` with `onClick={() => setConfirmOpen(true)}`; the form gains a `ref`; `ConfirmModal`'s `onConfirm` calls `formRef.current?.requestSubmit()` (jsdom 26 and all real browsers support this) and closes the confirm modal; `onCancel` just closes it.
 - **Discard-guards** (`edit-book-modal.tsx`, `add-book-modal.tsx`, both driving `Modal`'s synchronous `canClose` prop): `canClose` cannot itself await a modal, so it always vetoes (`return false`) while dirty and opens a `ConfirmModal` as a side effect; that modal's `onConfirm` calls the real `onClose`/`close` callback directly, bypassing `canClose` entirely, since a programmatic close is exempt from the guard by design (see `modal.tsx`'s existing `canClose` contract comment).
 
+**Further scope addition, also during Phase 3 manual verification (flagged by `/10x-impl-review`, not documented at implementation time):** two more styling requests landed on top of the above — the confirm message and button row are centered (`text-center` / `flex justify-center`), and the dialog sizes to its content instead of the fixed form-modal width. The latter needed a new optional `sizeClassName` prop on `Modal` itself (`modal.tsx:11,23-24,65`; default `"w-full max-w-lg sm:w-auto sm:min-w-lg"` unchanged, so every other `Modal` caller — `AddBookModal`, `EditBookModal` — is unaffected), which `ConfirmModal` overrides with `"w-fit max-w-[90vw]"` (`confirm-modal.tsx:31`).
+
 ### Success Criteria:
 
 #### Automated Verification:

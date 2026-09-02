@@ -27,6 +27,7 @@ Signing in or registering lands on `/collection`; visiting `/` while signed in r
 | Delivery scope | Ship all 5 items together, no deferral | All are small and already fully scoped by todo.md; splitting adds coordination overhead for little benefit | Plan (user-confirmed) |
 | Responsive collapse mechanism | Single render; a client component reads a `matchMedia` query via `useSyncExternalStore` | A single `<details>` can't carry two default-open states per breakpoint (dual-render rejected in plan review — duplicate `id="email"`, split form state); `useSyncExternalStore` replaced the plan's original `useState`+effect design during implementation after it tripped `react-hooks/set-state-in-effect` | Plan review; adapted in Phase 4 |
 | Confirmation dialog styling | Replace `window.confirm()` app-wide with a new styled `ConfirmModal` primitive | Developer feedback during Phase 3 manual verification asked for a styled confirm; offered scoped-to-friend-remove vs. app-wide, developer chose app-wide for visual consistency across all 5 destructive/discard confirmations | Implementation (user-directed) |
+| ConfirmModal presentation | Centered message/buttons; dialog sizes to content via a new `Modal` `sizeClassName` prop | Further developer feedback ("text should be in center", "modal should be fit-content") during the same Phase 3 verification pass; `sizeClassName` defaults to the existing fixed width so `AddBookModal`/`EditBookModal` are unaffected | Implementation (user-directed) |
 
 ## Scope
 
@@ -37,6 +38,7 @@ Signing in or registering lands on `/collection`; visiting `/` while signed in r
 - **Added mid-implementation:** new `ConfirmModal` primitive, replacing `window.confirm()` at all 5 call sites app-wide (friend-remove, book-delete, 2 discard-guards, borrowing-return) — not part of the reviewed plan; see Phase 3 in the full plan
 - `/friends`: collapsible "Manage invites" block (form + Received + Sent), always-open right column at `lg`/`xl`
 - **Added mid-implementation:** `<main>`'s `max-w-[1180px]` cap removed app-wide (`src/app/(app)/layout.tsx`) so it reaches the viewport's right edge — not part of the reviewed plan; see Phase 4 in the full plan
+- **Added mid-implementation:** `ConfirmModal` centers its message/buttons and sizes to content, via a new optional `sizeClassName` prop on `Modal` (default unchanged — `AddBookModal`/`EditBookModal` unaffected) — not part of the reviewed plan; see Phase 3 in the full plan
 - Narrower `design.html`-matching card grid across all three friend/invite lists, including restyling each card's internals to the mockup's column layout so they don't crowd at 240px
 
 **Out of scope:**
@@ -71,6 +73,7 @@ Four phases, smallest/most isolated first: (1) redirect targets (auth pages/acti
 - At exactly 1024px the friends grid gets ~390px next to a 280px admin column, so it stays one card wide until ~1180px. The 2-column split is a layout win at `xl` more than at `lg`.
 - `ConfirmModal`'s app-wide rollout was not part of the reviewed plan or its plan-review pass — it touches 4 files outside S-12's original file list. Automated coverage is thorough (all 5 call sites re-spec'd, `grep` confirms zero remaining `window.confirm()`), but it hasn't been through `/10x-plan-review`; worth a mention if this change goes through `/10x-impl-review`.
 - The `<main>` width-cap removal (Phase 4) is app-wide and also wasn't through `/10x-plan-review` — no page's tests or internal layout assumed the old 1180px cap (verified: full suite passes unmodified), but it's a visual change on every authenticated page, not just `/friends`.
+- `ConfirmModal`'s centered/fit-content styling and `Modal`'s new `sizeClassName` prop weren't through `/10x-plan-review` either (caught and documented after the fact by `/10x-impl-review`, F1) — low risk (the prop is additive and defaults to the prior fixed width), but the same "document scope additions when they happen" discipline this plan applied to its two bigger additions almost didn't get applied here.
 
 ## Success Criteria (Summary)
 
