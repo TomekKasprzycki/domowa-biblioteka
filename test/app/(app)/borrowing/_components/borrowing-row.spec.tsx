@@ -112,7 +112,7 @@ describe("BorrowingRow", () => {
     const dialog = screen.getByRole("dialog", { name: /confirm return/i });
 
     // when
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(mockMarkReturned).not.toHaveBeenCalled();

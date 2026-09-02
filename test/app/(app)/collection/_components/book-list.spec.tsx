@@ -42,10 +42,10 @@ describe("BookList", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Solaris,/ })
+      screen.getByRole("button", { name: /^Zobacz: Solaris,/ })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /^View Cyberiada,/ })
+      screen.getByRole("button", { name: /^Zobacz: Cyberiada,/ })
     ).toBeInTheDocument();
   });
 
@@ -73,7 +73,7 @@ describe("BookList", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: /^View Cyberiada,/ })
+      screen.getByRole("button", { name: /^Zobacz: Cyberiada,/ })
     );
     await user.click(screen.getByRole("button", { name: "Edit" }));
 
@@ -85,7 +85,7 @@ describe("BookList", () => {
     // given
     const user = userEvent.setup();
     render(<BookList books={[solaris]} />);
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
     await user.click(screen.getByRole("button", { name: "Edit" }));
 
     // when

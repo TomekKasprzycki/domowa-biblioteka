@@ -57,8 +57,12 @@ describe("ConfirmModal", () => {
     );
 
     // then
-    expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Potwierdź" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Anuluj" })
+    ).toBeInTheDocument();
   });
 
   it("calls onConfirm when the confirm button is clicked", async () => {
@@ -98,7 +102,7 @@ describe("ConfirmModal", () => {
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(onCancel).toHaveBeenCalledTimes(1);

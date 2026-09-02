@@ -9,7 +9,7 @@ import { Button } from "@/app/_components/button";
 import { ConfirmModal } from "@/app/_components/confirm-modal";
 import { spineStyleFor } from "@/lib/spine-style.utils";
 
-const dateFormat = new Intl.DateTimeFormat("en-GB", {
+const dateFormat = new Intl.DateTimeFormat("pl-PL", {
   day: "numeric",
   month: "short",
   year: "numeric",

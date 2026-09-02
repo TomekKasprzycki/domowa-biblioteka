@@ -79,11 +79,11 @@ describe("CollectionPage", () => {
 
     // when
     // The loan line now lives in the book's drawer, not directly on the shelf.
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
 
     // then
     expect(
-      screen.getByText("Lent to Ania · since 12 Mar 2026")
+      screen.getByText("Lent to Ania · since 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -104,9 +104,9 @@ describe("CollectionPage", () => {
 
     // when
     // Delete lives in each book's drawer; open both to compare.
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
     await user.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then
@@ -122,9 +122,9 @@ describe("CollectionPage", () => {
     render(await CollectionPage());
 
     // when
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
     await user.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then

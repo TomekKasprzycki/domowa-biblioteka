@@ -28,7 +28,7 @@ const availableToViewer = {
 };
 
 function spineFor(title: string) {
-  return new RegExp(`^View ${title},`);
+  return new RegExp(`^Zobacz: ${title},`);
 }
 
 const books: DiscoverBook[] = [

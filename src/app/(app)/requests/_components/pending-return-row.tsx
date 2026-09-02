@@ -6,7 +6,7 @@ import { LibraryCard } from "@/app/_components/library-card";
 import { Button } from "@/app/_components/button";
 import type { PendingReturn } from "@/app/(app)/requests/requests.types";
 
-const dateFormat = new Intl.DateTimeFormat("en-GB", {
+const dateFormat = new Intl.DateTimeFormat("pl-PL", {
   day: "numeric",
   month: "short",
   year: "numeric",

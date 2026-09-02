@@ -142,7 +142,9 @@ describe("AddBookModal", () => {
 
     // when
     await user.click(
-      within(getDialog("Discard book")).getByRole("button", { name: "Cancel" })
+      within(getDialog("Discard book")).getByRole("button", {
+        name: "Anuluj",
+      })
     );
 
     // then

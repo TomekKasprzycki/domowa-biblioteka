@@ -6,12 +6,12 @@ import { signOutAction } from "@/app/_components/sidebar.actions";
 import { Pill } from "@/app/_components/pill";
 
 const NAV_ROUTES = [
-  { href: "/collection", icon: "📚", label: "Collection" },
-  { href: "/friends", icon: "🤝", label: "Friends" },
-  { href: "/discover", icon: "🔎", label: "Discover" },
-  { href: "/requests", icon: "✉️", label: "Requests" },
-  { href: "/borrowing", icon: "🔁", label: "Borrowing" },
-  { href: "/account", icon: "⚙️", label: "Account" },
+  { href: "/collection", icon: "📚", label: "Twoja kolekcja" },
+  { href: "/friends", icon: "🤝", label: "Znajomi" },
+  { href: "/discover", icon: "🔎", label: "Odkrywaj" },
+  { href: "/requests", icon: "✉️", label: "Prośby" },
+  { href: "/borrowing", icon: "🔁", label: "Wypożyczenia" },
+  { href: "/account", icon: "⚙️", label: "Konto" },
 ] as const;
 
 export function SidebarNav({
@@ -43,14 +43,14 @@ export function SidebarNav({
             </span>
             {route.href === "/requests" && pendingRequestCount > 0 && (
               <span
-                aria-label={`${pendingRequestCount} borrow requests awaiting your response`}
+                aria-label={`Liczba próśb o wypożyczenie oczekujących na Twoją odpowiedź: ${pendingRequestCount}`}
               >
                 <Pill tone="pending">{pendingRequestCount}</Pill>
               </span>
             )}
             {route.href === "/requests" && pendingReturnCount > 0 && (
               <span
-                aria-label={`${pendingReturnCount} returns awaiting your confirmation`}
+                aria-label={`Liczba zwrotów oczekujących na Twoje potwierdzenie: ${pendingReturnCount}`}
               >
                 <Pill tone="pending">{pendingReturnCount}</Pill>
               </span>
@@ -63,14 +63,14 @@ export function SidebarNav({
           type="submit"
           className="w-full whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#CFE3D5] transition-colors hover:bg-white/[0.06] hover:text-white"
         >
-          Sign out
+          Wyloguj się
         </button>
       </form>
       <Link
         href="/privacy"
         className="whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium text-[#CFE3D5] transition-colors hover:bg-white/[0.06] hover:text-white"
       >
-        Privacy
+        Prywatność
       </Link>
     </nav>
   );

@@ -26,7 +26,7 @@ describe("SidebarNav", () => {
     );
 
     // then
-    expect(screen.getByRole("link", { name: /Friends/ })).toHaveClass(
+    expect(screen.getByRole("link", { name: /Znajomi/ })).toHaveClass(
       "bg-green-700"
     );
   });
@@ -41,9 +41,9 @@ describe("SidebarNav", () => {
     );
 
     // then
-    expect(screen.getByRole("link", { name: /Collection/ })).not.toHaveClass(
-      "bg-green-700"
-    );
+    expect(
+      screen.getByRole("link", { name: /Twoja kolekcja/ })
+    ).not.toHaveClass("bg-green-700");
   });
 
   it("renders the pending-request badge when the count is greater than zero", () => {
@@ -57,7 +57,7 @@ describe("SidebarNav", () => {
 
     // then
     expect(
-      screen.getByLabelText(/borrow requests awaiting your response/)
+      screen.getByLabelText(/Liczba próśb o wypożyczenie/)
     ).toHaveTextContent("4");
   });
 
@@ -71,7 +71,9 @@ describe("SidebarNav", () => {
     );
 
     // then
-    expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /wyloguj/i })
+    ).toBeInTheDocument();
   });
 
   it("renders an Account nav link", () => {
@@ -85,7 +87,7 @@ describe("SidebarNav", () => {
 
     // then
     expect(
-      screen.getByRole("link", { name: /Account/ })
+      screen.getByRole("link", { name: /Konto/ })
     ).toHaveAttribute("href", "/account");
   });
 
@@ -100,7 +102,7 @@ describe("SidebarNav", () => {
 
     // then
     expect(
-      screen.getByRole("link", { name: /Privacy/ })
+      screen.getByRole("link", { name: /Prywatność/ })
     ).toHaveAttribute("href", "/privacy");
   });
 });

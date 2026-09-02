@@ -38,8 +38,8 @@ const signedInSession = {
   },
 };
 
-const requestBadge = /borrow requests awaiting your response/;
-const returnBadge = /returns awaiting your confirmation/;
+const requestBadge = /Liczba próśb o wypożyczenie/;
+const returnBadge = /Liczba zwrotów oczekujących/;
 
 describe("Sidebar", () => {
   beforeEach(() => {
@@ -71,27 +71,28 @@ describe("Sidebar", () => {
     render(await Sidebar());
 
     // then
-    expect(screen.getByRole("link", { name: /Collection/ })).toHaveAttribute(
-      "href",
-      "/collection"
-    );
-    expect(screen.getByRole("link", { name: /Friends/ })).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: /Twoja kolekcja/ })
+    ).toHaveAttribute("href", "/collection");
+    expect(screen.getByRole("link", { name: /Znajomi/ })).toHaveAttribute(
       "href",
       "/friends"
     );
-    expect(screen.getByRole("link", { name: /Discover/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Odkrywaj/ })).toHaveAttribute(
       "href",
       "/discover"
     );
-    expect(screen.getByRole("link", { name: /Requests/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Prośby/ })).toHaveAttribute(
       "href",
       "/requests"
     );
-    expect(screen.getByRole("link", { name: /Borrowing/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Wypożyczenia/ })).toHaveAttribute(
       "href",
       "/borrowing"
     );
-    expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /wyloguj/i })
+    ).toBeInTheDocument();
   });
 
   it("shows the pending-request badge when the count is greater than zero", async () => {
@@ -154,7 +155,7 @@ describe("Sidebar", () => {
     render(await Sidebar());
 
     // then
-    expect(screen.getByRole("link", { name: /Requests/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Prośby/ })).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalled();
     consoleError.mockRestore();
   });
@@ -168,7 +169,7 @@ describe("Sidebar", () => {
     render(await Sidebar());
 
     // then
-    expect(screen.getByText("10 books on your shelf")).toBeInTheDocument();
+    expect(screen.getByText("10 książek na półce")).toBeInTheDocument();
   });
 
   it("degrades the book count to 0 when the query fails", async () => {
@@ -183,7 +184,7 @@ describe("Sidebar", () => {
     render(await Sidebar());
 
     // then
-    expect(screen.getByText("0 books on your shelf")).toBeInTheDocument();
+    expect(screen.getByText("0 książek na półce")).toBeInTheDocument();
     consoleError.mockRestore();
   });
 });

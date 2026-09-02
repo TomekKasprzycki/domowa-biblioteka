@@ -37,7 +37,7 @@ function makeBook(
 
 async function openDrawer(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
-    screen.getByRole("button", { name: /^View The Pragmatic Programmer,/ })
+    screen.getByRole("button", { name: /^Zobacz: The Pragmatic Programmer,/ })
   );
 }
 
@@ -85,7 +85,7 @@ describe("DiscoverBookRow", () => {
 
     // when / then
     expect(
-      screen.getByRole("button", { name: /owned by Friendly Person/ })
+      screen.getByRole("button", { name: /właściciel: Friendly Person/ })
     ).toBeInTheDocument();
 
     await openDrawer(user);

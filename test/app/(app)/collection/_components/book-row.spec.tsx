@@ -42,7 +42,7 @@ const returnPendingBook: CollectionBook = {
 };
 
 async function openDrawer(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+  await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
 }
 
 describe("BookRow", () => {
@@ -78,7 +78,7 @@ describe("BookRow", () => {
 
     // then
     expect(
-      screen.getByText("Lent to Ania · since 12 Mar 2026")
+      screen.getByText("Lent to Ania · since 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe("BookRow", () => {
 
     // then
     expect(
-      screen.getByText("Return pending · Ania · since 12 Mar 2026")
+      screen.getByText("Return pending · Ania · since 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -166,7 +166,7 @@ describe("BookRow", () => {
     const dialog = screen.getByRole("dialog", { name: /delete book/i });
 
     // when
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(mockDelete).not.toHaveBeenCalled();

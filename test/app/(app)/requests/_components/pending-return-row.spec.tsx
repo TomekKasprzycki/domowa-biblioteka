@@ -42,7 +42,7 @@ describe("PendingReturnRow", () => {
 
     // when / then
     expect(
-      screen.getByText(/borrowed since 12 Mar 2026/)
+      screen.getByText(/borrowed since 12 mar 2026/)
     ).toBeInTheDocument();
   });
 

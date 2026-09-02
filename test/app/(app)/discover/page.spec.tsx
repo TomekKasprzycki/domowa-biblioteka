@@ -91,7 +91,7 @@ describe("DiscoverPage", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });
@@ -107,7 +107,7 @@ describe("DiscoverPage", () => {
     const ui = await DiscoverPage({ searchParams: Promise.resolve({}) });
     render(ui);
     fireEvent.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then
@@ -126,7 +126,7 @@ describe("DiscoverPage", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });

@@ -161,7 +161,7 @@ describe("EditBookModal", () => {
     // when
     await user.click(
       within(getDialog("Discard changes")).getByRole("button", {
-        name: "Cancel",
+        name: "Anuluj",
       })
     );
 

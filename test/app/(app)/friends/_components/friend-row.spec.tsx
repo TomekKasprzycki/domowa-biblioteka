@@ -129,7 +129,7 @@ describe("FriendRow", () => {
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(mockRemove).not.toHaveBeenCalled();
