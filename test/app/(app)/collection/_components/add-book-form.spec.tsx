@@ -32,20 +32,20 @@ describe("AddBookForm", () => {
     render(<AddBookForm onSaved={onSaved} onCancel={onCancel} />);
 
     // then
-    expect(screen.getByLabelText("Title")).toBeInTheDocument();
-    expect(screen.getByLabelText("Author")).toBeInTheDocument();
-    expect(screen.getByLabelText("Notes (optional)")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tytuł")).toBeInTheDocument();
+    expect(screen.getByLabelText("Autor")).toBeInTheDocument();
+    expect(screen.getByLabelText("Notatki (opcjonalnie)")).toBeInTheDocument();
   });
 
   it("submits the entered book to addBookAction", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     const formData = mockAdd.mock.calls[0][1] as FormData;
@@ -58,11 +58,11 @@ describe("AddBookForm", () => {
     const user = userEvent.setup();
     const onSaved = jest.fn();
     render(<AddBookForm onSaved={onSaved} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     expect(onSaved).toHaveBeenCalledTimes(1);
@@ -73,18 +73,18 @@ describe("AddBookForm", () => {
     const user = userEvent.setup();
     const onSaved = jest.fn();
     mockAdd.mockResolvedValue(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     render(<AddBookForm onSaved={onSaved} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     expect(onSaved).not.toHaveBeenCalled();
   });
@@ -96,7 +96,7 @@ describe("AddBookForm", () => {
     render(<AddBookForm onSaved={jest.fn()} onCancel={onCancel} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(onCancel).toHaveBeenCalledTimes(1);
@@ -111,16 +111,16 @@ describe("AddBookForm", () => {
       author: "Roald Dahl",
     });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then
-    expect(await screen.findByLabelText("Title")).toHaveValue(
+    expect(await screen.findByLabelText("Tytuł")).toHaveValue(
       "Fantastic Mr. Fox"
     );
-    expect(screen.getByLabelText("Author")).toHaveValue("Roald Dahl");
+    expect(screen.getByLabelText("Autor")).toHaveValue("Roald Dahl");
   });
 
   it("fills only the title when the lookup returns no author", async () => {
@@ -132,16 +132,16 @@ describe("AddBookForm", () => {
       author: null,
     });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then
-    expect(await screen.findByLabelText("Title")).toHaveValue(
+    expect(await screen.findByLabelText("Tytuł")).toHaveValue(
       "The three voices of poetry"
     );
-    expect(screen.getByLabelText("Author")).toHaveValue("");
+    expect(screen.getByLabelText("Autor")).toHaveValue("");
   });
 
   it("shows the searching state while the lookup is pending", async () => {
@@ -155,14 +155,14 @@ describe("AddBookForm", () => {
         })
     );
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then
     expect(screen.getByRole("status")).toHaveTextContent(
-      "Searching Open Library…"
+      "Szukam w Open Library…"
     );
 
     // cleanup: resolve so the pending promise doesn't leak into other tests
@@ -174,16 +174,16 @@ describe("AddBookForm", () => {
     const user = userEvent.setup();
     mockLookup.mockResolvedValue({ status: "unauthenticated" });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then
     expect(await screen.findByRole("status")).toHaveTextContent(
-      "Your session has expired. Reload and sign in to look up an ISBN."
+      "Twoja sesja wygasła. Odśwież stronę i zaloguj się, aby wyszukać ISBN."
     );
-    expect(screen.getByRole("status")).not.toHaveTextContent("Not found");
+    expect(screen.getByRole("status")).not.toHaveTextContent("Nie znaleziono");
   });
 
   it("shows a generic error message for an error result, not not-found or session-expired", async () => {
@@ -191,17 +191,17 @@ describe("AddBookForm", () => {
     const user = userEvent.setup();
     mockLookup.mockResolvedValue({ status: "error" });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then
     expect(await screen.findByRole("status")).toHaveTextContent(
-      "Something went wrong. Type the details in manually."
+      "Coś poszło nie tak. Wpisz dane ręcznie."
     );
-    expect(screen.getByRole("status")).not.toHaveTextContent("session has expired");
-    expect(screen.getByLabelText("Title")).toBeEnabled();
+    expect(screen.getByRole("status")).not.toHaveTextContent("sesja wygasła");
+    expect(screen.getByLabelText("Tytuł")).toBeEnabled();
   });
 
   it("blocks submit until the confirmation checkbox is ticked after a lookup", async () => {
@@ -213,37 +213,37 @@ describe("AddBookForm", () => {
       author: "Stanisław Lem",
     });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
     await screen.findByDisplayValue("Solaris");
 
     // when / then: submit is disabled before confirmation
-    expect(screen.getByRole("button", { name: "Add" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Zapisz książkę" })).toBeDisabled();
 
     // when the checkbox is ticked
     await user.click(
       screen.getByRole("checkbox", {
-        name: "This is the right book — title and author are correct.",
+        name: "To właściwa książka — tytuł i autor są poprawne.",
       })
     );
 
     // then submit becomes enabled
-    expect(screen.getByRole("button", { name: "Add" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Zapisz książkę" })).toBeEnabled();
   });
 
   it("submits a manually typed book in one step with no checkbox present", async () => {
     // given a book typed in entirely by hand
     const user = userEvent.setup();
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when / then no checkbox renders and submit is already enabled
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Zapisz książkę" })).toBeEnabled();
 
     // and the book still submits normally
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
     expect(mockAdd).toHaveBeenCalledTimes(1);
   });
 
@@ -252,30 +252,30 @@ describe("AddBookForm", () => {
     const user = userEvent.setup();
     mockLookup.mockResolvedValue({ status: "not-found" });
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
 
     // then the fields stay empty, no checkbox appears, and the form still works
     expect(await screen.findByRole("status")).toHaveTextContent(
-      "Not found. Type the details in manually."
+      "Nie znaleziono. Wpisz dane ręcznie."
     );
-    expect(screen.getByLabelText("Title")).toHaveValue("");
+    expect(screen.getByLabelText("Tytuł")).toHaveValue("");
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Zapisz książkę" })).toBeEnabled();
   });
 
   it("includes the ISBN in the submitted FormData", async () => {
     // given a book with an ISBN typed in
     const user = userEvent.setup();
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     const formData = mockAdd.mock.calls[0][1] as FormData;
@@ -286,19 +286,19 @@ describe("AddBookForm", () => {
     // given an action that rejects with a duplicate error
     const user = userEvent.setup();
     mockAdd.mockResolvedValue(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     render(<AddBookForm onSaved={jest.fn()} onCancel={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
     await screen.findByRole("alert");
 
     // then the typed values survive the failed submit (React 19 would
     // otherwise blank an uncontrolled form's fields here)
-    expect(screen.getByLabelText("Title")).toHaveValue("Solaris");
-    expect(screen.getByLabelText("Author")).toHaveValue("Stanisław Lem");
+    expect(screen.getByLabelText("Tytuł")).toHaveValue("Solaris");
+    expect(screen.getByLabelText("Autor")).toHaveValue("Stanisław Lem");
   });
 });

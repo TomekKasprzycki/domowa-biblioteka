@@ -6,7 +6,7 @@ import { ConfirmModal } from "@/app/_components/confirm-modal";
 import { AddBookForm } from "@/app/(app)/collection/_components/add-book-form";
 import { Button } from "@/app/_components/button";
 
-const DISCARD_PROMPT = "Discard this book? What you've typed will be lost.";
+const DISCARD_PROMPT = "Odrzucić tę książkę? Wpisane dane zostaną utracone.";
 
 export function AddBookModal() {
   const [open, setOpen] = useState(false);
@@ -43,10 +43,10 @@ export function AddBookModal() {
   return (
     <div className="self-start">
       <Button type="button" variant="primary" onClick={() => setOpen(true)}>
-        Add book
+        Dodaj książkę
       </Button>
 
-      <Modal open={open} onClose={close} title="Add book" canClose={canClose}>
+      <Modal open={open} onClose={close} title="Dodaj książkę" canClose={canClose}>
         {/* Remounted on every open so a reopened dialog starts empty. Title,
             author and ISBN are controlled state now (S-07), and notes stays
             uncontrolled; the remount resets both kinds alike. */}
@@ -56,9 +56,9 @@ export function AddBookModal() {
       </Modal>
       <ConfirmModal
         open={discardConfirmOpen}
-        title="Discard book"
+        title="Odrzuć książkę"
         message={DISCARD_PROMPT}
-        confirmLabel="Discard"
+        confirmLabel="Odrzuć"
         confirmVariant="decline"
         onConfirm={() => {
           setDiscardConfirmOpen(false);

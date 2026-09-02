@@ -83,7 +83,7 @@ describe("CollectionPage", () => {
 
     // then
     expect(
-      screen.getByText("Lent to Ania · since 12 mar 2026")
+      screen.getByText("Wypożyczona: Ania · od 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -111,7 +111,7 @@ describe("CollectionPage", () => {
 
     // then
     // only the lent book carries a loan line, so exactly one Delete is hidden
-    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Usuń" })).toHaveLength(1);
   });
 
   it("shows no loan lines when nothing is out", async () => {
@@ -129,8 +129,8 @@ describe("CollectionPage", () => {
 
     // then
     expect(
-      screen.queryByText(/Lent to|Return pending/)
+      screen.queryByText(/Wypożyczona|Zwrot zgłoszony/)
     ).not.toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: "Usuń" })).toHaveLength(2);
   });
 });

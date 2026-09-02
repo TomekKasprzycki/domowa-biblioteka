@@ -51,20 +51,20 @@ describe("EditBookModal", () => {
     render(<EditBookModal book={book} onClose={jest.fn()} />);
 
     // then
-    expect(screen.getByLabelText("Title")).toHaveValue("Solaris");
-    expect(screen.getByLabelText("Author")).toHaveValue("Stanisław Lem");
-    expect(screen.getByLabelText("Notes (optional)")).toHaveValue("Paperback");
+    expect(screen.getByLabelText("Tytuł")).toHaveValue("Solaris");
+    expect(screen.getByLabelText("Autor")).toHaveValue("Stanisław Lem");
+    expect(screen.getByLabelText("Notatki (opcjonalnie)")).toHaveValue("Paperback");
   });
 
   it("submits the edited values with the book id", async () => {
     // given
     const user = userEvent.setup();
     render(<EditBookModal book={book} onClose={jest.fn()} />);
-    await user.clear(screen.getByLabelText("Author"));
-    await user.type(screen.getByLabelText("Author"), "Lem");
+    await user.clear(screen.getByLabelText("Autor"));
+    await user.type(screen.getByLabelText("Autor"), "Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz" }));
 
     // then
     const formData = mockUpdate.mock.calls[0][1] as FormData;
@@ -76,10 +76,10 @@ describe("EditBookModal", () => {
     // given
     const user = userEvent.setup();
     render(<EditBookModal book={book} onClose={jest.fn()} />);
-    await user.clear(screen.getByLabelText("Notes (optional)"));
+    await user.clear(screen.getByLabelText("Notatki (opcjonalnie)"));
 
     // when
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz" }));
 
     // then
     const formData = mockUpdate.mock.calls[0][1] as FormData;
@@ -93,7 +93,7 @@ describe("EditBookModal", () => {
     render(<EditBookModal book={book} onClose={onClose} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz" }));
 
     // then
     await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
@@ -104,16 +104,16 @@ describe("EditBookModal", () => {
     const user = userEvent.setup();
     const onClose = jest.fn();
     mockUpdate.mockResolvedValue(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     render(<EditBookModal book={book} onClose={onClose} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz" }));
 
     // then
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     expect(onClose).not.toHaveBeenCalled();
   });
@@ -125,11 +125,11 @@ describe("EditBookModal", () => {
 
     // when
     act(() => {
-      pressEscape(getDialog("Edit book"));
+      pressEscape(getDialog("Edytuj książkę"));
     });
 
     // then
-    expect(getDialog("Discard changes").open).toBe(false);
+    expect(getDialog("Odrzuć zmiany").open).toBe(false);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -137,37 +137,37 @@ describe("EditBookModal", () => {
     // given
     const user = userEvent.setup();
     render(<EditBookModal book={book} onClose={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), " Redux");
+    await user.type(screen.getByLabelText("Tytuł"), " Redux");
 
     // when
     act(() => {
-      pressEscape(getDialog("Edit book"));
+      pressEscape(getDialog("Edytuj książkę"));
     });
 
     // then
-    expect(getDialog("Edit book").open).toBe(true);
-    expect(getDialog("Discard changes").open).toBe(true);
+    expect(getDialog("Edytuj książkę").open).toBe(true);
+    expect(getDialog("Odrzuć zmiany").open).toBe(true);
   });
 
   it("keeps the edit dialog open when the discard confirm is cancelled", async () => {
     // given
     const user = userEvent.setup();
     render(<EditBookModal book={book} onClose={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), " Redux");
+    await user.type(screen.getByLabelText("Tytuł"), " Redux");
     act(() => {
-      pressEscape(getDialog("Edit book"));
+      pressEscape(getDialog("Edytuj książkę"));
     });
 
     // when
     await user.click(
-      within(getDialog("Discard changes")).getByRole("button", {
+      within(getDialog("Odrzuć zmiany")).getByRole("button", {
         name: "Anuluj",
       })
     );
 
     // then
-    expect(getDialog("Edit book").open).toBe(true);
-    expect(getDialog("Discard changes").open).toBe(false);
+    expect(getDialog("Edytuj książkę").open).toBe(true);
+    expect(getDialog("Odrzuć zmiany").open).toBe(false);
   });
 
   it("calls onClose when the discard confirm is accepted", async () => {
@@ -175,15 +175,15 @@ describe("EditBookModal", () => {
     const user = userEvent.setup();
     const onClose = jest.fn();
     render(<EditBookModal book={book} onClose={onClose} />);
-    await user.type(screen.getByLabelText("Title"), " Redux");
+    await user.type(screen.getByLabelText("Tytuł"), " Redux");
     act(() => {
-      pressEscape(getDialog("Edit book"));
+      pressEscape(getDialog("Edytuj książkę"));
     });
 
     // when
     await user.click(
-      within(getDialog("Discard changes")).getByRole("button", {
-        name: "Discard",
+      within(getDialog("Odrzuć zmiany")).getByRole("button", {
+        name: "Odrzuć",
       })
     );
 
@@ -195,15 +195,15 @@ describe("EditBookModal", () => {
     // given
     const user = userEvent.setup();
     render(<EditBookModal book={book} onClose={jest.fn()} />);
-    await user.type(screen.getByLabelText("Title"), "X");
-    await user.type(screen.getByLabelText("Title"), "{backspace}");
+    await user.type(screen.getByLabelText("Tytuł"), "X");
+    await user.type(screen.getByLabelText("Tytuł"), "{backspace}");
 
     // when
     act(() => {
-      pressEscape(getDialog("Edit book"));
+      pressEscape(getDialog("Edytuj książkę"));
     });
 
     // then
-    expect(getDialog("Discard changes").open).toBe(false);
+    expect(getDialog("Odrzuć zmiany").open).toBe(false);
   });
 });

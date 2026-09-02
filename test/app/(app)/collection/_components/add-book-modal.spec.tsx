@@ -46,7 +46,7 @@ describe("AddBookModal", () => {
     render(<AddBookModal />);
 
     // then
-    expect(getDialog("Add book").open).toBe(false);
+    expect(getDialog("Dodaj książkę").open).toBe(false);
   });
 
   it("opens the dialog when the trigger is clicked", async () => {
@@ -55,144 +55,144 @@ describe("AddBookModal", () => {
     render(<AddBookModal />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
 
     // then
-    expect(getDialog("Add book").open).toBe(true);
+    expect(getDialog("Dodaj książkę").open).toBe(true);
   });
 
   it("closes the dialog after a successful save", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     // The close lands a render after the action settles: the success hook runs
     // in an effect, which then flips the open state the dialog effect reads.
-    await waitFor(() => expect(getDialog("Add book").open).toBe(false));
+    await waitFor(() => expect(getDialog("Dodaj książkę").open).toBe(false));
   });
 
   it("keeps the dialog open when the action returns an error", async () => {
     // given
     const user = userEvent.setup();
     mockAdd.mockResolvedValue(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
 
     // then
     expect(await screen.findByRole("alert")).toBeInTheDocument();
-    expect(getDialog("Add book").open).toBe(true);
+    expect(getDialog("Dodaj książkę").open).toBe(true);
   });
 
   it("dismisses an untouched dialog without prompting", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
 
     // when
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // then
-    expect(getDialog("Discard book").open).toBe(false);
-    expect(getDialog("Add book").open).toBe(false);
+    expect(getDialog("Odrzuć książkę").open).toBe(false);
+    expect(getDialog("Dodaj książkę").open).toBe(false);
   });
 
   it("opens a discard-confirm modal for a dirty dialog, keeping the Add dialog open", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Sola");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Sola");
 
     // when
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // then
-    expect(getDialog("Add book").open).toBe(true);
-    expect(getDialog("Discard book").open).toBe(true);
+    expect(getDialog("Dodaj książkę").open).toBe(true);
+    expect(getDialog("Odrzuć książkę").open).toBe(true);
   });
 
   it("keeps the Add dialog open when the discard confirm is cancelled", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Sola");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Sola");
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // when
     await user.click(
-      within(getDialog("Discard book")).getByRole("button", {
+      within(getDialog("Odrzuć książkę")).getByRole("button", {
         name: "Anuluj",
       })
     );
 
     // then
-    expect(getDialog("Add book").open).toBe(true);
-    expect(getDialog("Discard book").open).toBe(false);
+    expect(getDialog("Dodaj książkę").open).toBe(true);
+    expect(getDialog("Odrzuć książkę").open).toBe(false);
   });
 
   it("discards a dirty dialog when the discard confirm is accepted", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Sola");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Sola");
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // when
     await user.click(
-      within(getDialog("Discard book")).getByRole("button", {
-        name: "Discard",
+      within(getDialog("Odrzuć książkę")).getByRole("button", {
+        name: "Odrzuć",
       })
     );
 
     // then
-    expect(getDialog("Add book").open).toBe(false);
+    expect(getDialog("Dodaj książkę").open).toBe(false);
   });
 
   it("starts empty when reopened after a discard", async () => {
     // given
     const user = userEvent.setup();
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Sola");
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Sola");
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
     await user.click(
-      within(getDialog("Discard book")).getByRole("button", {
-        name: "Discard",
+      within(getDialog("Odrzuć książkę")).getByRole("button", {
+        name: "Odrzuć",
       })
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
 
     // then
-    expect(screen.getByLabelText("Title")).toHaveValue("");
+    expect(screen.getByLabelText("Tytuł")).toHaveValue("");
   });
 
   it("closes without prompting when every field is cleared, even with the confirmation checkbox rendered", async () => {
@@ -207,22 +207,22 @@ describe("AddBookModal", () => {
       author: "Stanisław Lem",
     });
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("ISBN (optional)"), "9780140328721");
-    await user.click(screen.getByRole("button", { name: "Look up" }));
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("ISBN (opcjonalnie)"), "9780140328721");
+    await user.click(screen.getByRole("button", { name: "Wyszukaj" }));
     await screen.findByRole("checkbox");
-    await user.clear(screen.getByLabelText("ISBN (optional)"));
-    await user.clear(screen.getByLabelText("Title"));
-    await user.clear(screen.getByLabelText("Author"));
+    await user.clear(screen.getByLabelText("ISBN (opcjonalnie)"));
+    await user.clear(screen.getByLabelText("Tytuł"));
+    await user.clear(screen.getByLabelText("Autor"));
 
     // when
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // then
-    expect(getDialog("Discard book").open).toBe(false);
-    expect(getDialog("Add book").open).toBe(false);
+    expect(getDialog("Odrzuć książkę").open).toBe(false);
+    expect(getDialog("Dodaj książkę").open).toBe(false);
   });
 
   it("prompts on Esc after a failed submit, since the retained values are now dirty", async () => {
@@ -230,21 +230,21 @@ describe("AddBookModal", () => {
     // otherwise blank an uncontrolled form here)
     const user = userEvent.setup();
     mockAdd.mockResolvedValue(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
     render(<AddBookModal />);
-    await user.click(screen.getByRole("button", { name: "Add book" }));
-    await user.type(screen.getByLabelText("Title"), "Solaris");
-    await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
-    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("button", { name: "Dodaj książkę" }));
+    await user.type(screen.getByLabelText("Tytuł"), "Solaris");
+    await user.type(screen.getByLabelText("Autor"), "Stanisław Lem");
+    await user.click(screen.getByRole("button", { name: "Zapisz książkę" }));
     await screen.findByRole("alert");
 
     // when
     act(() => {
-      pressEscape(getDialog("Add book"));
+      pressEscape(getDialog("Dodaj książkę"));
     });
 
     // then the retained values are dirty, so the discard-confirm modal opens
-    expect(getDialog("Discard book").open).toBe(true);
+    expect(getDialog("Odrzuć książkę").open).toBe(true);
   });
 });

@@ -419,28 +419,28 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 1.1 New spec `pluralize-pl.utils.spec.ts` covers one/few/many including the 12–14 exception
-- [x] 1.2 Shared-component specs (sidebar, sidebar-nav, drawer, spine, confirm-modal) updated and passing
-- [x] 1.3 `npm run lint` passes
-- [x] 1.4 `npx tsc --noEmit` shows no new errors
+- [x] 1.1 New spec `pluralize-pl.utils.spec.ts` covers one/few/many including the 12–14 exception — 1bfca35
+- [x] 1.2 Shared-component specs (sidebar, sidebar-nav, drawer, spine, confirm-modal) updated and passing — 1bfca35
+- [x] 1.3 `npm run lint` passes — 1bfca35
+- [x] 1.4 `npx tsc --noEmit` shows no new errors — 1bfca35
 
 #### Manual
 
-- [x] 1.5 Sidebar nav, book-count footer, sign-out/privacy links read correctly in Polish
-- [x] 1.6 Book detail drawer (own + friend's) shows Polish close/status/ISBN text
-- [x] 1.7 `pluralizePl` spot-checked by hand at 1 / 3 / 12 / 22 against real Polish grammar
+- [x] 1.5 Sidebar nav, book-count footer, sign-out/privacy links read correctly in Polish — 1bfca35
+- [x] 1.6 Book detail drawer (own + friend's) shows Polish close/status/ISBN text — 1bfca35
+- [x] 1.7 `pluralizePl` spot-checked by hand at 1 / 3 / 12 / 22 against real Polish grammar — 1bfca35
 
 ### Phase 2: Collection
 
 #### Automated
 
-- [ ] 2.1 `collection/actions.spec.ts` and `_components/*.spec.tsx` updated, full directory suite passes
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `collection/actions.spec.ts` and `_components/*.spec.tsx` updated, full directory suite passes
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 2.3 Add/edit/delete a book — all labels, buttons, status messages, confirm dialogs correct in Polish
-- [ ] 2.4 One validation error and one business-rule error confirmed correct and natural in Polish
+- [x] 2.3 Add/edit/delete a book — all labels, buttons, status messages, confirm dialogs correct in Polish
+- [x] 2.4 One validation error and one business-rule error confirmed correct and natural in Polish
 
 ### Phase 3: Friends
 

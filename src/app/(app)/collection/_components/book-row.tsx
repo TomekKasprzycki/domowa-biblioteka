@@ -17,11 +17,11 @@ const dateFormat = new Intl.DateTimeFormat("pl-PL", {
 
 function loanLabel(loan: NonNullable<CollectionBook["loan"]>): string {
   const since = loan.startedAt
-    ? ` · since ${dateFormat.format(loan.startedAt)}`
+    ? ` · od ${dateFormat.format(loan.startedAt)}`
     : "";
   return loan.status === "return_pending"
-    ? `Return pending · ${loan.borrowerName}${since}`
-    : `Lent to ${loan.borrowerName}${since}`;
+    ? `Zwrot zgłoszony: ${loan.borrowerName}${since}`
+    : `Wypożyczona: ${loan.borrowerName}${since}`;
 }
 
 export function BookRow({
@@ -84,7 +84,7 @@ export function BookRow({
                 onEdit();
               }}
             >
-              Edit
+              Edytuj
             </Button>
             {/* Deleting a book that is out would orphan the borrower's loan
                 row, and the FK refuses it anyway. Hiding the control makes
@@ -100,7 +100,7 @@ export function BookRow({
                   disabled={isPending}
                   onClick={() => setConfirmOpen(true)}
                 >
-                  Delete
+                  Usuń
                 </Button>
               </form>
             )}
@@ -114,9 +114,9 @@ export function BookRow({
       />
       <ConfirmModal
         open={confirmOpen}
-        title="Delete book"
-        message={`Delete "${book.title}"?`}
-        confirmLabel="Delete"
+        title="Usuń książkę"
+        message={`Usunąć „${book.title}”?`}
+        confirmLabel="Usuń"
         confirmVariant="decline"
         onConfirm={() => {
           setConfirmOpen(false);
