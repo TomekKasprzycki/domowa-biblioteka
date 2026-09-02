@@ -385,18 +385,18 @@ None — no schema or data changes.
 
 #### Automated
 
-- [x] 4.1 New spec `manage-invites-section.spec.tsx` passes
-- [x] 4.2 `section.spec.tsx` passes unmodified plus the new `headingLevel={3}` case
-- [x] 4.3 `page.spec.tsx` single-invite-form assertion passes
-- [x] 4.4 `manage-invites-section.spec.tsx` matchMedia open-state cases pass
-- [x] 4.5 Pre-existing friends row/list specs pass unmodified after the card restyle
-- [x] 4.6 `npm run lint` passes
-- [x] 4.11 Full suite passes unmodified after removing `max-w-[1180px]` from `layout.tsx`
+- [x] 4.1 New spec `manage-invites-section.spec.tsx` passes — 2db2a1c
+- [x] 4.2 `section.spec.tsx` passes unmodified plus the new `headingLevel={3}` case — 2db2a1c
+- [x] 4.3 `page.spec.tsx` single-invite-form assertion passes — 2db2a1c
+- [x] 4.4 `manage-invites-section.spec.tsx` matchMedia open-state cases pass — 2db2a1c
+- [x] 4.5 Pre-existing friends row/list specs pass unmodified after the card restyle — 2db2a1c
+- [x] 4.6 `npm run lint` passes — 2db2a1c
+- [x] 4.11 Full suite passes unmodified after removing `max-w-[1180px]` from `layout.tsx` — 2db2a1c
 
 #### Manual
 
-- [x] 4.7 Below 1024px: collapsed "Manage invites" expands/collapses correctly above narrow "Your friends" cards
-- [x] 4.8 At/above 1024px: "Manage invites" always visible in right column, no collapse control
-- [x] 4.9 Typed invite-form input survives resizing across 1024px; label focuses the visible input
-- [x] 4.12 `<main>` reaches the viewport's right edge on `/friends` and at least one other page at a wide viewport
-- [x] 4.10 Card grids and card internals visually match `design.html`'s column-layout cards at 240px
+- [x] 4.7 Below 1024px: collapsed "Manage invites" expands/collapses correctly above narrow "Your friends" cards — 2db2a1c
+- [x] 4.8 At/above 1024px: "Manage invites" always visible in right column, no collapse control — 2db2a1c
+- [x] 4.9 Typed invite-form input survives resizing across 1024px; label focuses the visible input — 2db2a1c
+- [x] 4.12 `<main>` reaches the viewport's right edge on `/friends` and at least one other page at a wide viewport — 2db2a1c
+- [x] 4.10 Card grids and card internals visually match `design.html`'s column-layout cards at 240px — 2db2a1c

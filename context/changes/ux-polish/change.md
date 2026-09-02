@@ -1,7 +1,7 @@
 ---
 id: ux-polish
 title: "S-12: Post-Launch UX Polish — IconButton, post-login redirect, friends list layout"
-status: implementing
+status: implemented
 created: 2026-08-22
 updated: 2026-09-02
 roadmap_id: S-12
