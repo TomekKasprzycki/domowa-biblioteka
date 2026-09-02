@@ -4,6 +4,7 @@ import {
   findPendingSent,
   findFriends,
 } from "@/server/friend-connection/friend-connection.repository";
+import { countBooksForUser } from "@/server/book/book.repository";
 import type { FriendConnectionEntity } from "@/server/friend-connection/friend-connection.entity";
 import { SendInviteForm } from "@/app/(app)/friends/_components/send-invite-form";
 import { ReceivedInvitesList } from "@/app/(app)/friends/_components/received-invites-list";
@@ -47,14 +48,22 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
     otherUser: { email: c.addressee.email, name: c.addressee.name },
     createdAt: c.createdAt,
   }));
-  const plainFriends = friends.map((c) => {
-    const other = otherUserOf(c, userId);
-    return {
-      id: c.id,
-      otherUser: { id: other.id, email: other.email, name: other.name },
-      createdAt: c.createdAt,
-    };
-  });
+  const plainFriends = await Promise.all(
+    friends.map(async (c) => {
+      const other = otherUserOf(c, userId);
+      const bookCount = await countBooksForUser(other.id);
+      return {
+        id: c.id,
+        otherUser: {
+          id: other.id,
+          email: other.email,
+          name: other.name,
+          bookCount,
+        },
+        createdAt: c.createdAt,
+      };
+    })
+  );
 
   return (
     <div className="flex flex-col gap-7">

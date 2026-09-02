@@ -8,6 +8,7 @@ export function Modal({
   title,
   children,
   canClose,
+  sizeClassName = "w-full max-w-lg sm:w-auto sm:min-w-lg",
 }: {
   open: boolean;
   onClose: () => void;
@@ -19,6 +20,8 @@ export function Modal({
    * closes bypass this entirely, so a successful save always closes.
    */
   canClose?: () => boolean;
+  /** Overrides the dialog's width behavior; defaults to the fixed form-modal sizing every other caller relies on. */
+  sizeClassName?: string;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -59,7 +62,7 @@ export function Modal({
       // May fire again from the effect's own close() call, so onClose must be
       // safe to run when the dialog is already considered shut.
       onClose={onClose}
-      className="m-auto w-full max-w-lg rounded-card border border-line bg-paper-card p-0 shadow-card backdrop:bg-[rgba(16,36,26,0.45)] sm:w-auto sm:min-w-lg"
+      className={`m-auto ${sizeClassName} rounded-card border border-line bg-paper-card p-0 shadow-card backdrop:bg-[rgba(16,36,26,0.45)]`}
     >
       <div className="flex flex-col gap-4 p-4 sm:p-6">
         <h2 id={titleId} className="font-display text-lg font-semibold text-ink">

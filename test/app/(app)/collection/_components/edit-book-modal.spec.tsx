@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { pressEscape } from "../../../../shared/dialog.mock";
 
@@ -23,8 +23,17 @@ const book: CollectionBook = {
   loan: null,
 };
 
-function getDialog(): HTMLDialogElement {
-  return screen.getByRole("dialog", { hidden: true }) as HTMLDialogElement;
+// Not name-matched via getByRole: a closed <dialog>'s subtree counts as
+// hidden for accessible-name computation, so aria-labelledby resolves to ""
+// while the dialog is shut — exactly the state most of these assertions
+// need to inspect. Match on the rendered heading text instead.
+function getDialog(title: string): HTMLDialogElement {
+  const dialogs = screen.getAllByRole("dialog", {
+    hidden: true,
+  }) as HTMLDialogElement[];
+  const match = dialogs.find((d) => d.querySelector("h2")?.textContent === title);
+  if (!match) throw new Error(`No dialog found with heading "${title}"`);
+  return match;
 }
 
 describe("EditBookModal", () => {
@@ -111,44 +120,90 @@ describe("EditBookModal", () => {
 
   it("dismisses without prompting when nothing was changed", async () => {
     // given
-    const confirmSpy = jest.spyOn(window, "confirm");
     const onClose = jest.fn();
     render(<EditBookModal book={book} onClose={onClose} />);
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Edit book"));
+    });
 
     // then
-    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(getDialog("Discard changes").open).toBe(false);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps the dialog open when a dirty discard is declined", async () => {
+  it("opens a discard-confirm modal on Escape when dirty, keeping the edit dialog open", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(false);
     render(<EditBookModal book={book} onClose={jest.fn()} />);
     await user.type(screen.getByLabelText("Title"), " Redux");
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Edit book"));
+    });
 
     // then
-    expect(getDialog().open).toBe(true);
+    expect(getDialog("Edit book").open).toBe(true);
+    expect(getDialog("Discard changes").open).toBe(true);
+  });
+
+  it("keeps the edit dialog open when the discard confirm is cancelled", async () => {
+    // given
+    const user = userEvent.setup();
+    render(<EditBookModal book={book} onClose={jest.fn()} />);
+    await user.type(screen.getByLabelText("Title"), " Redux");
+    act(() => {
+      pressEscape(getDialog("Edit book"));
+    });
+
+    // when
+    await user.click(
+      within(getDialog("Discard changes")).getByRole("button", {
+        name: "Cancel",
+      })
+    );
+
+    // then
+    expect(getDialog("Edit book").open).toBe(true);
+    expect(getDialog("Discard changes").open).toBe(false);
+  });
+
+  it("calls onClose when the discard confirm is accepted", async () => {
+    // given
+    const user = userEvent.setup();
+    const onClose = jest.fn();
+    render(<EditBookModal book={book} onClose={onClose} />);
+    await user.type(screen.getByLabelText("Title"), " Redux");
+    act(() => {
+      pressEscape(getDialog("Edit book"));
+    });
+
+    // when
+    await user.click(
+      within(getDialog("Discard changes")).getByRole("button", {
+        name: "Discard",
+      })
+    );
+
+    // then
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("does not prompt when an edit is typed and then undone", async () => {
     // given
     const user = userEvent.setup();
-    const confirmSpy = jest.spyOn(window, "confirm");
     render(<EditBookModal book={book} onClose={jest.fn()} />);
     await user.type(screen.getByLabelText("Title"), "X");
     await user.type(screen.getByLabelText("Title"), "{backspace}");
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Edit book"));
+    });
 
     // then
-    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(getDialog("Discard changes").open).toBe(false);
   });
 });

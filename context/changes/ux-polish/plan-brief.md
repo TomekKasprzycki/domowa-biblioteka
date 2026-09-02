@@ -26,6 +26,7 @@ Signing in or registering lands on `/collection`; visiting `/` while signed in r
 | Card-grid restyle scope | All three lists (Received, Sent, Friends) | design.html reuses one grid class for both pending and confirmed cards — one visual pattern for "a person" across the page | Plan (user-confirmed) |
 | Delivery scope | Ship all 5 items together, no deferral | All are small and already fully scoped by todo.md; splitting adds coordination overhead for little benefit | Plan (user-confirmed) |
 | Responsive collapse mechanism | Single render; a client component syncs `<details open>` to a `matchMedia` query | A single `<details>` can't carry two default-open states per breakpoint, and the zero-JS dual-render alternative was rejected in plan review (duplicate `id="email"`, split form state) | Plan review |
+| Confirmation dialog styling | Replace `window.confirm()` app-wide with a new styled `ConfirmModal` primitive | Developer feedback during Phase 3 manual verification asked for a styled confirm; offered scoped-to-friend-remove vs. app-wide, developer chose app-wide for visual consistency across all 5 destructive/discard confirmations | Implementation (user-directed) |
 
 ## Scope
 
@@ -33,6 +34,7 @@ Signing in or registering lands on `/collection`; visiting `/` while signed in r
 - Home/login/register default post-auth redirect → `/collection`, preserving explicit deep-link `callbackUrl`
 - New `IconButton` primitive, fully spec'd
 - `FriendRow`: Remove → IconButton; email → live book count (via existing `countBooksForUser`)
+- **Added mid-implementation:** new `ConfirmModal` primitive, replacing `window.confirm()` at all 5 call sites app-wide (friend-remove, book-delete, 2 discard-guards, borrowing-return) — not part of the reviewed plan; see Phase 3 in the full plan
 - `/friends`: collapsible "Manage invites" block (form + Received + Sent), always-open right column at `lg`/`xl`
 - Narrower `design.html`-matching card grid across all three friend/invite lists, including restyling each card's internals to the mockup's column layout so they don't crowd at 240px
 
@@ -64,8 +66,9 @@ Four phases, smallest/most isolated first: (1) redirect targets (auth pages/acti
 
 - The admin block's `matchMedia`-driven open state (Phase 4) means at `lg` it paints collapsed for one frame before the effect opens it — the server render can't know the viewport width. Worth a manual check at exactly 1024px.
 - `loginAction`/`registerAction` redirect-target changes rely on manual verification only, since no `signIn()` mocking harness exists — flagged explicitly rather than silently skipped, consistent with how this codebase has handled similar test-infra gaps before (`lessons.md`).
-- `IconButton`'s tooltip is a native `title`, which never fires on touch — on the mobile-first target a sighted user sees only the glyph. Accepted: `aria-label` covers assistive tech and the `window.confirm` guard (naming the friend) catches mis-taps.
+- `IconButton`'s tooltip is a native `title`, which never fires on touch — on the mobile-first target a sighted user sees only the glyph. Accepted: `aria-label` covers assistive tech and the `ConfirmModal` (naming the friend) catches mis-taps.
 - At exactly 1024px the friends grid gets ~390px next to a 280px admin column, so it stays one card wide until ~1180px. The 2-column split is a layout win at `xl` more than at `lg`.
+- `ConfirmModal`'s app-wide rollout was not part of the reviewed plan or its plan-review pass — it touches 4 files outside S-12's original file list. Automated coverage is thorough (all 5 call sites re-spec'd, `grep` confirms zero remaining `window.confirm()`), but it hasn't been through `/10x-plan-review`; worth a mention if this change goes through `/10x-impl-review`.
 
 ## Success Criteria (Summary)
 

@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "../../../../shared/dialog.mock";
 
@@ -141,9 +141,8 @@ describe("BookRow", () => {
     expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
   });
 
-  it("does not fire the delete action when the confirm dialog is dismissed", async () => {
+  it("opens a confirm modal instead of deleting immediately", async () => {
     // given
-    jest.spyOn(window, "confirm").mockReturnValue(false);
     const user = userEvent.setup();
     render(<BookRow book={shelvedBook} onEdit={() => {}} />);
     await openDrawer(user);
@@ -152,18 +151,37 @@ describe("BookRow", () => {
     await user.click(screen.getByRole("button", { name: "Delete" }));
 
     // then
+    expect(
+      screen.getByRole("dialog", { name: /delete book/i })
+    ).toBeInTheDocument();
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
-  it("fires deleteBookAction when the confirm dialog is accepted", async () => {
+  it("does not fire the delete action when the confirm modal is cancelled", async () => {
     // given
-    jest.spyOn(window, "confirm").mockReturnValue(true);
     const user = userEvent.setup();
     render(<BookRow book={shelvedBook} onEdit={() => {}} />);
     await openDrawer(user);
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    const dialog = screen.getByRole("dialog", { name: /delete book/i });
 
     // when
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    // then
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+
+  it("fires deleteBookAction when the confirm modal is confirmed", async () => {
+    // given
+    const user = userEvent.setup();
+    render(<BookRow book={shelvedBook} onEdit={() => {}} />);
+    await openDrawer(user);
     await user.click(screen.getByRole("button", { name: "Delete" }));
+    const dialog = screen.getByRole("dialog", { name: /delete book/i });
+
+    // when
+    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
 
     // then
     expect(mockDelete).toHaveBeenCalledTimes(1);

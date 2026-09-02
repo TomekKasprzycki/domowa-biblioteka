@@ -149,6 +149,8 @@ Add a new, isolated `IconButton` component: an emoji icon wrapped in a `<button>
 
 Convert `FriendRow`'s "Remove" action to `IconButton` and swap confirmed friends' displayed email for their live book count.
 
+**Scope addition during manual verification (not in the reviewed plan):** while manually testing this phase, the developer asked for the destructive-action confirmation to use app-styled modals instead of the native `window.confirm()` dialog — and, when offered a choice between scoping that to Remove-friend only or an app-wide replacement, chose app-wide. This added Change 4 below (a new `ConfirmModal` primitive) and touches 4 files this phase's plan never named: `src/app/(app)/collection/_components/book-row.tsx`, `edit-book-modal.tsx`, `add-book-modal.tsx`, and `src/app/(app)/borrowing/_components/borrowing-row.tsx` — every remaining `window.confirm()` call site in the codebase (confirmed via `grep -rn "window.confirm" src/`, now zero matches after the migration). None of these files belong to S-12's scope on paper; they're touched here because the alternative — a styled dialog only for the one action this phase happens to touch — would have shipped visibly inconsistent confirmation UX on the very next screen over.
+
 ### Changes Required:
 
 #### 1. Friend type gains a book count
@@ -173,22 +175,37 @@ Convert `FriendRow`'s "Remove" action to `IconButton` and swap confirmed friends
 
 **Intent**: Replace the text "Remove" `Button` with an `IconButton` carrying a context-specific label; replace the visible email line with the book count, phrased like the sidebar's existing "X book(s) on your shelf" copy.
 
-**Contract**: Import `IconButton` from `@/app/_components/icon-button`. Replace `<Button type="submit" variant="decline" size="sm" ...>Remove</Button>` with `<IconButton type="submit" variant="decline" icon="🗑️" label={`Remove ${friend.otherUser.name} as a friend`} disabled={isPending} onClick={...same confirm guard...} />`. Replace `<p className="text-sm text-ink-faint">{friend.otherUser.email}</p>` with the book-count line (`{bookCount} {bookCount === 1 ? "book" : "books"} on their shelf`).
+**Contract**: Import `IconButton` from `@/app/_components/icon-button`. Replace `<Button type="submit" variant="decline" size="sm" ...>Remove</Button>` with `<IconButton type="button" variant="decline" icon="🗑️" label={`Remove ${friend.otherUser.name} as a friend`} disabled={isPending} onClick={() => setConfirmOpen(true)} />` (superseded from a synchronous `window.confirm` guard to opening a `ConfirmModal` — see Change 4). Replace `<p className="text-sm text-ink-faint">{friend.otherUser.email}</p>` with the book-count line (`{bookCount} {bookCount === 1 ? "book" : "books"} on their shelf`).
+
+#### 4. ConfirmModal primitive + app-wide `window.confirm()` replacement
+
+**Files**: `src/app/_components/confirm-modal.tsx` (new); call-site migrations in `src/app/(app)/friends/_components/friend-row.tsx`, `src/app/(app)/collection/_components/book-row.tsx`, `edit-book-modal.tsx`, `add-book-modal.tsx`, and `src/app/(app)/borrowing/_components/borrowing-row.tsx`
+
+**Intent**: Replace the native `window.confirm()` dialog everywhere it's used with an app-styled modal, built on the existing `Modal` primitive. See the scope-addition note above.
+
+**Contract**: `ConfirmModal({ open, title, message, confirmLabel = "Confirm", cancelLabel = "Cancel", confirmVariant = "decline", onConfirm, onCancel })` wraps `Modal` with a message paragraph and two `Button`s. Two distinct call-site shapes, since `window.confirm()` was synchronous and a modal isn't:
+- **Destructive-action guards** (friend-row, book-row, borrowing-row): the trigger `Button`/`IconButton` changes from `type="submit"` with an `onClick` guard to `type="button"` with `onClick={() => setConfirmOpen(true)}`; the form gains a `ref`; `ConfirmModal`'s `onConfirm` calls `formRef.current?.requestSubmit()` (jsdom 26 and all real browsers support this) and closes the confirm modal; `onCancel` just closes it.
+- **Discard-guards** (`edit-book-modal.tsx`, `add-book-modal.tsx`, both driving `Modal`'s synchronous `canClose` prop): `canClose` cannot itself await a modal, so it always vetoes (`return false`) while dirty and opens a `ConfirmModal` as a side effect; that modal's `onConfirm` calls the real `onClose`/`close` callback directly, bypassing `canClose` entirely, since a programmatic close is exempt from the guard by design (see `modal.tsx`'s existing `canClose` contract comment).
 
 ### Success Criteria:
 
 #### Automated Verification:
 
-- `test/app/(app)/friends/_components/friend-row.spec.tsx`: fixture gains `bookCount`; existing "does not submit"/"submits the remove action" assertions still pass unmodified (accessible-name regex `/remove/i` still matches); add an assertion that the rendered button has `title` = the full contextual label and that the email string is no longer present; add an assertion that the book-count text renders.
+- `test/app/(app)/friends/_components/friend-row.spec.tsx`: fixture gains `bookCount`; confirm-flow tests rewritten for the modal (open → Cancel → not called; open → Remove → called once); add an assertion that the rendered button has `title` = the full contextual label and that the email string is no longer present; add an assertion that the book-count text renders.
 - `test/app/(app)/friends/_components/friends-list.spec.tsx`: fixture gains `bookCount`; existing assertions pass unmodified.
 - `test/app/(app)/friends/page.spec.tsx`: add a mock for `@/server/book/book.repository`'s `countBooksForUser`; assert it's called once per confirmed friend and the resolved count reaches the rendered row.
+- New spec `test/app/_components/confirm-modal.spec.tsx`: open/closed state, title/message rendering, default vs. custom labels, `onConfirm`/`onCancel` firing on button click and backdrop click.
+- `test/app/(app)/collection/_components/book-row.spec.tsx`, `edit-book-modal.spec.tsx`, `add-book-modal.spec.tsx`, `test/app/(app)/borrowing/_components/borrowing-row.spec.tsx`: confirm-flow tests rewritten for the modal flow (all pre-existing non-confirm assertions pass unmodified).
+- `grep -rn "window.confirm" src/` returns zero matches.
 - `npm run lint` passes.
+- `npx tsc --noEmit` shows no new errors.
 
 #### Manual Verification:
 
 - On `/friends`, a confirmed friend's card shows their current book count (matches what their own sidebar shows), not their email.
-- Clicking the trash icon on a friend card shows the same confirm dialog as before, with the friend's name in it; cancelling leaves the friend in place, confirming removes them.
+- Clicking the trash icon on a friend card opens a styled confirm modal naming the friend; Cancel leaves the friend in place, confirming removes them.
 - Hovering the trash icon shows a tooltip naming the specific friend, not just "Remove".
+- Deleting a book, marking a borrowed book returned, and discarding a dirty add/edit-book form all show the same styled `ConfirmModal` (not the browser's native dialog), with correct copy per action.
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 
@@ -323,27 +340,32 @@ None — no schema or data changes.
 
 #### Automated
 
-- [x] 2.1 New spec `test/app/_components/icon-button.spec.tsx` passes (all variants, title, prop forwarding, aria-hidden icon)
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 New spec `test/app/_components/icon-button.spec.tsx` passes (all variants, title, prop forwarding, aria-hidden icon) — 3688cfb
+- [x] 2.2 `npm run lint` passes — 3688cfb
 
 #### Manual
 
-- [ ] 2.3 Hover shows native tooltip with full label text
+- [x] 2.3 Hover shows native tooltip with full label text
 
 ### Phase 3: Friends — IconButton Adoption & Book Count
 
 #### Automated
 
-- [ ] 3.1 `friend-row.spec.tsx` updated fixture + new assertions pass
-- [ ] 3.2 `friends-list.spec.tsx` updated fixture passes
-- [ ] 3.3 `page.spec.tsx` `countBooksForUser` mock/assertion passes
-- [ ] 3.4 `npm run lint` passes
+- [x] 3.1 `friend-row.spec.tsx` updated fixture + new assertions pass
+- [x] 3.2 `friends-list.spec.tsx` updated fixture passes
+- [x] 3.3 `page.spec.tsx` `countBooksForUser` mock/assertion passes
+- [x] 3.4 `npm run lint` passes
+- [x] 3.8 New spec `confirm-modal.spec.tsx` passes
+- [x] 3.9 `book-row.spec.tsx`, `edit-book-modal.spec.tsx`, `add-book-modal.spec.tsx`, `borrowing-row.spec.tsx` confirm-flow tests pass against the modal flow; all other assertions unmodified
+- [x] 3.10 `grep -rn "window.confirm" src/` returns zero matches
+- [x] 3.11 `npx tsc --noEmit` shows no new errors
 
 #### Manual
 
-- [ ] 3.5 Confirmed friend card shows book count, not email
-- [ ] 3.6 Remove icon: confirm dialog + tooltip both name the friend
-- [ ] 3.7 Cancel/confirm on the remove dialog behaves as before
+- [x] 3.5 Confirmed friend card shows book count, not email
+- [x] 3.6 Remove icon: confirm modal + tooltip both name the friend
+- [x] 3.7 Cancel/confirm on the remove modal behaves as before
+- [x] 3.12 Book delete, mark-returned, and discard-dirty-form all show the styled ConfirmModal with correct per-action copy
 
 ### Phase 4: Friends Page Layout — Admin Collapse, 2-Column, Card Grid
 
