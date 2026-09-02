@@ -21,16 +21,16 @@ export function FriendRow({ friend }: { friend: Friend }) {
 
   return (
     <Card as="li" className="flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Avatar name={friend.otherUser.name} />
-          <div>
-            <p className="font-medium text-ink">{friend.otherUser.name}</p>
-            <p className="text-sm text-ink-faint">
-              {bookCount} {bookCount === 1 ? "book" : "books"} on their shelf
-            </p>
-          </div>
+      <div className="flex items-center gap-3">
+        <Avatar name={friend.otherUser.name} />
+        <div>
+          <p className="font-medium text-ink">{friend.otherUser.name}</p>
+          <p className="text-sm text-ink-faint">
+            {bookCount} {bookCount === 1 ? "book" : "books"} on their shelf
+          </p>
         </div>
+      </div>
+      <div className="self-start">
         <Pill tone="active">Confirmed</Pill>
       </div>
       <div className="flex shrink-0 items-center gap-2">

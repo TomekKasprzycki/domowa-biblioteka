@@ -49,7 +49,7 @@ A single `<details>` element's `open` attribute is one JS/DOM boolean; it cannot
 
 **The obvious workaround — rendering the admin block twice and toggling copies with `lg:hidden` / `hidden lg:block` — is rejected and must not be reintroduced.** Two simultaneously-mounted copies break in two concrete ways: (1) `SendInviteForm` passes a hardcoded `id="email"` to `Field` (`src/app/(app)/friends/_components/send-invite-form.tsx:19`), and `Field` wires `<label htmlFor={id}>` to `<input id={id}>` (`src/app/_components/field.tsx:27-44`), so two copies put two `<input id="email">` in one document — invalid HTML, and the label resolves to the *first* match in DOM order, which would be the `display:none` copy; (2) each copy holds its own `useActionState`, so text typed on one side of the `lg` boundary vanishes when a resize reveals the other copy.
 
-Instead the admin content renders **once**. `ManageInvitesSection` is a Client Component owning the open state: it initialises to closed (mobile-first, and the value the server renders) and, in an effect, syncs to `window.matchMedia("(min-width: 1024px)")` — forcing open at `lg`/`xl` and restoring user-controlled collapse below it. The `<details>` `open` attribute is driven from that state. Consequence to accept: at `lg` the block paints collapsed for one frame before the effect opens it, since the server render cannot know the viewport width.
+Instead the admin content renders **once**. `ManageInvitesSection` is a Client Component reading `window.matchMedia("(min-width: 1024px)")` via `useSyncExternalStore` (not `useState` + an effect calling `setOpen` synchronously — that trips this repo's `react-hooks/set-state-in-effect` lint rule; see Phase 4, Change 2's implementation note for the adaptation made during implementation) — forcing `open` true at `lg`/`xl` and deferring to a small separate `manuallyOpen` state below it. The `<details>` `open` attribute is driven from `isLargeScreen || manuallyOpen`. Because `useSyncExternalStore`'s snapshot is read synchronously on first client render rather than after mount in an effect, there's no "closed for one frame" flash at `lg` — an improvement over the plan's original design, not a tradeoff to accept.
 
 ## Phase 1: Post-Login Redirect
 
@@ -217,6 +217,8 @@ Convert `FriendRow`'s "Remove" action to `IconButton` and swap confirmed friends
 
 Restructure `/friends` into a primary "Your friends" region and a collapsible "Manage invites" region (form + Received + Sent), collapsed by default below `lg` and always open in a right column at `lg`/`xl`; restyle all three lists onto a `design.html`-matching narrow-card grid.
 
+**Scope addition during manual verification (not in the reviewed plan):** the developer asked for `<main>` to reach the right edge of the viewport instead of stopping at the `max-w-[1180px]` cap. That cap lives in the shared `(app)` route-group layout (`src/app/(app)/layout.tsx`), used by every authenticated page — collection, friends, discover, requests, borrowing, account — not just `/friends`. Offered a choice between an app-wide removal and a `/friends`-only override, the developer chose app-wide. Change 4 below removes the cap; it touches one file outside this phase's original list and affects every authenticated page's content width, not only the one this phase is otherwise scoped to.
+
 ### Changes Required:
 
 #### 1. Card-grid restyle across all three lists
@@ -249,7 +251,9 @@ Restructure `/friends` into a primary "Your friends" region and a collapsible "M
 
 **Intent**: Bundle `SendInviteForm` + a "Received" sub-heading/list + a "Sent" sub-heading/list into one block that renders exactly once and owns its own responsive open state (see Critical Implementation Details for why a single render is mandatory).
 
-**Contract**: `"use client"` component — `function ManageInvitesSection({ received, sent }: { received: ReceivedInvite[]; sent: SentInvite[] }): ReactNode`. Renders a `<details>` (via `Section` or its own markup) titled "Manage invites", containing `SendInviteForm`, then a "Received" sub-section wrapping `ReceivedInvitesList`, then a "Sent" sub-section wrapping `SentInvitesList` — both sub-sections passing `headingLevel={3}` (Change 1c). Owns `const [open, setOpen] = useState(false)` plus an effect subscribing to `window.matchMedia("(min-width: 1024px)")` that forces `open` true while the query matches; below `lg` the user's own toggle governs. The `<details>` must reflect state via its `open` prop and update state from its own `toggle` event, so browser-initiated toggles and React state don't diverge (same class of trap as `Modal`/`Drawer`'s `close`-event handling, `modal.tsx:58-61`).
+**Contract**: `"use client"` component — `function ManageInvitesSection({ received, sent }: { received: ReceivedInvite[]; sent: SentInvite[] }): ReactNode`. Renders a `<details>` (via `Section` or its own markup) titled "Manage invites", containing `SendInviteForm`, then a "Received" sub-section wrapping `ReceivedInvitesList`, then a "Sent" sub-section wrapping `SentInvitesList` — both sub-sections passing `headingLevel={3}` (Change 1c).
+
+**Implementation note (adapted from the original Contract during Phase 4):** the plan as reviewed specified a `useState` + effect calling `setOpen(mediaQuery.matches)` synchronously in the effect body. That trips this repo's `react-hooks/set-state-in-effect` lint rule (a real, correct finding — setState directly in an effect body, not inside a subscription callback, causes an extra cascading render). The implemented version instead reads `window.matchMedia("(min-width: 1024px)")` via `useSyncExternalStore` — React's purpose-built hook for exactly this "external browser API" case, with an SSR-safe `getServerSnapshot` returning `false` (mobile-first default). A separate small `useState` (`manuallyOpen`) tracks the user's own toggle, meaningful only below `lg`; the `<details>`'s displayed `open` is `isLargeScreen || manuallyOpen`, so a stray click at `lg`/`xl` has no visible effect since `isLargeScreen` keeps forcing it open. Net behavior is identical to the reviewed Contract (closed by default below `lg`, forced open at `lg`/`xl`, user-toggle-driven below it) — only the mechanism changed, and it removes the "one frame closed before opening" flash the original design accepted, since `useSyncExternalStore`'s snapshot is read synchronously on the client's first render rather than after mount in an effect.
 
 #### 3. Page layout: collapse + 2-column
 
@@ -257,7 +261,15 @@ Restructure `/friends` into a primary "Your friends" region and a collapsible "M
 
 **Intent**: Arrange the page as one column on small/medium screens (admin block collapsed, then "Your friends") and two columns at `lg`/`xl` ("Your friends" left/primary, admin block always-open right, per the confirmed design decision).
 
-**Contract**: Wrap the body in a container that is a single column below `lg` and a two-column grid (`1fr` + a fixed admin column of ~280px) at `lg`/`xl`, aligned to the top. Width budget at exactly 1024px: 248px sidebar (`layout.tsx:9`) + `px-10` padding leaves ~696px, so a 280px admin column gives the friends grid ~390px — one 240px card per row at `lg`, two from ~1180px up. Widening the admin column beyond ~280px pushes the second card further out; that's the tradeoff being priced here. It has exactly two children, in this DOM order: (1) `ManageInvitesSection` (single instance — see Change 2), (2) `FriendsList` inside a non-collapsible `Section title="Your friends"`. Below `lg` they stack in that order, preserving today's admin-content-first ordering. At `lg`/`xl`, grid placement puts `FriendsList` in column 1 and `ManageInvitesSection` in column 2 — use explicit column placement rather than relying on source order, since the admin block comes first in the DOM.
+**Contract**: Wrap the body in a container that is a single column below `lg` and a two-column grid (`1fr` + a fixed admin column of ~280px) at `lg`/`xl`, aligned to the top. Width budget at exactly 1024px: 248px sidebar (`layout.tsx:9`) + `px-10` padding leaves ~696px, so a 280px admin column gives the friends grid ~390px — one 240px card per row at `lg`, two from ~1128px up (independent of Change 4 below — that threshold sits under the old 1180px cap either way). Widening the admin column beyond ~280px pushes the second card further out; that's the tradeoff being priced here. It has exactly two children, in this DOM order: (1) `ManageInvitesSection` (single instance — see Change 2), (2) `FriendsList` inside a non-collapsible `Section title="Your friends"`. Below `lg` they stack in that order, preserving today's admin-content-first ordering. At `lg`/`xl`, grid placement puts `FriendsList` in column 1 and `ManageInvitesSection` in column 2 — use explicit column placement rather than relying on source order, since the admin block comes first in the DOM.
+
+#### 4. `<main>` reaches the viewport's right edge (app-wide)
+
+**File**: `src/app/(app)/layout.tsx`
+
+**Intent**: See the scope-addition note above — `<main>` should no longer stop at a fixed 1180px content width; it should grow with the viewport like the sidebar column already does.
+
+**Contract**: Remove `max-w-[1180px]` from `<main>`'s className (`layout.tsx:11`); keep `min-w-0` (still needed so flex/grid children inside `<main>` can shrink below their content size) and all padding classes unchanged. Affects every authenticated page, not only `/friends` — on very wide viewports, pages with narrower natural content (forms, single-column lists) will now have more surrounding whitespace rather than a hard-stopped column; no page's internal layout assumes the old cap.
 
 ### Success Criteria:
 
@@ -268,6 +280,7 @@ Restructure `/friends` into a primary "Your friends" region and a collapsible "M
 - `test/app/(app)/friends/page.spec.tsx`: existing notice-banner assertions pass unmodified; add an assertion that the invite form renders exactly once (`getAllByLabelText(/friend's email/i)` has length 1) — the regression guard against a dual-render reappearing and reintroducing duplicate ids.
 - `manage-invites-section.spec.tsx` additionally covers the open-state logic with a stubbed `window.matchMedia`: closed by default when the query does not match, forced open when it does.
 - All pre-existing friends specs (`friend-row`, `received-invite-row`, `sent-invite-row`, and their list specs) pass unmodified after the card-internal restyle — the proof it stayed presentation-only.
+- Full test suite passes unmodified after removing `max-w-[1180px]` from `layout.tsx` (no spec asserts on that class; confirms no page's tests depended on the cap).
 - `npm run lint` passes.
 
 #### Manual Verification:
@@ -276,6 +289,7 @@ Restructure `/friends` into a primary "Your friends" region and a collapsible "M
 - At 1024px and above, "Manage invites" is always visible in a right-hand column next to "Your friends", with no collapse/expand control needed.
 - Typing an email into the invite form and then resizing across the 1024px boundary keeps the typed text (the single-render guarantee) and leaves the form usable, with its label focusing the visible input on click.
 - All three friend/invite card grids visually match `design.html`'s narrower card width at a typical desktop viewport, and each card's internals follow the mockup's column layout (avatar+name row, chip, then actions) without crowding at 240px.
+- `<main>` reaches the viewport's right edge on `/friends` and at least one other authenticated page (e.g. `/collection`) at a wide viewport, with no leftover fixed-width gap.
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful. This is the final phase — confirm the whole slice against the five todo.md items before closing it out.
 
@@ -345,42 +359,44 @@ None — no schema or data changes.
 
 #### Manual
 
-- [x] 2.3 Hover shows native tooltip with full label text
+- [x] 2.3 Hover shows native tooltip with full label text — 604820e
 
 ### Phase 3: Friends — IconButton Adoption & Book Count
 
 #### Automated
 
-- [x] 3.1 `friend-row.spec.tsx` updated fixture + new assertions pass
-- [x] 3.2 `friends-list.spec.tsx` updated fixture passes
-- [x] 3.3 `page.spec.tsx` `countBooksForUser` mock/assertion passes
-- [x] 3.4 `npm run lint` passes
-- [x] 3.8 New spec `confirm-modal.spec.tsx` passes
-- [x] 3.9 `book-row.spec.tsx`, `edit-book-modal.spec.tsx`, `add-book-modal.spec.tsx`, `borrowing-row.spec.tsx` confirm-flow tests pass against the modal flow; all other assertions unmodified
-- [x] 3.10 `grep -rn "window.confirm" src/` returns zero matches
-- [x] 3.11 `npx tsc --noEmit` shows no new errors
+- [x] 3.1 `friend-row.spec.tsx` updated fixture + new assertions pass — 604820e
+- [x] 3.2 `friends-list.spec.tsx` updated fixture passes — 604820e
+- [x] 3.3 `page.spec.tsx` `countBooksForUser` mock/assertion passes — 604820e
+- [x] 3.4 `npm run lint` passes — 604820e
+- [x] 3.8 New spec `confirm-modal.spec.tsx` passes — 604820e
+- [x] 3.9 `book-row.spec.tsx`, `edit-book-modal.spec.tsx`, `add-book-modal.spec.tsx`, `borrowing-row.spec.tsx` confirm-flow tests pass against the modal flow; all other assertions unmodified — 604820e
+- [x] 3.10 `grep -rn "window.confirm" src/` returns zero matches — 604820e
+- [x] 3.11 `npx tsc --noEmit` shows no new errors — 604820e
 
 #### Manual
 
-- [x] 3.5 Confirmed friend card shows book count, not email
-- [x] 3.6 Remove icon: confirm modal + tooltip both name the friend
-- [x] 3.7 Cancel/confirm on the remove modal behaves as before
-- [x] 3.12 Book delete, mark-returned, and discard-dirty-form all show the styled ConfirmModal with correct per-action copy
+- [x] 3.5 Confirmed friend card shows book count, not email — 604820e
+- [x] 3.6 Remove icon: confirm modal + tooltip both name the friend — 604820e
+- [x] 3.7 Cancel/confirm on the remove modal behaves as before — 604820e
+- [x] 3.12 Book delete, mark-returned, and discard-dirty-form all show the styled ConfirmModal with correct per-action copy — 604820e
 
 ### Phase 4: Friends Page Layout — Admin Collapse, 2-Column, Card Grid
 
 #### Automated
 
-- [ ] 4.1 New spec `manage-invites-section.spec.tsx` passes
-- [ ] 4.2 `section.spec.tsx` passes unmodified plus the new `headingLevel={3}` case
-- [ ] 4.3 `page.spec.tsx` single-invite-form assertion passes
-- [ ] 4.4 `manage-invites-section.spec.tsx` matchMedia open-state cases pass
-- [ ] 4.5 Pre-existing friends row/list specs pass unmodified after the card restyle
-- [ ] 4.6 `npm run lint` passes
+- [x] 4.1 New spec `manage-invites-section.spec.tsx` passes
+- [x] 4.2 `section.spec.tsx` passes unmodified plus the new `headingLevel={3}` case
+- [x] 4.3 `page.spec.tsx` single-invite-form assertion passes
+- [x] 4.4 `manage-invites-section.spec.tsx` matchMedia open-state cases pass
+- [x] 4.5 Pre-existing friends row/list specs pass unmodified after the card restyle
+- [x] 4.6 `npm run lint` passes
+- [x] 4.11 Full suite passes unmodified after removing `max-w-[1180px]` from `layout.tsx`
 
 #### Manual
 
-- [ ] 4.7 Below 1024px: collapsed "Manage invites" expands/collapses correctly above narrow "Your friends" cards
-- [ ] 4.8 At/above 1024px: "Manage invites" always visible in right column, no collapse control
-- [ ] 4.9 Typed invite-form input survives resizing across 1024px; label focuses the visible input
-- [ ] 4.10 Card grids and card internals visually match `design.html`'s column-layout cards at 240px
+- [x] 4.7 Below 1024px: collapsed "Manage invites" expands/collapses correctly above narrow "Your friends" cards
+- [x] 4.8 At/above 1024px: "Manage invites" always visible in right column, no collapse control
+- [x] 4.9 Typed invite-form input survives resizing across 1024px; label focuses the visible input
+- [x] 4.12 `<main>` reaches the viewport's right edge on `/friends` and at least one other page at a wide viewport
+- [x] 4.10 Card grids and card internals visually match `design.html`'s column-layout cards at 240px

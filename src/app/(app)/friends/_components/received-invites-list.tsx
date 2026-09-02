@@ -12,7 +12,7 @@ export function ReceivedInvitesList({
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
       {invites.map((invite) => (
         <ReceivedInviteRow key={invite.id} invite={invite} />
       ))}

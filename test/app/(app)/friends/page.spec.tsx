@@ -1,6 +1,7 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import "../../../shared/match-media.mock";
 
 jest.mock("@/auth", () => ({ auth: jest.fn() }));
 jest.mock("@/server/friend-connection/friend-connection.repository", () => ({
@@ -100,5 +101,16 @@ describe("FriendsPage", () => {
     expect(mockCountBooksForUser).toHaveBeenCalledTimes(1);
     expect(mockCountBooksForUser).toHaveBeenCalledWith(friendUser.id);
     expect(screen.getByText("6 books on their shelf")).toBeInTheDocument();
+  });
+
+  it("renders the invite form exactly once — regression guard against the admin block rendering twice", async () => {
+    // given
+    const ui = await FriendsPage({ searchParams: Promise.resolve({}) });
+
+    // when
+    render(ui);
+
+    // then
+    expect(screen.getAllByLabelText(/friend's email/i)).toHaveLength(1);
   });
 });
