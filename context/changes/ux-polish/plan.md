@@ -137,9 +137,9 @@ Add a new, isolated `IconButton` component: an emoji icon wrapped in a `<button>
 
 #### Manual Verification:
 
-- Hovering the component in a throwaway page/Storybook-less manual check shows the native tooltip with the full label text.
+- Hovering the component in a throwaway page/Storybook-less manual check shows the native tooltip with the full label text. **Deferred by user decision during implementation** — no real adopter exists until Phase 3, and Phase 3's manual step 3.6 (hover the real "Remove" trash icon on `/friends`) is a strict superset of this check with real usage; building throwaway scaffolding here would be pure busywork. Progress row 2.3 is closed out when 3.6 is confirmed, not before.
 
-**Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
+**Implementation Note**: After completing this phase's automated verification, no isolated manual check remains for this phase — see the deferral note above. Proceed directly to the commit step.
 
 ---
 
@@ -308,23 +308,23 @@ None — no schema or data changes.
 
 #### Automated
 
-- [x] 1.1 New spec `test/app/page.spec.tsx` passes (redirect + welcome content + accountDeleted flash)
-- [x] 1.2 New spec `test/app/login/page.spec.tsx` passes (default + explicit callbackUrl)
-- [x] 1.3 `npm run lint` passes
+- [x] 1.1 New spec `test/app/page.spec.tsx` passes (redirect + welcome content + accountDeleted flash) — 65b24b6
+- [x] 1.2 New spec `test/app/login/page.spec.tsx` passes (default + explicit callbackUrl) — 65b24b6
+- [x] 1.3 `npm run lint` passes — 65b24b6
 
 #### Manual
 
-- [x] 1.4 Sign-in with no deep link lands on `/collection`
-- [x] 1.5 Registering lands on `/collection`
-- [x] 1.6 Deep-link callbackUrl (e.g. `/requests`) still honored after sign-in
-- [x] 1.7 Visiting `/` while signed in redirects immediately, no welcome-content flash
+- [x] 1.4 Sign-in with no deep link lands on `/collection` — 65b24b6
+- [x] 1.5 Registering lands on `/collection` — 65b24b6
+- [x] 1.6 Deep-link callbackUrl (e.g. `/requests`) still honored after sign-in — 65b24b6
+- [x] 1.7 Visiting `/` while signed in redirects immediately, no welcome-content flash — 65b24b6
 
 ### Phase 2: IconButton Primitive
 
 #### Automated
 
-- [ ] 2.1 New spec `test/app/_components/icon-button.spec.tsx` passes (all variants, title, prop forwarding, aria-hidden icon)
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 New spec `test/app/_components/icon-button.spec.tsx` passes (all variants, title, prop forwarding, aria-hidden icon)
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
