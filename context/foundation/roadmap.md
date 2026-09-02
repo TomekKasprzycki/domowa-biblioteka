@@ -3,7 +3,7 @@ project: Domowa Biblioteka
 version: 1
 status: draft
 created: 2026-06-09
-updated: 2026-08-22  <!-- S-10 (RODO), S-11 (forgot-password), S-12 (ux-polish), S-13 (polish-localization) added; i18n unparked into S-13 -->
+updated: 2026-09-02  <!-- S-11 (forgot-password) marked impl_reviewed — plan + implementation + review complete, see context/changes/forgot-password/ -->
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -41,7 +41,7 @@ Gwiazda przewodnia — pierwszy slice, którego ukończenie udowadnia, że produ
 | S-08 | design-system         | see the app in its designed visual identity                                       | S-06             | NFR (usable, responsive)       | proposed |
 | S-09 | shelf-view            | browse books as spines on a shelf and act on one via a detail drawer              | S-08             | FR-004, FR-007                 | proposed |
 | S-10 | gdpr-assessment        | read a privacy notice and permanently delete their account, cascading across books, friends, and loans | F-02, S-01, S-02, S-04 | Access Control, Non-Goals | proposed |
-| S-11 | forgot-password        | reset a forgotten password via an emailed link                                    | F-02              | FR-002, Access Control          | proposed |
+| S-11 | forgot-password        | reset a forgotten password via an emailed link                                    | F-02              | FR-002, Access Control          | impl_reviewed |
 | S-12 | ux-polish              | land on their collection right after sign-in, use accessible icon buttons, and read a reorganized friends list | S-09              | NFR (usable, responsive)    | proposed |
 | S-13 | polish-localization    | use the app in Polish                                                             | S-09, S-10, S-11, S-12 | NFR (usable)                | proposed |
 
@@ -232,7 +232,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** Which transactional-email provider to use — this is the first outbound-email requirement in the codebase (S-07's ISBN lookup is inbound HTTP only). Resolve via a real Marketplace integration during `/10x-plan` rather than hand-rolling SMTP. Owner: developer. Block: no.
 - **Risk:** A password-reset token must be single-use, time-limited, and validated server-side before the new password is accepted — a reused or unexpired token is an account-takeover vector. First slice touching security-sensitive email delivery; treat provider setup (API key, sender domain/DNS) as part of the plan, not an afterthought.
-- **Status:** proposed
+- **Status:** impl_reviewed — plan, implementation, and `/10x-impl-review` all complete; see `context/changes/forgot-password/`
 - **Source:** `context/design/todo.md` (developer note: "dodaj opcję: zapomniałem hasła. wyślij link na mail z linkiem do resetu")
 
 ### S-12: Post-Launch UX Polish
@@ -277,7 +277,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-08       | design-system         | Design: tokens, fonts, sidebar shell, reusable primitives   | yes                   | Build after S-07 — see Streams note   |
 | S-09       | shelf-view            | Design: book-spine shelf and per-book detail drawer         | no                    | Awaits S-08                           |
 | S-10       | gdpr-assessment        | Privacy: notice + right-to-erasure (account deletion)       | yes                   | Run `/10x-plan gdpr-assessment` — research done, see `context/changes/gdpr-assessment/research.md` |
-| S-11       | forgot-password        | Auth: forgot-password email reset flow                      | yes                   | Run `/10x-plan forgot-password` — pick an email provider first (see Unknowns) |
+| S-11       | forgot-password        | Auth: forgot-password email reset flow                      | done                  | Implemented & reviewed — see `context/changes/forgot-password/` |
 | S-12       | ux-polish              | UX: icon buttons, post-login redirect, friends list layout  | yes                   | Run `/10x-plan ux-polish` — source: `context/design/todo.md` |
 | S-13       | polish-localization    | i18n: one-off Polish string sweep                            | no                    | Awaits S-10, S-11, S-12 (translates their new UI copy too) |
 
