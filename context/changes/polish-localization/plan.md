@@ -434,26 +434,26 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 2.1 `collection/actions.spec.ts` and `_components/*.spec.tsx` updated, full directory suite passes
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `collection/actions.spec.ts` and `_components/*.spec.tsx` updated, full directory suite passes — bc9c631
+- [x] 2.2 `npm run lint` passes — bc9c631
 
 #### Manual
 
-- [x] 2.3 Add/edit/delete a book — all labels, buttons, status messages, confirm dialogs correct in Polish
-- [x] 2.4 One validation error and one business-rule error confirmed correct and natural in Polish
+- [x] 2.3 Add/edit/delete a book — all labels, buttons, status messages, confirm dialogs correct in Polish — bc9c631
+- [x] 2.4 One validation error and one business-rule error confirmed correct and natural in Polish — bc9c631
 
 ### Phase 3: Friends
 
 #### Automated
 
-- [ ] 3.1 `friends/actions.spec.ts`, `page.spec.tsx`, `_components/*.spec.tsx` updated, full directory suite passes
-- [ ] 3.2 `npm run lint` passes
+- [x] 3.1 `friends/actions.spec.ts`, `page.spec.tsx`, `_components/*.spec.tsx` updated, full directory suite passes
+- [x] 3.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 3.3 Send/accept/reject invite, remove friend — all labels, buttons, pills, confirm modal correct in Polish
-- [ ] 3.4 Friend book count reads with correct Polish plural agreement
-- [ ] 3.5 "Manage invites" block fully Polish below and above 1024px
+- [x] 3.3 Send/accept/reject invite, remove friend — all labels, buttons, pills, confirm modal correct in Polish
+- [x] 3.4 Friend book count reads with correct Polish plural agreement
+- [x] 3.5 "Manage invites" block fully Polish below and above 1024px
 
 ### Phase 4: Discover
 

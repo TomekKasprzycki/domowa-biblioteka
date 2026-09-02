@@ -65,7 +65,7 @@ describe("ReceivedInviteRow", () => {
     render(<ReceivedInviteRow invite={invite} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: /accept/i }));
+    await user.click(screen.getByRole("button", { name: /akceptuj/i }));
 
     // then
     expect(mockAccept).toHaveBeenCalledTimes(1);
@@ -78,7 +78,7 @@ describe("ReceivedInviteRow", () => {
     render(<ReceivedInviteRow invite={invite} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: /reject/i }));
+    await user.click(screen.getByRole("button", { name: /odrzuć/i }));
 
     // then
     expect(mockReject).toHaveBeenCalledTimes(1);

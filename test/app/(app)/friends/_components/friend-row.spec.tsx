@@ -41,7 +41,7 @@ describe("FriendRow", () => {
     render(<FriendRow friend={friend} />);
 
     // when
-    const link = screen.getByRole("link", { name: /view collection/i });
+    const link = screen.getByRole("link", { name: /zobacz kolekcję/i });
 
     // then
     expect(link).toHaveAttribute(
@@ -56,7 +56,7 @@ describe("FriendRow", () => {
 
     // when
     const name = screen.getByText("Friendly Person");
-    const bookCount = screen.getByText("6 books on their shelf");
+    const bookCount = screen.getByText("6 książek na półce");
     const hidden = container.querySelector<HTMLInputElement>(
       'input[type="hidden"][name="connectionId"]'
     );
@@ -86,7 +86,7 @@ describe("FriendRow", () => {
     render(<FriendRow friend={singleBookFriend} />);
 
     // then
-    expect(screen.getByText("1 book on their shelf")).toBeInTheDocument();
+    expect(screen.getByText("1 książka na półce")).toBeInTheDocument();
   });
 
   it("labels the remove button with the friend's name as both its accessible name and tooltip", () => {
@@ -95,11 +95,11 @@ describe("FriendRow", () => {
 
     // then
     const removeButton = screen.getByRole("button", {
-      name: "Remove Friendly Person as a friend",
+      name: "Usuń Friendly Person ze znajomych",
     });
     expect(removeButton).toHaveAttribute(
       "title",
-      "Remove Friendly Person as a friend"
+      "Usuń Friendly Person ze znajomych"
     );
   });
 
@@ -110,12 +110,12 @@ describe("FriendRow", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+      screen.getByRole("button", { name: "Usuń Friendly Person ze znajomych" })
     );
 
     // then
     expect(
-      screen.getByRole("dialog", { name: /remove friend/i })
+      screen.getByRole("dialog", { name: /usuń znajomego/i })
     ).toBeInTheDocument();
     expect(mockRemove).not.toHaveBeenCalled();
   });
@@ -125,7 +125,7 @@ describe("FriendRow", () => {
     const user = userEvent.setup();
     render(<FriendRow friend={friend} />);
     await user.click(
-      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+      screen.getByRole("button", { name: "Usuń Friendly Person ze znajomych" })
     );
 
     // when
@@ -140,11 +140,11 @@ describe("FriendRow", () => {
     const user = userEvent.setup();
     render(<FriendRow friend={friend} />);
     await user.click(
-      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+      screen.getByRole("button", { name: "Usuń Friendly Person ze znajomych" })
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: "Remove" }));
+    await user.click(screen.getByRole("button", { name: "Usuń" }));
 
     // then
     expect(mockRemove).toHaveBeenCalledTimes(1);

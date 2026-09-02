@@ -8,7 +8,7 @@ export function ReceivedInvitesList({
   invites: ReceivedInvite[];
 }) {
   if (invites.length === 0) {
-    return <EmptyNote>No pending invitations.</EmptyNote>;
+    return <EmptyNote>Brak oczekujących zaproszeń.</EmptyNote>;
   }
 
   return (

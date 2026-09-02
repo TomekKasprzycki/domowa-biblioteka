@@ -32,7 +32,7 @@ const sent: SentInvite[] = [
 ];
 
 function getDetails(): HTMLDetailsElement {
-  return screen.getByText("Manage invites").closest("details") as HTMLDetailsElement;
+  return screen.getByText("Zarządzaj zaproszeniami").closest("details") as HTMLDetailsElement;
 }
 
 describe("ManageInvitesSection", () => {
@@ -45,13 +45,13 @@ describe("ManageInvitesSection", () => {
     render(<ManageInvitesSection received={received} sent={sent} />);
 
     // then
-    expect(screen.getByLabelText("Friend's email")).toBeInTheDocument();
+    expect(screen.getByLabelText("E-mail znajomego")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 3, name: "Received" })
+      screen.getByRole("heading", { level: 3, name: "Otrzymane" })
     ).toBeInTheDocument();
     expect(screen.getByText("Tomek")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 3, name: "Sent" })
+      screen.getByRole("heading", { level: 3, name: "Wysłane" })
     ).toBeInTheDocument();
     expect(screen.getByText("Ola")).toBeInTheDocument();
   });

@@ -59,17 +59,17 @@ export function ManageInvitesSection({
           >
             ▸
           </span>
-          Manage invites
+          Zarządzaj zaproszeniami
         </h2>
       </summary>
 
       <SendInviteForm />
 
-      <Section title="Received" collapsible={false} headingLevel={3}>
+      <Section title="Otrzymane" collapsible={false} headingLevel={3}>
         <ReceivedInvitesList invites={received} />
       </Section>
 
-      <Section title="Sent" collapsible={false} headingLevel={3}>
+      <Section title="Wysłane" collapsible={false} headingLevel={3}>
         <SentInvitesList invites={sent} />
       </Section>
     </details>

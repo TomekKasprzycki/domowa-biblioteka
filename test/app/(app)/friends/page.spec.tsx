@@ -59,7 +59,7 @@ describe("FriendsPage", () => {
 
     // then
     expect(screen.getByRole("alert")).toHaveTextContent(
-      /not connected with that user/i
+      /nie masz połączenia z tym użytkownikiem/i
     );
   });
 
@@ -100,7 +100,7 @@ describe("FriendsPage", () => {
     // then
     expect(mockCountBooksForUser).toHaveBeenCalledTimes(1);
     expect(mockCountBooksForUser).toHaveBeenCalledWith(friendUser.id);
-    expect(screen.getByText("6 books on their shelf")).toBeInTheDocument();
+    expect(screen.getByText("6 książek na półce")).toBeInTheDocument();
   });
 
   it("renders the invite form exactly once — regression guard against the admin block rendering twice", async () => {
@@ -111,6 +111,6 @@ describe("FriendsPage", () => {
     render(ui);
 
     // then
-    expect(screen.getAllByLabelText(/friend's email/i)).toHaveLength(1);
+    expect(screen.getAllByLabelText(/e-mail znajomego/i)).toHaveLength(1);
   });
 });

@@ -24,8 +24,8 @@ describe("SendInviteForm", () => {
     render(<SendInviteForm />);
 
     // when
-    const input = screen.getByLabelText(/friend's email/i);
-    const button = screen.getByRole("button", { name: /send invite/i });
+    const input = screen.getByLabelText(/e-mail znajomego/i);
+    const button = screen.getByRole("button", { name: /wyślij zaproszenie/i });
 
     // then
     expect(input).toHaveAttribute("type", "email");
@@ -38,12 +38,12 @@ describe("SendInviteForm", () => {
     const user = userEvent.setup();
     render(<SendInviteForm />);
     await user.type(
-      screen.getByLabelText(/friend's email/i),
+      screen.getByLabelText(/e-mail znajomego/i),
       "friend@example.com"
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: /send invite/i }));
+    await user.click(screen.getByRole("button", { name: /wyślij zaproszenie/i }));
 
     // then
     expect(mockSendInvite).toHaveBeenCalledTimes(1);

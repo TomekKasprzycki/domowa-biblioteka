@@ -4,7 +4,7 @@ import { EmptyNote } from "@/app/_components/empty-note";
 
 export function SentInvitesList({ invites }: { invites: SentInvite[] }) {
   if (invites.length === 0) {
-    return <EmptyNote>You haven&apos;t sent any invitations.</EmptyNote>;
+    return <EmptyNote>Nie wysłano jeszcze żadnych zaproszeń.</EmptyNote>;
   }
 
   return (

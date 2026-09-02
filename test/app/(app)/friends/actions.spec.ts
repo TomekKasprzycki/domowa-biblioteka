@@ -123,7 +123,7 @@ describe("friends actions", () => {
     );
 
     // then
-    expect(result).toBe("No user found with that email.");
+    expect(result).toBe("Nie znaleziono użytkownika o tym adresie e-mail.");
   });
 
   it("returns a self-invite message when inviting yourself", async () => {
@@ -134,7 +134,7 @@ describe("friends actions", () => {
     const result = await sendInviteAction(null, formData({ email: emailA }));
 
     // then
-    expect(result).toBe("You can't invite yourself.");
+    expect(result).toBe("Nie możesz zaprosić samego siebie.");
   });
 
   it("returns a duplicate message when re-inviting while pending in the same direction", async () => {
@@ -146,7 +146,7 @@ describe("friends actions", () => {
     const result = await sendInviteAction(null, formData({ email: emailB }));
 
     // then
-    expect(result).toBe("You've already sent an invitation to this user.");
+    expect(result).toBe("Masz już wysłane zaproszenie do tego użytkownika.");
   });
 
   it("auto-accepts when the addressee invites back while pending", async () => {
@@ -176,7 +176,7 @@ describe("friends actions", () => {
     const result = await sendInviteAction(null, formData({ email: emailB }));
 
     // then
-    expect(result).toBe("You're already friends with this user.");
+    expect(result).toBe("Jesteście już znajomymi.");
   });
 
   it("sends a pending invite to a third user for ownership-scoping coverage", async () => {
@@ -207,7 +207,7 @@ describe("friends actions", () => {
 
     // then
     expect(result).toBe(
-      "Connection not found or you don't have permission to do that."
+      "Nie znaleziono połączenia lub nie masz uprawnień, aby to zrobić."
     );
   });
 
@@ -223,7 +223,7 @@ describe("friends actions", () => {
 
     // then
     expect(result).toBe(
-      "Connection not found or you don't have permission to do that."
+      "Nie znaleziono połączenia lub nie masz uprawnień, aby to zrobić."
     );
   });
 
@@ -272,7 +272,7 @@ describe("friends actions", () => {
 
     // then
     expect(result).toBe(
-      "Connection not found or you don't have permission to do that."
+      "Nie znaleziono połączenia lub nie masz uprawnień, aby to zrobić."
     );
   });
 
@@ -308,7 +308,7 @@ describe("friends actions", () => {
 
     // then
     expect(result).toBe(
-      "Connection not found or you don't have permission to do that."
+      "Nie znaleziono połączenia lub nie masz uprawnień, aby to zrobić."
     );
   });
 

@@ -30,7 +30,7 @@ describe("FriendsList", () => {
     render(<FriendsList friends={[]} />);
 
     // when
-    const message = screen.getByText(/you have no friends yet/i);
+    const message = screen.getByText(/nie masz jeszcze żadnych znajomych/i);
 
     // then
     expect(message).toBeInTheDocument();

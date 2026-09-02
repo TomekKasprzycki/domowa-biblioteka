@@ -30,7 +30,7 @@ describe("ReceivedInvitesList", () => {
     render(<ReceivedInvitesList invites={[]} />);
 
     // when
-    const message = screen.getByText(/no pending invitations/i);
+    const message = screen.getByText(/brak oczekujących zaproszeń/i);
 
     // then
     expect(message).toBeInTheDocument();
