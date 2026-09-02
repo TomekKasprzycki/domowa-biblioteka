@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { markReturnedAction } from "@/app/borrow/actions";
 import { LibraryCard } from "@/app/_components/library-card";
 import { Button } from "@/app/_components/button";
+import { ConfirmModal } from "@/app/_components/confirm-modal";
 import type { OutgoingLoan } from "@/app/(app)/borrowing/borrowing.types";
 
 function statusLabel(loan: OutgoingLoan): string {
@@ -24,6 +25,8 @@ function statusLabel(loan: OutgoingLoan): string {
 
 export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
   const [error, action, isPending] = useActionState(markReturnedAction, null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     <li>
@@ -42,22 +45,14 @@ export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
         // dialog is the single guard against a mis-click.
         actions={
           loan.status === "active" ? (
-            <form action={action}>
+            <form ref={formRef} action={action}>
               <input type="hidden" name="loanId" value={loan.id} />
               <Button
-                type="submit"
+                type="button"
                 variant="outline-blue"
                 size="sm"
                 disabled={isPending}
-                onClick={(e) => {
-                  if (
-                    !window.confirm(
-                      `Mark "${loan.book.title}" as returned to ${loan.owner.name}? This can't be undone.`
-                    )
-                  ) {
-                    e.preventDefault();
-                  }
-                }}
+                onClick={() => setConfirmOpen(true)}
               >
                 I returned it
               </Button>
@@ -70,6 +65,18 @@ export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
           {error}
         </p>
       )}
+      <ConfirmModal
+        open={confirmOpen}
+        title="Confirm return"
+        message={`Mark "${loan.book.title}" as returned to ${loan.owner.name}? This can't be undone.`}
+        confirmLabel="I returned it"
+        confirmVariant="outline-blue"
+        onConfirm={() => {
+          setConfirmOpen(false);
+          formRef.current?.requestSubmit();
+        }}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </li>
   );
 }

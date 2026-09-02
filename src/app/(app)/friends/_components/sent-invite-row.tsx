@@ -5,7 +5,7 @@ import { Pill } from "@/app/_components/pill";
 
 export function SentInviteRow({ invite }: { invite: SentInvite }) {
   return (
-    <Card as="li" className="flex items-start justify-between gap-4">
+    <Card as="li" className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
         <Avatar name={invite.otherUser.name} />
         <div>
@@ -13,7 +13,9 @@ export function SentInviteRow({ invite }: { invite: SentInvite }) {
           <p className="text-sm text-ink-faint">{invite.otherUser.email}</p>
         </div>
       </div>
-      <Pill tone="pending">Pending</Pill>
+      <div className="self-start">
+        <Pill tone="pending">Pending</Pill>
+      </div>
     </Card>
   );
 }

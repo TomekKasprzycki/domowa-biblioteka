@@ -4,10 +4,9 @@ import {
   findPendingSent,
   findFriends,
 } from "@/server/friend-connection/friend-connection.repository";
+import { countBooksForUser } from "@/server/book/book.repository";
 import type { FriendConnectionEntity } from "@/server/friend-connection/friend-connection.entity";
-import { SendInviteForm } from "@/app/(app)/friends/_components/send-invite-form";
-import { ReceivedInvitesList } from "@/app/(app)/friends/_components/received-invites-list";
-import { SentInvitesList } from "@/app/(app)/friends/_components/sent-invites-list";
+import { ManageInvitesSection } from "@/app/(app)/friends/_components/manage-invites-section";
 import { FriendsList } from "@/app/(app)/friends/_components/friends-list";
 import { Section } from "@/app/_components/section";
 
@@ -47,14 +46,22 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
     otherUser: { email: c.addressee.email, name: c.addressee.name },
     createdAt: c.createdAt,
   }));
-  const plainFriends = friends.map((c) => {
-    const other = otherUserOf(c, userId);
-    return {
-      id: c.id,
-      otherUser: { id: other.id, email: other.email, name: other.name },
-      createdAt: c.createdAt,
-    };
-  });
+  const plainFriends = await Promise.all(
+    friends.map(async (c) => {
+      const other = otherUserOf(c, userId);
+      const bookCount = await countBooksForUser(other.id);
+      return {
+        id: c.id,
+        otherUser: {
+          id: other.id,
+          email: other.email,
+          name: other.name,
+          bookCount,
+        },
+        createdAt: c.createdAt,
+      };
+    })
+  );
 
   return (
     <div className="flex flex-col gap-7">
@@ -74,19 +81,16 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
           You&apos;re not connected with that user.
         </p>
       )}
-      <SendInviteForm />
-
-      <Section title="Received">
-        <ReceivedInvitesList invites={plainReceived} />
-      </Section>
-
-      <Section title="Sent">
-        <SentInvitesList invites={plainSent} />
-      </Section>
-
-      <Section title="Your friends">
-        <FriendsList friends={plainFriends} />
-      </Section>
+      <div className="grid grid-cols-1 gap-7 lg:grid-cols-[1fr_280px] lg:items-start">
+        <div className="lg:col-start-2 lg:row-start-1">
+          <ManageInvitesSection received={plainReceived} sent={plainSent} />
+        </div>
+        <div className="lg:col-start-1 lg:row-start-1">
+          <Section title="Your friends" collapsible={false}>
+            <FriendsList friends={plainFriends} />
+          </Section>
+        </div>
+      </div>
     </div>
   );
 }

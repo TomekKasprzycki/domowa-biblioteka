@@ -24,7 +24,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </p>
         )}
 
-        <LoginForm callbackUrl={callbackUrl ?? "/"} />
+        <LoginForm callbackUrl={callbackUrl ?? "/collection"} />
         <Link
           href="/privacy"
           className="text-sm font-medium text-green-700 underline"

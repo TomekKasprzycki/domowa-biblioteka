@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { deleteBookAction } from "@/app/(app)/collection/actions";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
 import { Spine } from "@/app/_components/spine";
 import { Drawer } from "@/app/_components/drawer";
 import { Button } from "@/app/_components/button";
+import { ConfirmModal } from "@/app/_components/confirm-modal";
 import { spineStyleFor } from "@/lib/spine-style.utils";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
@@ -35,6 +36,8 @@ export function BookRow({
     deleteBookAction,
     null
   );
+  const deleteFormRef = useRef<HTMLFormElement>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     // Shelf renders as role="list" (see shelf.tsx); each row is one
@@ -88,18 +91,14 @@ export function BookRow({
                 the rule visible; the server action is what actually
                 enforces it. */}
             {!book.loan && (
-              <form action={deleteAction}>
+              <form ref={deleteFormRef} action={deleteAction}>
                 <input type="hidden" name="bookId" value={book.id} />
                 <Button
-                  type="submit"
+                  type="button"
                   variant="decline"
                   className="w-full"
                   disabled={isPending}
-                  onClick={(e) => {
-                    if (!window.confirm(`Delete "${book.title}"?`)) {
-                      e.preventDefault();
-                    }
-                  }}
+                  onClick={() => setConfirmOpen(true)}
                 >
                   Delete
                 </Button>
@@ -112,6 +111,18 @@ export function BookRow({
             )}
           </>
         }
+      />
+      <ConfirmModal
+        open={confirmOpen}
+        title="Delete book"
+        message={`Delete "${book.title}"?`}
+        confirmLabel="Delete"
+        confirmVariant="decline"
+        onConfirm={() => {
+          setConfirmOpen(false);
+          deleteFormRef.current?.requestSubmit();
+        }}
+        onCancel={() => setConfirmOpen(false)}
       />
     </div>
   );

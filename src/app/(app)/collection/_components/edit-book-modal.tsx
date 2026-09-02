@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useCallback, useRef } from "react";
+import { useActionState, useCallback, useRef, useState } from "react";
 import { Modal } from "@/app/_components/modal";
+import { ConfirmModal } from "@/app/_components/confirm-modal";
 import { updateBookAction } from "@/app/(app)/collection/actions";
 import { useActionSuccess } from "@/lib/use-action-success.utils";
 import type { CollectionBook } from "@/app/(app)/collection/collection.types";
@@ -19,6 +20,7 @@ export function EditBookModal({
 }) {
   const [error, formAction, isPending] = useActionState(updateBookAction, null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false);
 
   useActionSuccess(isPending, error, onClose);
 
@@ -35,60 +37,78 @@ export function EditBookModal({
     );
   }, [book]);
 
-  const canClose = useCallback(
-    () => !isDirty() || window.confirm(DISCARD_PROMPT),
-    [isDirty]
-  );
+  // Always vetoes a dismissal while dirty (Modal's canClose is synchronous,
+  // so it can't await the confirm modal's result) — the discard-confirm
+  // modal opened as a side effect here is what actually decides the close.
+  const canClose = useCallback(() => {
+    if (!isDirty()) return true;
+    setDiscardConfirmOpen(true);
+    return false;
+  }, [isDirty]);
 
   const requestClose = useCallback(() => {
     if (canClose()) onClose();
   }, [canClose, onClose]);
 
   return (
-    <Modal open onClose={onClose} title="Edit book" canClose={canClose}>
-      <form ref={formRef} action={formAction} className="flex flex-col gap-1">
-        <input type="hidden" name="bookId" value={book.id} />
+    <>
+      <Modal open onClose={onClose} title="Edit book" canClose={canClose}>
+        <form ref={formRef} action={formAction} className="flex flex-col gap-1">
+          <input type="hidden" name="bookId" value={book.id} />
 
-        <Field
-          label="Title"
-          id={`title-${book.id}`}
-          name="title"
-          required
-          defaultValue={book.title}
-        />
+          <Field
+            label="Title"
+            id={`title-${book.id}`}
+            name="title"
+            required
+            defaultValue={book.title}
+          />
 
-        <Field
-          label="Author"
-          id={`author-${book.id}`}
-          name="author"
-          required
-          defaultValue={book.author}
-        />
+          <Field
+            label="Author"
+            id={`author-${book.id}`}
+            name="author"
+            required
+            defaultValue={book.author}
+          />
 
-        <Field
-          as="textarea"
-          label="Notes (optional)"
-          id={`notes-${book.id}`}
-          name="notes"
-          rows={2}
-          defaultValue={book.notes ?? ""}
-        />
+          <Field
+            as="textarea"
+            label="Notes (optional)"
+            id={`notes-${book.id}`}
+            name="notes"
+            rows={2}
+            defaultValue={book.notes ?? ""}
+          />
 
-        {error && (
-          <p role="alert" className="mb-2 text-sm text-red-600">
-            {error}
-          </p>
-        )}
+          {error && (
+            <p role="alert" className="mb-2 text-sm text-red-600">
+              {error}
+            </p>
+          )}
 
-        <div className="flex gap-2">
-          <Button type="submit" variant="primary" disabled={isPending}>
-            {isPending ? "Saving…" : "Save"}
-          </Button>
-          <Button type="button" variant="ghost" onClick={requestClose}>
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </Modal>
+          <div className="flex gap-2">
+            <Button type="submit" variant="primary" disabled={isPending}>
+              {isPending ? "Saving…" : "Save"}
+            </Button>
+            <Button type="button" variant="ghost" onClick={requestClose}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
+      <ConfirmModal
+        open={discardConfirmOpen}
+        title="Discard changes"
+        message={DISCARD_PROMPT}
+        confirmLabel="Discard"
+        confirmVariant="decline"
+        onConfirm={() => {
+          setDiscardConfirmOpen(false);
+          onClose();
+        }}
+        onCancel={() => setDiscardConfirmOpen(false)}
+      />
+    </>
   );
 }

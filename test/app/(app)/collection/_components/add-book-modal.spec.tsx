@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { pressEscape } from "../../../../shared/dialog.mock";
 
@@ -17,8 +17,17 @@ import { AddBookModal } from "@/app/(app)/collection/_components/add-book-modal"
 const mockAdd = addBookAction as jest.Mock;
 const mockLookup = lookupIsbn as jest.Mock;
 
-function getDialog(): HTMLDialogElement {
-  return screen.getByRole("dialog", { hidden: true }) as HTMLDialogElement;
+// Not name-matched via getByRole: a closed <dialog>'s subtree counts as
+// hidden for accessible-name computation, so aria-labelledby resolves to ""
+// while the dialog is shut — exactly the state most of these assertions
+// need to inspect. Match on the rendered heading text instead.
+function getDialog(title: string): HTMLDialogElement {
+  const dialogs = screen.getAllByRole("dialog", {
+    hidden: true,
+  }) as HTMLDialogElement[];
+  const match = dialogs.find((d) => d.querySelector("h2")?.textContent === title);
+  if (!match) throw new Error(`No dialog found with heading "${title}"`);
+  return match;
 }
 
 describe("AddBookModal", () => {
@@ -37,7 +46,7 @@ describe("AddBookModal", () => {
     render(<AddBookModal />);
 
     // then
-    expect(getDialog().open).toBe(false);
+    expect(getDialog("Add book").open).toBe(false);
   });
 
   it("opens the dialog when the trigger is clicked", async () => {
@@ -49,7 +58,7 @@ describe("AddBookModal", () => {
     await user.click(screen.getByRole("button", { name: "Add book" }));
 
     // then
-    expect(getDialog().open).toBe(true);
+    expect(getDialog("Add book").open).toBe(true);
   });
 
   it("closes the dialog after a successful save", async () => {
@@ -66,7 +75,7 @@ describe("AddBookModal", () => {
     // then
     // The close lands a render after the action settles: the success hook runs
     // in an effect, which then flips the open state the dialog effect reads.
-    await waitFor(() => expect(getDialog().open).toBe(false));
+    await waitFor(() => expect(getDialog("Add book").open).toBe(false));
   });
 
   it("keeps the dialog open when the action returns an error", async () => {
@@ -85,62 +94,97 @@ describe("AddBookModal", () => {
 
     // then
     expect(await screen.findByRole("alert")).toBeInTheDocument();
-    expect(getDialog().open).toBe(true);
+    expect(getDialog("Add book").open).toBe(true);
   });
 
   it("dismisses an untouched dialog without prompting", async () => {
     // given
     const user = userEvent.setup();
-    const confirmSpy = jest.spyOn(window, "confirm");
     render(<AddBookModal />);
     await user.click(screen.getByRole("button", { name: "Add book" }));
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
 
     // then
-    expect(confirmSpy).not.toHaveBeenCalled();
-    expect(getDialog().open).toBe(false);
+    expect(getDialog("Discard book").open).toBe(false);
+    expect(getDialog("Add book").open).toBe(false);
   });
 
-  it("keeps a dirty dialog open when the discard prompt is declined", async () => {
+  it("opens a discard-confirm modal for a dirty dialog, keeping the Add dialog open", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(false);
     render(<AddBookModal />);
     await user.click(screen.getByRole("button", { name: "Add book" }));
     await user.type(screen.getByLabelText("Title"), "Sola");
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
 
     // then
-    expect(getDialog().open).toBe(true);
+    expect(getDialog("Add book").open).toBe(true);
+    expect(getDialog("Discard book").open).toBe(true);
   });
 
-  it("discards a dirty dialog when the prompt is accepted", async () => {
+  it("keeps the Add dialog open when the discard confirm is cancelled", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(true);
     render(<AddBookModal />);
     await user.click(screen.getByRole("button", { name: "Add book" }));
     await user.type(screen.getByLabelText("Title"), "Sola");
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
 
     // when
-    pressEscape(getDialog());
+    await user.click(
+      within(getDialog("Discard book")).getByRole("button", { name: "Cancel" })
+    );
 
     // then
-    expect(getDialog().open).toBe(false);
+    expect(getDialog("Add book").open).toBe(true);
+    expect(getDialog("Discard book").open).toBe(false);
+  });
+
+  it("discards a dirty dialog when the discard confirm is accepted", async () => {
+    // given
+    const user = userEvent.setup();
+    render(<AddBookModal />);
+    await user.click(screen.getByRole("button", { name: "Add book" }));
+    await user.type(screen.getByLabelText("Title"), "Sola");
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
+
+    // when
+    await user.click(
+      within(getDialog("Discard book")).getByRole("button", {
+        name: "Discard",
+      })
+    );
+
+    // then
+    expect(getDialog("Add book").open).toBe(false);
   });
 
   it("starts empty when reopened after a discard", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(true);
     render(<AddBookModal />);
     await user.click(screen.getByRole("button", { name: "Add book" }));
     await user.type(screen.getByLabelText("Title"), "Sola");
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
+    await user.click(
+      within(getDialog("Discard book")).getByRole("button", {
+        name: "Discard",
+      })
+    );
 
     // when
     await user.click(screen.getByRole("button", { name: "Add book" }));
@@ -155,7 +199,6 @@ describe("AddBookModal", () => {
     // working isDirty from a permanently-true one, since the checkbox's
     // .value is "on" regardless of checked state
     const user = userEvent.setup();
-    const confirmSpy = jest.spyOn(window, "confirm");
     mockLookup.mockResolvedValue({
       status: "found",
       title: "Solaris",
@@ -171,11 +214,13 @@ describe("AddBookModal", () => {
     await user.clear(screen.getByLabelText("Author"));
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
 
     // then
-    expect(confirmSpy).not.toHaveBeenCalled();
-    expect(getDialog().open).toBe(false);
+    expect(getDialog("Discard book").open).toBe(false);
+    expect(getDialog("Add book").open).toBe(false);
   });
 
   it("prompts on Esc after a failed submit, since the retained values are now dirty", async () => {
@@ -191,15 +236,13 @@ describe("AddBookModal", () => {
     await user.type(screen.getByLabelText("Author"), "Stanisław Lem");
     await user.click(screen.getByRole("button", { name: "Add" }));
     await screen.findByRole("alert");
-    jest.spyOn(window, "confirm").mockReturnValue(true);
 
     // when
-    pressEscape(getDialog());
+    act(() => {
+      pressEscape(getDialog("Add book"));
+    });
 
-    // then the retained values are dirty, so the discard prompt fires
-    expect(window.confirm).toHaveBeenCalledWith(
-      "Discard this book? What you've typed will be lost."
-    );
-    expect(getDialog().open).toBe(false);
+    // then the retained values are dirty, so the discard-confirm modal opens
+    expect(getDialog("Discard book").open).toBe(true);
   });
 });

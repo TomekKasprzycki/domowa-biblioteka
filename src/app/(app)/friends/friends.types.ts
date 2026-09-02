@@ -12,6 +12,6 @@ export type SentInvite = {
 
 export type Friend = {
   id: string;
-  otherUser: { id: string; email: string; name: string };
+  otherUser: { id: string; email: string; name: string; bookCount: number };
   createdAt: Date;
 };

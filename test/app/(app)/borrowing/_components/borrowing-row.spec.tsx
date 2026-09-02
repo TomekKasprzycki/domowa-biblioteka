@@ -1,7 +1,8 @@
 /** @jest-environment jsdom */
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import "../../../../shared/dialog.mock";
 
 jest.mock("@/app/borrow/actions", () => ({
   markReturnedAction: jest.fn().mockResolvedValue(null),
@@ -88,9 +89,8 @@ describe("BorrowingRow", () => {
     expect(hidden).toHaveValue(activeLoan.id);
   });
 
-  it("does not fire the action when the confirm dialog is dismissed", async () => {
+  it("opens a confirm modal instead of firing the action immediately", async () => {
     // given
-    jest.spyOn(window, "confirm").mockReturnValue(false);
     const user = userEvent.setup();
     render(<BorrowingRow loan={activeLoan} />);
 
@@ -98,17 +98,37 @@ describe("BorrowingRow", () => {
     await user.click(screen.getByRole("button", { name: "I returned it" }));
 
     // then
+    expect(
+      screen.getByRole("dialog", { name: /confirm return/i })
+    ).toBeInTheDocument();
     expect(mockMarkReturned).not.toHaveBeenCalled();
   });
 
-  it("fires markReturnedAction when the confirm dialog is accepted", async () => {
+  it("does not fire the action when the confirm modal is cancelled", async () => {
     // given
-    jest.spyOn(window, "confirm").mockReturnValue(true);
     const user = userEvent.setup();
     render(<BorrowingRow loan={activeLoan} />);
+    await user.click(screen.getByRole("button", { name: "I returned it" }));
+    const dialog = screen.getByRole("dialog", { name: /confirm return/i });
 
     // when
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+
+    // then
+    expect(mockMarkReturned).not.toHaveBeenCalled();
+  });
+
+  it("fires markReturnedAction when the confirm modal is confirmed", async () => {
+    // given
+    const user = userEvent.setup();
+    render(<BorrowingRow loan={activeLoan} />);
     await user.click(screen.getByRole("button", { name: "I returned it" }));
+    const dialog = screen.getByRole("dialog", { name: /confirm return/i });
+
+    // when
+    await user.click(
+      within(dialog).getByRole("button", { name: "I returned it" })
+    );
 
     // then
     expect(mockMarkReturned).toHaveBeenCalledTimes(1);

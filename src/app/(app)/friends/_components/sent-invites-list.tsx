@@ -8,7 +8,7 @@ export function SentInvitesList({ invites }: { invites: SentInvite[] }) {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
       {invites.map((invite) => (
         <SentInviteRow key={invite.id} invite={invite} />
       ))}

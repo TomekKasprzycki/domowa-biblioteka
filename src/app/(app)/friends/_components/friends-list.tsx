@@ -8,7 +8,7 @@ export function FriendsList({ friends }: { friends: Friend[] }) {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
       {friends.map((friend) => (
         <FriendRow key={friend.id} friend={friend} />
       ))}

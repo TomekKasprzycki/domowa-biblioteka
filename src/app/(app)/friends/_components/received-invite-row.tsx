@@ -20,14 +20,14 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
 
   return (
     <Card as="li" className="flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Avatar name={invite.otherUser.name} />
-          <div>
-            <p className="font-medium text-ink">{invite.otherUser.name}</p>
-            <p className="text-sm text-ink-faint">{invite.otherUser.email}</p>
-          </div>
+      <div className="flex items-center gap-3">
+        <Avatar name={invite.otherUser.name} />
+        <div>
+          <p className="font-medium text-ink">{invite.otherUser.name}</p>
+          <p className="text-sm text-ink-faint">{invite.otherUser.email}</p>
         </div>
+      </div>
+      <div className="self-start">
         <Pill tone="pending">Pending</Pill>
       </div>
       <div className="flex shrink-0 gap-2">

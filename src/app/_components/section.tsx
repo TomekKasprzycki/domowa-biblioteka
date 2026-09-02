@@ -5,16 +5,20 @@ export function Section({
   children,
   collapsible = true,
   defaultOpen = true,
+  headingLevel = 2,
 }: {
   title: string;
   children: ReactNode;
   collapsible?: boolean;
   defaultOpen?: boolean;
+  headingLevel?: 2 | 3;
 }) {
+  const Heading = headingLevel === 3 ? "h3" : "h2";
+
   if (!collapsible) {
     return (
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold text-green-800">{title}</h2>
+        <Heading className="text-sm font-semibold text-green-800">{title}</Heading>
         {children}
       </section>
     );
@@ -23,7 +27,7 @@ export function Section({
   return (
     <details open={defaultOpen} className="group flex flex-col gap-3">
       <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-        <h2 className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-800">
+        <Heading className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-800">
           <span
             aria-hidden="true"
             className="inline-block text-base transition-transform group-open:rotate-90"
@@ -31,7 +35,7 @@ export function Section({
             ▸
           </span>
           {title}
-        </h2>
+        </Heading>
       </summary>
       {children}
     </details>

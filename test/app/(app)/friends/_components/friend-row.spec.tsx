@@ -2,6 +2,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import "../../../../shared/dialog.mock";
 
 jest.mock("@/app/(app)/friends/actions", () => ({
   sendInviteAction: jest.fn().mockResolvedValue(null),
@@ -21,6 +22,7 @@ const friend: Friend = {
     id: "44444444-4444-4444-4444-444444444444",
     email: "friend@example.com",
     name: "Friendly Person",
+    bookCount: 6,
   },
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
 };
@@ -48,42 +50,101 @@ describe("FriendRow", () => {
     );
   });
 
-  it("renders the friend's name and email with the connection id hidden field", () => {
+  it("renders the friend's name, book count, and the connection id hidden field", () => {
     // given
     const { container } = render(<FriendRow friend={friend} />);
 
     // when
     const name = screen.getByText("Friendly Person");
+    const bookCount = screen.getByText("6 books on their shelf");
     const hidden = container.querySelector<HTMLInputElement>(
       'input[type="hidden"][name="connectionId"]'
     );
 
     // then
     expect(name).toBeInTheDocument();
+    expect(bookCount).toBeInTheDocument();
     expect(hidden).toHaveValue(friend.id);
   });
 
-  it("does not submit the remove action when the confirm dialog is cancelled", async () => {
+  it("does not render the friend's email", () => {
+    // given / when
+    render(<FriendRow friend={friend} />);
+
+    // then
+    expect(screen.queryByText("friend@example.com")).not.toBeInTheDocument();
+  });
+
+  it("uses a singular book count when there is exactly one book", () => {
+    // given
+    const singleBookFriend: Friend = {
+      ...friend,
+      otherUser: { ...friend.otherUser, bookCount: 1 },
+    };
+
+    // when
+    render(<FriendRow friend={singleBookFriend} />);
+
+    // then
+    expect(screen.getByText("1 book on their shelf")).toBeInTheDocument();
+  });
+
+  it("labels the remove button with the friend's name as both its accessible name and tooltip", () => {
+    // given / when
+    render(<FriendRow friend={friend} />);
+
+    // then
+    const removeButton = screen.getByRole("button", {
+      name: "Remove Friendly Person as a friend",
+    });
+    expect(removeButton).toHaveAttribute(
+      "title",
+      "Remove Friendly Person as a friend"
+    );
+  });
+
+  it("opens a confirm modal instead of submitting immediately", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(false);
     render(<FriendRow friend={friend} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: /remove/i }));
+    await user.click(
+      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+    );
+
+    // then
+    expect(
+      screen.getByRole("dialog", { name: /remove friend/i })
+    ).toBeInTheDocument();
+    expect(mockRemove).not.toHaveBeenCalled();
+  });
+
+  it("does not submit the remove action when the confirm modal is cancelled", async () => {
+    // given
+    const user = userEvent.setup();
+    render(<FriendRow friend={friend} />);
+    await user.click(
+      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+    );
+
+    // when
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     // then
     expect(mockRemove).not.toHaveBeenCalled();
   });
 
-  it("submits the remove action when the confirm dialog is accepted", async () => {
+  it("submits the remove action when the confirm modal is confirmed", async () => {
     // given
     const user = userEvent.setup();
-    jest.spyOn(window, "confirm").mockReturnValue(true);
     render(<FriendRow friend={friend} />);
+    await user.click(
+      screen.getByRole("button", { name: "Remove Friendly Person as a friend" })
+    );
 
     // when
-    await user.click(screen.getByRole("button", { name: /remove/i }));
+    await user.click(screen.getByRole("button", { name: "Remove" }));
 
     // then
     expect(mockRemove).toHaveBeenCalledTimes(1);

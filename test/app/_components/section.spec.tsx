@@ -91,4 +91,37 @@ describe("Section", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("content")).toBeInTheDocument();
   });
+
+  it("renders an h2 by default", () => {
+    // given / when
+    const { container } = render(
+      <Section title="Received">
+        <p>content</p>
+      </Section>
+    );
+
+    // then
+    expect(container.querySelector("h2")).toHaveTextContent("Received");
+    expect(container.querySelector("h3")).not.toBeInTheDocument();
+  });
+
+  it("renders an h3 when headingLevel is 3, in both collapsible and non-collapsible modes", () => {
+    // given / when
+    const { container: collapsible } = render(
+      <Section title="Received" headingLevel={3}>
+        <p>content</p>
+      </Section>
+    );
+    const { container: plain } = render(
+      <Section title="Sent" collapsible={false} headingLevel={3}>
+        <p>content</p>
+      </Section>
+    );
+
+    // then
+    expect(collapsible.querySelector("h3")).toHaveTextContent("Received");
+    expect(collapsible.querySelector("h2")).not.toBeInTheDocument();
+    expect(plain.querySelector("h3")).toHaveTextContent("Sent");
+    expect(plain.querySelector("h2")).not.toBeInTheDocument();
+  });
 });

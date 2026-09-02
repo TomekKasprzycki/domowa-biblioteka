@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { Modal } from "@/app/_components/modal";
+import { ConfirmModal } from "@/app/_components/confirm-modal";
 import { AddBookForm } from "@/app/(app)/collection/_components/add-book-form";
 import { Button } from "@/app/_components/button";
 
@@ -9,6 +10,7 @@ const DISCARD_PROMPT = "Discard this book? What you've typed will be lost.";
 
 export function AddBookModal() {
   const [open, setOpen] = useState(false);
+  const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setOpen(false), []);
@@ -25,10 +27,14 @@ export function AddBookModal() {
     return Array.from(fields ?? []).some((field) => field.value.trim() !== "");
   }, []);
 
-  const canClose = useCallback(
-    () => !isDirty() || window.confirm(DISCARD_PROMPT),
-    [isDirty]
-  );
+  // Always vetoes a dismissal while dirty (Modal's canClose is synchronous,
+  // so it can't await the confirm modal's result) — the discard-confirm
+  // modal opened as a side effect here is what actually decides the close.
+  const canClose = useCallback(() => {
+    if (!isDirty()) return true;
+    setDiscardConfirmOpen(true);
+    return false;
+  }, [isDirty]);
 
   const requestClose = useCallback(() => {
     if (canClose()) close();
@@ -48,6 +54,18 @@ export function AddBookModal() {
           <AddBookForm onSaved={close} onCancel={requestClose} />
         </div>
       </Modal>
+      <ConfirmModal
+        open={discardConfirmOpen}
+        title="Discard book"
+        message={DISCARD_PROMPT}
+        confirmLabel="Discard"
+        confirmVariant="decline"
+        onConfirm={() => {
+          setDiscardConfirmOpen(false);
+          close();
+        }}
+        onCancel={() => setDiscardConfirmOpen(false)}
+      />
     </div>
   );
 }
