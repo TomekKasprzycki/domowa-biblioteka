@@ -15,7 +15,7 @@ export function ForgotPasswordForm() {
     <form action={formAction} className="flex flex-col gap-1 w-full max-w-sm">
       <Field
         id="email"
-        label="Email"
+        label="E-mail"
         type="email"
         name="email"
         required

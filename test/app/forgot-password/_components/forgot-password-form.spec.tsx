@@ -24,7 +24,7 @@ describe("ForgotPasswordForm", () => {
     render(<ForgotPasswordForm />);
 
     // then
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
   });
 
   it("calls the action on submit", async () => {
@@ -32,7 +32,7 @@ describe("ForgotPasswordForm", () => {
     const user = userEvent.setup();
     mockRequestPasswordReset.mockResolvedValue(null);
     render(<ForgotPasswordForm />);
-    await user.type(screen.getByLabelText(/email/i), "me@example.com");
+    await user.type(screen.getByLabelText(/e-mail/i), "me@example.com");
 
     // when
     await user.click(
@@ -48,7 +48,7 @@ describe("ForgotPasswordForm", () => {
     const user = userEvent.setup();
     mockRequestPasswordReset.mockResolvedValue("Nieprawidłowy adres e-mail");
     render(<ForgotPasswordForm />);
-    await user.type(screen.getByLabelText(/email/i), "me@example.com");
+    await user.type(screen.getByLabelText(/e-mail/i), "me@example.com");
 
     // when
     await user.click(

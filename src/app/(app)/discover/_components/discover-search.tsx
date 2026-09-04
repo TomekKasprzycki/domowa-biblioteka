@@ -67,7 +67,7 @@ export function DiscoverSearch({
       </div>
 
       {matches.length === 0 ? (
-        <EmptyNote>Nic tu nie ma...</EmptyNote>
+        <EmptyNote>Brak książek pasujących do szukanej frazy.</EmptyNote>
       ) : (
         <Shelf>
           {matches.map((book) => (

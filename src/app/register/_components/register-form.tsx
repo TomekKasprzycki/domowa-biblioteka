@@ -14,7 +14,7 @@ export function RegisterForm() {
 
       <Field
         id="email"
-        label="Email"
+        label="E-mail"
         type="email"
         name="email"
         required

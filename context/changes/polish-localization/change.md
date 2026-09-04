@@ -1,7 +1,7 @@
 ---
 id: polish-localization
 title: "S-13: Polish Localization — one-off Polish string sweep"
-status: implemented
+status: impl_reviewed
 created: 2026-08-22
 updated: 2026-09-04
 roadmap_id: S-13

@@ -18,7 +18,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
 
       <Field
         id="email"
-        label="Email"
+        label="E-mail"
         type="email"
         name="email"
         required
