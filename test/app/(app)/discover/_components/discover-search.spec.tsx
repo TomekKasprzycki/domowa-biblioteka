@@ -63,7 +63,7 @@ describe("DiscoverSearch", () => {
 
     // when / then
     expect(
-      screen.getByText(/you have no confirmed friends yet/i)
+      screen.getByText(/nie masz jeszcze potwierdzonych znajomych/i)
     ).toBeInTheDocument();
   });
 
@@ -110,7 +110,7 @@ describe("DiscoverSearch", () => {
 
     // when
     await user.type(
-      screen.getByLabelText(/search by title or author/i),
+      screen.getByLabelText(/szukaj po tytule lub autorze/i),
       "clean"
     );
 
@@ -134,7 +134,7 @@ describe("DiscoverSearch", () => {
 
     // when
     await user.type(
-      screen.getByLabelText(/search by title or author/i),
+      screen.getByLabelText(/szukaj po tytule lub autorze/i),
       "fowler"
     );
 
@@ -157,7 +157,7 @@ describe("DiscoverSearch", () => {
     );
 
     // when
-    await user.selectOptions(screen.getByLabelText(/filter by friend/i), bob.id);
+    await user.selectOptions(screen.getByLabelText(/filtruj według znajomego/i), bob.id);
 
     // then
     expect(screen.getByRole("button", { name: spineFor("Refactoring") })).toBeInTheDocument();
@@ -176,7 +176,7 @@ describe("DiscoverSearch", () => {
         initialFriendId={null}
       />
     );
-    const search = screen.getByLabelText(/search by title or author/i);
+    const search = screen.getByLabelText(/szukaj po tytule lub autorze/i);
 
     // when
     await user.type(search, "clean");

@@ -111,8 +111,10 @@ describe("DiscoverPage", () => {
     );
 
     // then
-    expect(screen.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
-    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("button", { name: "Poproś o wypożyczenie" })
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("Wypożyczona").length).toBeGreaterThan(0);
   });
 
   it("pre-scopes when the friend param matches a confirmed friend", async () => {

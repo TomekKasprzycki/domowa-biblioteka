@@ -23,10 +23,10 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
   const tag =
     status === "on_loan"
       ? borrowedByViewer
-        ? "Borrowed by you"
-        : "On loan"
+        ? "U Ciebie"
+        : "Wypożyczona"
       : requestedByViewer
-        ? "Requested"
+        ? "Zgłoszono"
         : undefined;
 
   return (
@@ -54,9 +54,9 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
         statusSlot={
           <div className="flex flex-col items-center gap-1">
             <p className="text-sm text-ink-faint">
-              Owned by {book.owner.name}
+              Właściciel: {book.owner.name}
             </p>
-            <Pill tone={tag ? "pending" : "active"}>{tag ?? "Available"}</Pill>
+            <Pill tone={tag ? "pending" : "active"}>{tag ?? "Dostępna"}</Pill>
           </div>
         }
         actionsSlot={
@@ -70,13 +70,13 @@ export function DiscoverBookRow({ book }: { book: DiscoverBook }) {
                   className="w-full"
                   disabled={isPending}
                 >
-                  Borrow
+                  Poproś o wypożyczenie
                 </Button>
               </form>
             )}
             {status === "on_loan" && !borrowedByViewer && (
               <p className="text-center text-sm text-ink-faint">
-                Will be available again once it&apos;s returned
+                Będzie znów dostępna po zwrocie.
               </p>
             )}
             {error && (

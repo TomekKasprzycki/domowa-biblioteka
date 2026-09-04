@@ -446,25 +446,25 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 3.1 `friends/actions.spec.ts`, `page.spec.tsx`, `_components/*.spec.tsx` updated, full directory suite passes
-- [x] 3.2 `npm run lint` passes
+- [x] 3.1 `friends/actions.spec.ts`, `page.spec.tsx`, `_components/*.spec.tsx` updated, full directory suite passes — e57ea8c
+- [x] 3.2 `npm run lint` passes — e57ea8c
 
 #### Manual
 
-- [x] 3.3 Send/accept/reject invite, remove friend — all labels, buttons, pills, confirm modal correct in Polish
-- [x] 3.4 Friend book count reads with correct Polish plural agreement
-- [x] 3.5 "Manage invites" block fully Polish below and above 1024px
+- [x] 3.3 Send/accept/reject invite, remove friend — all labels, buttons, pills, confirm modal correct in Polish — e57ea8c
+- [x] 3.4 Friend book count reads with correct Polish plural agreement — e57ea8c
+- [x] 3.5 "Manage invites" block fully Polish below and above 1024px — e57ea8c
 
 ### Phase 4: Discover
 
 #### Automated
 
-- [ ] 4.1 `page.spec.tsx` and `_components/*.spec.tsx` updated, full directory suite passes
-- [ ] 4.2 `npm run lint` passes
+- [x] 4.1 `page.spec.tsx` and `_components/*.spec.tsx` updated, full directory suite passes
+- [x] 4.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 4.3 Browse, search, filter by friend — all labels, placeholders, availability status correct in Polish
+- [x] 4.3 Browse, search, filter by friend — all labels, placeholders, availability status correct in Polish
 
 ### Phase 5: Requests & Borrowing
 

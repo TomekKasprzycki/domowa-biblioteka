@@ -23,8 +23,8 @@ export function DiscoverSearch({
   if (friends.length === 0) {
     return (
       <EmptyNote>
-        You have no confirmed friends yet. Connect with friends to browse
-        their collections.
+        Nie masz jeszcze potwierdzonych znajomych. Połącz się ze znajomymi,
+        aby przeglądać ich kolekcje.
       </EmptyNote>
     );
   }
@@ -47,17 +47,17 @@ export function DiscoverSearch({
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by title or author"
-          aria-label="Search by title or author"
+          placeholder="Szukaj po tytule lub autorze…"
+          aria-label="Szukaj po tytule lub autorze"
           className="flex-1 rounded-lg border border-line bg-paper-card px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-green-500 focus:outline-none"
         />
         <select
           value={friendFilter ?? ""}
           onChange={(e) => setFriendFilter(e.target.value || null)}
-          aria-label="Filter by friend"
+          aria-label="Filtruj według znajomego"
           className="rounded-lg border border-line bg-paper-card px-3 py-2 text-sm text-ink focus:border-green-500 focus:outline-none"
         >
-          <option value="">All friends</option>
+          <option value="">Wszyscy znajomi</option>
           {friends.map((friend) => (
             <option key={friend.id} value={friend.id}>
               {friend.name}
@@ -67,7 +67,7 @@ export function DiscoverSearch({
       </div>
 
       {matches.length === 0 ? (
-        <EmptyNote>No books match your search.</EmptyNote>
+        <EmptyNote>Nic tu nie ma...</EmptyNote>
       ) : (
         <Shelf>
           {matches.map((book) => (
