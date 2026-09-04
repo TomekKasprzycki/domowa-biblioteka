@@ -79,11 +79,11 @@ describe("CollectionPage", () => {
 
     // when
     // The loan line now lives in the book's drawer, not directly on the shelf.
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
 
     // then
     expect(
-      screen.getByText("Lent to Ania · since 12 Mar 2026")
+      screen.getByText("Wypożyczona: Ania · od 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -104,14 +104,14 @@ describe("CollectionPage", () => {
 
     // when
     // Delete lives in each book's drawer; open both to compare.
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
     await user.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then
     // only the lent book carries a loan line, so exactly one Delete is hidden
-    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Usuń" })).toHaveLength(1);
   });
 
   it("shows no loan lines when nothing is out", async () => {
@@ -122,15 +122,15 @@ describe("CollectionPage", () => {
     render(await CollectionPage());
 
     // when
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
     await user.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then
     expect(
-      screen.queryByText(/Lent to|Return pending/)
+      screen.queryByText(/Wypożyczona|Zwrot zgłoszony/)
     ).not.toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: "Usuń" })).toHaveLength(2);
   });
 });

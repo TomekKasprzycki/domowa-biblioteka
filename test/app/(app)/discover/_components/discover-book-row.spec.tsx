@@ -37,7 +37,7 @@ function makeBook(
 
 async function openDrawer(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
-    screen.getByRole("button", { name: /^View The Pragmatic Programmer,/ })
+    screen.getByRole("button", { name: /^Zobacz: The Pragmatic Programmer,/ })
   );
 }
 
@@ -85,11 +85,13 @@ describe("DiscoverBookRow", () => {
 
     // when / then
     expect(
-      screen.getByRole("button", { name: /owned by Friendly Person/ })
+      screen.getByRole("button", { name: /właściciel: Friendly Person/ })
     ).toBeInTheDocument();
 
     await openDrawer(user);
-    expect(screen.getByText("Owned by Friendly Person")).toBeInTheDocument();
+    expect(
+      screen.getByText("Właściciel: Friendly Person")
+    ).toBeInTheDocument();
   });
 
   it("shows Available and a Borrow button for an available book, and fires the action on submit", async () => {
@@ -107,8 +109,10 @@ describe("DiscoverBookRow", () => {
     await openDrawer(user);
 
     // when
-    expect(screen.getByText("Available")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Borrow" }));
+    expect(screen.getByText("Dostępna")).toBeInTheDocument();
+    await user.click(
+      screen.getByRole("button", { name: "Poproś o wypożyczenie" })
+    );
 
     // then
     expect(mockRequestBorrowAction).toHaveBeenCalled();
@@ -131,9 +135,9 @@ describe("DiscoverBookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getAllByText("Requested").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Zgłoszono").length).toBeGreaterThan(0);
     expect(
-      screen.queryByRole("button", { name: "Borrow" })
+      screen.queryByRole("button", { name: "Poproś o wypożyczenie" })
     ).not.toBeInTheDocument();
   });
 
@@ -154,9 +158,9 @@ describe("DiscoverBookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getAllByText("Borrowed by you").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("U Ciebie").length).toBeGreaterThan(0);
     expect(
-      screen.queryByText(/will be available again/i)
+      screen.queryByText(/będzie znów dostępna/i)
     ).not.toBeInTheDocument();
   });
 
@@ -179,8 +183,8 @@ describe("DiscoverBookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Requested")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Wypożyczona").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Zgłoszono")).not.toBeInTheDocument();
   });
 
   it("shows a generic On loan state with an availability note for a third friend", async () => {
@@ -200,9 +204,9 @@ describe("DiscoverBookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Wypożyczona").length).toBeGreaterThan(0);
     expect(
-      screen.getByText(/will be available again once it's returned/i)
+      screen.getByText(/będzie znów dostępna po zwrocie/i)
     ).toBeInTheDocument();
   });
 

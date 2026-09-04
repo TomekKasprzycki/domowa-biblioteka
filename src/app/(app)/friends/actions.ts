@@ -16,15 +16,15 @@ import { isDuplicateError } from "@/lib/db-error.utils";
 const emailSchema = z
   .string()
   .trim()
-  .pipe(z.email("Enter a valid email address."));
+  .pipe(z.email("Podaj prawidłowy adres e-mail."));
 const connectionIdSchema = z.uuid();
 
 const NOT_FOUND_MESSAGE =
-  "Connection not found or you don't have permission to do that.";
-const UNKNOWN_EMAIL_MESSAGE = "No user found with that email.";
-const SELF_INVITE_MESSAGE = "You can't invite yourself.";
-const DUPLICATE_MESSAGE = "You've already sent an invitation to this user.";
-const ALREADY_FRIENDS_MESSAGE = "You're already friends with this user.";
+  "Nie znaleziono połączenia lub nie masz uprawnień, aby to zrobić.";
+const UNKNOWN_EMAIL_MESSAGE = "Nie znaleziono użytkownika o tym adresie e-mail.";
+const SELF_INVITE_MESSAGE = "Nie możesz zaprosić samego siebie.";
+const DUPLICATE_MESSAGE = "Masz już wysłane zaproszenie do tego użytkownika.";
+const ALREADY_FRIENDS_MESSAGE = "Jesteście już znajomymi.";
 
 export async function sendInviteAction(
   _prevState: string | null,
@@ -32,12 +32,12 @@ export async function sendInviteAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to send a friend invitation.";
+    return "Musisz być zalogowany, aby wysłać zaproszenie do znajomych.";
   }
 
   const parsedEmail = emailSchema.safeParse(formData.get("email"));
   if (!parsedEmail.success) {
-    return parsedEmail.error.issues[0]?.message ?? "Invalid email.";
+    return parsedEmail.error.issues[0]?.message ?? "Nieprawidłowy adres e-mail.";
   }
 
   const targetUser = await findByEmail(parsedEmail.data);
@@ -86,7 +86,7 @@ export async function acceptInviteAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to respond to a friend invitation.";
+    return "Musisz być zalogowany, aby odpowiedzieć na zaproszenie do znajomych.";
   }
 
   const parsedId = connectionIdSchema.safeParse(formData.get("connectionId"));
@@ -113,7 +113,7 @@ export async function rejectInviteAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to respond to a friend invitation.";
+    return "Musisz być zalogowany, aby odpowiedzieć na zaproszenie do znajomych.";
   }
 
   const parsedId = connectionIdSchema.safeParse(formData.get("connectionId"));
@@ -140,7 +140,7 @@ export async function removeFriendAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to remove a friend.";
+    return "Musisz być zalogowany, aby usunąć znajomego.";
   }
 
   const parsedId = connectionIdSchema.safeParse(formData.get("connectionId"));

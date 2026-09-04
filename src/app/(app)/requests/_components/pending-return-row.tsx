@@ -6,7 +6,7 @@ import { LibraryCard } from "@/app/_components/library-card";
 import { Button } from "@/app/_components/button";
 import type { PendingReturn } from "@/app/(app)/requests/requests.types";
 
-const dateFormat = new Intl.DateTimeFormat("en-GB", {
+const dateFormat = new Intl.DateTimeFormat("pl-PL", {
   day: "numeric",
   month: "short",
   year: "numeric",
@@ -22,16 +22,16 @@ export function PendingReturnRow({
   return (
     <li>
       <LibraryCard
-        stampLabel="Return"
+        stampLabel="Zwrot"
         tone="pending-return"
         title={pendingReturn.book.title}
         subtitle={
           <>
             <span className="block">{pendingReturn.book.author}</span>
             <span className="block">
-              {pendingReturn.requester.name} says they returned it
+              {pendingReturn.requester.name} zgłasza zwrot
               {pendingReturn.startedAt &&
-                ` · borrowed since ${dateFormat.format(pendingReturn.startedAt)}`}
+                ` · wypożyczono od ${dateFormat.format(pendingReturn.startedAt)}`}
             </span>
           </>
         }
@@ -39,7 +39,7 @@ export function PendingReturnRow({
           <form action={action}>
             <input type="hidden" name="loanId" value={pendingReturn.id} />
             <Button type="submit" variant="primary" size="sm" disabled={isPending}>
-              I received it back
+              Potwierdź odbiór
             </Button>
           </form>
         }

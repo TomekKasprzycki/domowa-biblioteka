@@ -8,7 +8,7 @@ import { sendPasswordResetEmail } from "@/server/password-reset/send-reset-email
 import { getBaseUrl } from "@/lib/get-base-url.utils";
 
 const requestResetSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email("Nieprawidłowy adres e-mail"),
 });
 
 export async function requestPasswordResetAction(
@@ -20,7 +20,7 @@ export async function requestPasswordResetAction(
   });
 
   if (!parsed.success) {
-    return parsed.error.issues[0]?.message ?? "Invalid input.";
+    return parsed.error.issues[0]?.message ?? "Nieprawidłowe dane.";
   }
 
   const user = await findByEmail(parsed.data.email);

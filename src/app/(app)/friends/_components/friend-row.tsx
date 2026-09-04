@@ -9,6 +9,7 @@ import { Pill } from "@/app/_components/pill";
 import { Button } from "@/app/_components/button";
 import { IconButton } from "@/app/_components/icon-button";
 import { ConfirmModal } from "@/app/_components/confirm-modal";
+import { pluralizePl } from "@/lib/pluralize-pl.utils";
 
 export function FriendRow({ friend }: { friend: Friend }) {
   const [error, removeAction, isPending] = useActionState(
@@ -26,12 +27,12 @@ export function FriendRow({ friend }: { friend: Friend }) {
         <div>
           <p className="font-medium text-ink">{friend.otherUser.name}</p>
           <p className="text-sm text-ink-faint">
-            {bookCount} {bookCount === 1 ? "book" : "books"} on their shelf
+            {bookCount} {pluralizePl(bookCount, ["książka", "książki", "książek"])} na półce
           </p>
         </div>
       </div>
       <div className="self-start">
-        <Pill tone="active">Confirmed</Pill>
+        <Pill tone="active">Potwierdzony</Pill>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <Button
@@ -39,7 +40,7 @@ export function FriendRow({ friend }: { friend: Friend }) {
           size="sm"
           href={`/discover?friend=${friend.otherUser.id}`}
         >
-          View collection
+          Zobacz kolekcję
         </Button>
         <form ref={formRef} action={removeAction}>
           <input type="hidden" name="connectionId" value={friend.id} />
@@ -47,7 +48,7 @@ export function FriendRow({ friend }: { friend: Friend }) {
             type="button"
             variant="decline"
             icon="🗑️"
-            label={`Remove ${friend.otherUser.name} as a friend`}
+            label={`Usuń ${friend.otherUser.name} ze znajomych`}
             disabled={isPending}
             onClick={() => setConfirmOpen(true)}
           />
@@ -60,9 +61,9 @@ export function FriendRow({ friend }: { friend: Friend }) {
       )}
       <ConfirmModal
         open={confirmOpen}
-        title="Remove friend"
-        message={`Remove "${friend.otherUser.name}" as a friend?`}
-        confirmLabel="Remove"
+        title="Usuń znajomego"
+        message={`Usunąć „${friend.otherUser.name}” ze znajomych?`}
+        confirmLabel="Usuń"
         confirmVariant="decline"
         onConfirm={() => {
           setConfirmOpen(false);

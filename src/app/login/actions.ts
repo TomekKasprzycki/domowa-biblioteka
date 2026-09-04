@@ -18,7 +18,7 @@ export async function loginAction(
     await signIn("credentials", { email, password, redirectTo: callbackUrl });
   } catch (error) {
     if (error instanceof AuthError) {
-      return "Invalid email or password.";
+      return "Nieprawidłowy e-mail lub hasło.";
     }
     throw error;
   }

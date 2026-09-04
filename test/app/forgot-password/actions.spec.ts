@@ -73,7 +73,7 @@ describe("requestPasswordResetAction", () => {
     );
 
     // then
-    expect(result).toBe("Invalid email address");
+    expect(result).toBe("Nieprawidłowy adres e-mail");
     expect(mockRedirect).not.toHaveBeenCalled();
     expect(mockSendPasswordResetEmail).not.toHaveBeenCalled();
   });

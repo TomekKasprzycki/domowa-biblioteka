@@ -16,7 +16,7 @@ export function SendInviteForm() {
       action={formAction}
       className="flex flex-col gap-1 rounded-card border border-line bg-paper-card p-4 shadow-card"
     >
-      <Field label="Friend's email" id="email" type="email" name="email" required />
+      <Field label="E-mail znajomego" id="email" type="email" name="email" required />
 
       {error && (
         <p role="alert" className="mb-2 text-sm text-red-600">
@@ -25,7 +25,7 @@ export function SendInviteForm() {
       )}
 
       <Button type="submit" variant="primary" className="self-start" disabled={isPending}>
-        {isPending ? "Sending…" : "Send invite"}
+        {isPending ? "Wysyłanie…" : "Wyślij zaproszenie"}
       </Button>
     </form>
   );

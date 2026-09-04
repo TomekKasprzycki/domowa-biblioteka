@@ -6,18 +6,18 @@ import { z } from "zod";
 import { resetPasswordWithToken } from "@/server/password-reset/password-reset.repository";
 
 const INVALID_LINK_MESSAGE =
-  "This link is invalid or has expired. Request a new one.";
+  "Ten link jest nieprawidłowy lub wygasł. Poproś o nowy.";
 
 const resetPasswordSchema = z
   .object({
     token: z.string().min(1, INVALID_LINK_MESSAGE),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
     confirmPassword: z
       .string()
-      .min(8, "Password must be at least 8 characters"),
+      .min(8, "Hasło musi mieć co najmniej 8 znaków"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match.",
+    message: "Hasła muszą się zgadzać.",
     path: ["confirmPassword"],
   });
 
@@ -32,7 +32,7 @@ export async function resetPasswordAction(
   });
 
   if (!parsed.success) {
-    return parsed.error.issues[0]?.message ?? "Invalid input.";
+    return parsed.error.issues[0]?.message ?? "Nieprawidłowe dane.";
   }
 
   const { token, password } = parsed.data;

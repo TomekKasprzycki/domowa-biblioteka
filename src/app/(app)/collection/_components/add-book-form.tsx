@@ -18,12 +18,12 @@ type LookupStatus =
 
 const STATUS_MESSAGES: Record<LookupStatus, string> = {
   idle: "",
-  searching: "Searching Open Library…",
-  found: "✓ Found — fields are still editable.",
-  "not-found": "Not found. Type the details in manually.",
+  searching: "Szukam w Open Library…",
+  found: "✓ Znaleziono — pola są nadal edytowalne.",
+  "not-found": "Nie znaleziono. Wpisz dane ręcznie.",
   "session-expired":
-    "Your session has expired. Reload and sign in to look up an ISBN.",
-  error: "Something went wrong. Type the details in manually.",
+    "Twoja sesja wygasła. Odśwież stronę i zaloguj się, aby wyszukać ISBN.",
+  error: "Coś poszło nie tak. Wpisz dane ręcznie.",
 };
 
 export function AddBookForm({
@@ -81,7 +81,7 @@ export function AddBookForm({
           htmlFor="isbn"
           className="mb-1.5 block font-mono text-[11.5px] font-semibold uppercase tracking-wide text-ink-soft"
         >
-          ISBN (optional)
+          ISBN (opcjonalnie)
         </label>
         <div className="flex items-center gap-2">
           <input
@@ -98,7 +98,7 @@ export function AddBookForm({
             size="sm"
             onClick={handleLookup}
           >
-            Look up
+            Wyszukaj
           </Button>
         </div>
         <p role="status" className="mt-1.5 min-h-4 text-xs text-ink-faint">
@@ -107,7 +107,7 @@ export function AddBookForm({
       </div>
 
       <Field
-        label="Title"
+        label="Tytuł"
         id="title"
         name="title"
         required
@@ -116,7 +116,7 @@ export function AddBookForm({
       />
 
       <Field
-        label="Author"
+        label="Autor"
         id="author"
         name="author"
         required
@@ -124,7 +124,7 @@ export function AddBookForm({
         onChange={(e) => setAuthor(e.target.value)}
       />
 
-      <Field as="textarea" label="Notes (optional)" id="notes" name="notes" rows={2} />
+      <Field as="textarea" label="Notatki (opcjonalnie)" id="notes" name="notes" rows={2} />
 
       {isFromLookup && (
         <label className="mb-2 flex items-center gap-2 text-sm text-ink">
@@ -133,7 +133,7 @@ export function AddBookForm({
             checked={confirmed}
             onChange={(e) => setConfirmed(e.target.checked)}
           />
-          This is the right book — title and author are correct.
+          To właściwa książka — tytuł i autor są poprawne.
         </label>
       )}
 
@@ -145,10 +145,10 @@ export function AddBookForm({
 
       <div className="flex gap-2">
         <Button type="submit" variant="primary" disabled={submitDisabled}>
-          {isPending ? "Adding…" : "Add"}
+          {isPending ? "Zapisywanie…" : "Zapisz książkę"}
         </Button>
         <Button type="button" variant="ghost" onClick={onCancel}>
-          Cancel
+          Anuluj
         </Button>
       </div>
     </form>

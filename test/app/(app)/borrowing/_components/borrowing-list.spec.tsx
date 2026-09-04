@@ -58,7 +58,7 @@ describe("BorrowingList", () => {
 
     // when
     const message = screen.getByText(
-      /you have no borrow requests or active loans/i
+      /nie masz żadnych próśb o wypożyczenie ani aktywnych wypożyczeń/i
     );
 
     // then
@@ -70,7 +70,7 @@ describe("BorrowingList", () => {
     render(<BorrowingList loans={[requestedLoan]} />);
 
     // when / then
-    expect(screen.getByText("Requested from Marta")).toBeInTheDocument();
+    expect(screen.getByText("Prośba wysłana do Marta")).toBeInTheDocument();
   });
 
   it("labels an active loan as borrowed from the owner", () => {
@@ -78,7 +78,7 @@ describe("BorrowingList", () => {
     render(<BorrowingList loans={[activeLoan]} />);
 
     // when / then
-    expect(screen.getByText("Borrowed from Marta")).toBeInTheDocument();
+    expect(screen.getByText("Wypożyczona od Marta")).toBeInTheDocument();
   });
 
   it("labels a declined loan as declined by the owner", () => {
@@ -86,7 +86,7 @@ describe("BorrowingList", () => {
     render(<BorrowingList loans={[declinedLoan]} />);
 
     // when / then
-    expect(screen.getByText("Declined by Marta")).toBeInTheDocument();
+    expect(screen.getByText("Odrzucona przez Marta")).toBeInTheDocument();
   });
 
   it("renders a row per loan with its book title and author", () => {
@@ -110,7 +110,7 @@ describe("BorrowingList", () => {
 
     // when / then
     expect(
-      screen.getByText("Return pending — waiting for Marta to confirm")
+      screen.getByText("Zwrot w trakcie — czeka na potwierdzenie od Marta")
     ).toBeInTheDocument();
   });
 
@@ -119,7 +119,7 @@ describe("BorrowingList", () => {
     render(<BorrowingList loans={[declinedLoan, returnedLoan]} />);
 
     // when
-    const summary = screen.getByText("Past loans (2)");
+    const summary = screen.getByText("Poprzednie wypożyczenia (2)");
 
     // then
     expect(summary).toBeInTheDocument();
@@ -135,7 +135,9 @@ describe("BorrowingList", () => {
     );
 
     // when
-    const details = screen.getByText("Past loans (1)").closest("details");
+    const details = screen
+      .getByText("Poprzednie wypożyczenia (1)")
+      .closest("details");
 
     // then
     expect(details).toHaveTextContent("Solaris");
@@ -147,6 +149,8 @@ describe("BorrowingList", () => {
     render(<BorrowingList loans={[requestedLoan, activeLoan]} />);
 
     // when / then
-    expect(screen.queryByText(/Past loans/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Poprzednie wypożyczenia/)
+    ).not.toBeInTheDocument();
   });
 });

@@ -67,10 +67,10 @@ export default async function DiscoverPage({
     <div className="flex flex-col gap-7">
       <div>
         <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
-          Their shelf
+          Cudza półka
         </span>
         <h1 className="font-display text-[30px] font-semibold text-ink">
-          Discover
+          Odkrywaj
         </h1>
       </div>
       {/* No availability legend here (removed per impl review F4, 2026-08-21):

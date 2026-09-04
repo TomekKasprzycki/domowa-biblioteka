@@ -14,7 +14,7 @@ export default async function ForgotPasswordPage({
     <main className="flex flex-1 items-center justify-center px-4 py-16">
       <div className="flex flex-col items-center gap-6 w-full max-w-sm">
         <h1 className="font-display text-3xl font-semibold text-ink">
-          Forgot password?
+          Nie pamiętasz hasła?
         </h1>
 
         {sent === "1" && (
@@ -22,8 +22,8 @@ export default async function ForgotPasswordPage({
             role="status"
             className="rounded-lg border border-green-300 bg-green-50 px-4 py-2.5 text-sm text-green-800"
           >
-            If that email is registered, we&apos;ve sent a password reset
-            link.
+            Jeśli ten adres e-mail jest zarejestrowany, wysłaliśmy na niego
+            link do zresetowania hasła.
           </p>
         )}
 
@@ -33,7 +33,7 @@ export default async function ForgotPasswordPage({
           href="/privacy"
           className="text-sm font-medium text-green-700 underline"
         >
-          Privacy notice
+          Informacja o prywatności
         </Link>
       </div>
     </main>

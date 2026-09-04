@@ -6,6 +6,7 @@ import {
 import { countBooksForUser } from "@/server/book/book.repository";
 import { Avatar } from "@/app/_components/avatar";
 import { SidebarNav } from "@/app/_components/sidebar-nav";
+import { pluralizePl } from "@/lib/pluralize-pl.utils";
 
 // Sidebar renders from the (app) route group's layout, so an unhandled
 // rejection here would 500 every authenticated page. The counts are
@@ -60,7 +61,7 @@ export default async function Sidebar() {
         <div>
           <div className="text-[13px] font-semibold">{displayName}</div>
           <div className="text-[11px] text-green-300">
-            {bookCount} {bookCount === 1 ? "book" : "books"} on your shelf
+            {bookCount} {pluralizePl(bookCount, ["książka", "książki", "książek"])} na półce
           </div>
         </div>
       </div>

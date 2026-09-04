@@ -91,7 +91,7 @@ describe("DiscoverPage", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });
@@ -107,12 +107,14 @@ describe("DiscoverPage", () => {
     const ui = await DiscoverPage({ searchParams: Promise.resolve({}) });
     render(ui);
     fireEvent.click(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     );
 
     // then
-    expect(screen.getByRole("button", { name: "Borrow" })).toBeInTheDocument();
-    expect(screen.getAllByText("On loan").length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("button", { name: "Poproś o wypożyczenie" })
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("Wypożyczona").length).toBeGreaterThan(0);
   });
 
   it("pre-scopes when the friend param matches a confirmed friend", async () => {
@@ -126,7 +128,7 @@ describe("DiscoverPage", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Clean Code,/ })
+      screen.getByRole("button", { name: /^Zobacz: Clean Code,/ })
     ).toBeInTheDocument();
     expect(mockRedirect).not.toHaveBeenCalled();
   });

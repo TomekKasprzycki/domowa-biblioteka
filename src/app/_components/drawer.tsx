@@ -60,7 +60,7 @@ export function Drawer({
           onClick={onClose}
           className="-m-2 self-end rounded-md px-2.5 py-2 text-[13px] text-ink-faint hover:bg-paper hover:text-ink"
         >
-          Close ✕
+          Zamknij ✕
         </button>
 
         <div
@@ -77,7 +77,7 @@ export function Drawer({
         <div
           className={`text-center font-mono text-[11.5px] tracking-wide text-ink-faint ${isbn ? "" : "italic"}`}
         >
-          {isbn ? `ISBN ${isbn}` : "No ISBN — added manually"}
+          {isbn ? `ISBN ${isbn}` : "Brak numeru ISBN — dodano ręcznie"}
         </div>
 
         {statusSlot && <div className="text-center">{statusSlot}</div>}

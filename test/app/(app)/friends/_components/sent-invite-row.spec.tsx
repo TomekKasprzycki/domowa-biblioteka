@@ -29,7 +29,7 @@ describe("SentInviteRow", () => {
     render(<SentInviteRow invite={invite} />);
 
     // when
-    const status = screen.getByText("Pending");
+    const status = screen.getByText("Oczekuje");
 
     // then
     expect(status).toBeInTheDocument();

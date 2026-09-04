@@ -99,7 +99,7 @@ describe("collection actions", () => {
       formData({ title: "  ", author, notes: "" })
     );
 
-    expect(result).toBe("Title is required");
+    expect(result).toBe("Tytuł jest wymagany");
     const after = await findByUserId(ownerId);
     expect(after.length).toBe(before.length);
   });
@@ -113,7 +113,7 @@ describe("collection actions", () => {
     );
 
     expect(result).toBe(
-      "You already have a book with this title and author."
+      "Masz już książkę o tym tytule i autorze."
     );
   });
 
@@ -147,7 +147,7 @@ describe("collection actions", () => {
     );
 
     expect(result).toBe(
-      "Book not found or you don't have permission to edit it."
+      "Nie znaleziono książki lub nie masz uprawnień, aby ją edytować."
     );
   });
 
@@ -160,7 +160,7 @@ describe("collection actions", () => {
     );
 
     expect(result).toBe(
-      "Book not found or you don't have permission to edit it."
+      "Nie znaleziono książki lub nie masz uprawnień, aby ją edytować."
     );
   });
 
@@ -171,7 +171,7 @@ describe("collection actions", () => {
     const result = await deleteBookAction(null, formData({ bookId: book.id }));
 
     expect(result).toBe(
-      "Book not found or you don't have permission to edit it."
+      "Nie znaleziono książki lub nie masz uprawnień, aby ją edytować."
     );
   });
 
@@ -205,7 +205,7 @@ describe("collection actions", () => {
     const result = await deleteBookAction(null, formData({ bookId: book.id }));
 
     // then
-    expect(result).toBe("This book is currently on loan and can't be deleted.");
+    expect(result).toBe("Ta książka jest obecnie wypożyczona i nie można jej usunąć.");
     expect((await findByUserId(ownerId)).some((b) => b.id === book.id)).toBe(
       true
     );
@@ -234,7 +234,7 @@ describe("collection actions", () => {
 
     // then
     expect(result).toBe(
-      "This book has borrow requests or borrowing history and can't be deleted."
+      "Ta książka ma prośby o wypożyczenie lub historię wypożyczeń i nie można jej usunąć."
     );
     expect((await findByUserId(ownerId)).some((b) => b.id === book.id)).toBe(
       true
@@ -258,7 +258,7 @@ describe("collection actions", () => {
     // then
     // the loan-state messages must not leak to someone who doesn't own it
     expect(result).toBe(
-      "Book not found or you don't have permission to edit it."
+      "Nie znaleziono książki lub nie masz uprawnień, aby ją edytować."
     );
   });
 
@@ -322,7 +322,7 @@ describe("collection actions", () => {
     );
 
     // then it is rejected and nothing is written
-    expect(result).toBe("That ISBN doesn't look right.");
+    expect(result).toBe("Ten numer ISBN wygląda na nieprawidłowy.");
     const after = await findByUserId(ownerId);
     expect(after.length).toBe(before.length);
   });

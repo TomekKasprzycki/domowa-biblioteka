@@ -43,10 +43,10 @@ export default async function CollectionPage() {
       <div className="flex flex-wrap items-end justify-between gap-5">
         <div>
           <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
-            Your shelf
+            Twoja półka
           </span>
           <h1 className="font-display text-[30px] font-semibold text-ink">
-            Your collection
+            Twoja kolekcja
           </h1>
         </div>
         <AddBookModal />

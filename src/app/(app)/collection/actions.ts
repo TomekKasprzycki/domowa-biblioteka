@@ -19,22 +19,22 @@ import {
 } from "@/lib/db-error.utils";
 import { normalizeIsbn } from "@/lib/normalize-isbn.utils";
 
-const titleSchema = z.string().trim().min(1, "Title is required").max(255);
-const authorSchema = z.string().trim().min(1, "Author is required").max(255);
-const notesSchema = z.string().trim().max(2000, "Notes are too long");
+const titleSchema = z.string().trim().min(1, "Tytuł jest wymagany").max(255);
+const authorSchema = z.string().trim().min(1, "Autor jest wymagany").max(255);
+const notesSchema = z.string().trim().max(2000, "Notatki są za długie");
 const bookIdSchema = z.uuid();
 
 const NOT_FOUND_MESSAGE =
-  "Book not found or you don't have permission to edit it.";
+  "Nie znaleziono książki lub nie masz uprawnień, aby ją edytować.";
 const DUPLICATE_MESSAGE =
-  "You already have a book with this title and author.";
+  "Masz już książkę o tym tytule i autorze.";
 const ON_LOAN_MESSAGE =
-  "This book is currently on loan and can't be deleted.";
-const INVALID_ISBN_MESSAGE = "That ISBN doesn't look right.";
+  "Ta książka jest obecnie wypożyczona i nie można jej usunąć.";
+const INVALID_ISBN_MESSAGE = "Ten numer ISBN wygląda na nieprawidłowy.";
 // Covers every non-open loan row: pending requests, declines and closed loans
 // alike. All of them are referenced by the FK, so none can be deleted.
 const HAS_HISTORY_MESSAGE =
-  "This book has borrow requests or borrowing history and can't be deleted.";
+  "Ta książka ma prośby o wypożyczenie lub historię wypożyczeń i nie można jej usunąć.";
 
 export async function addBookAction(
   _prevState: string | null,
@@ -42,23 +42,23 @@ export async function addBookAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to add a book.";
+    return "Musisz być zalogowany, aby dodać książkę.";
   }
 
   const parsedTitle = titleSchema.safeParse(formData.get("title"));
   if (!parsedTitle.success) {
-    return parsedTitle.error.issues[0]?.message ?? "Invalid title.";
+    return parsedTitle.error.issues[0]?.message ?? "Nieprawidłowy tytuł.";
   }
   const parsedAuthor = authorSchema.safeParse(formData.get("author"));
   if (!parsedAuthor.success) {
-    return parsedAuthor.error.issues[0]?.message ?? "Invalid author.";
+    return parsedAuthor.error.issues[0]?.message ?? "Nieprawidłowy autor.";
   }
   const rawNotes = formData.get("notes");
   const parsedNotes = notesSchema.safeParse(
     typeof rawNotes === "string" ? rawNotes : ""
   );
   if (!parsedNotes.success) {
-    return parsedNotes.error.issues[0]?.message ?? "Invalid notes.";
+    return parsedNotes.error.issues[0]?.message ?? "Nieprawidłowe notatki.";
   }
   // Add is a fresh row: an empty notes field just means "don't set notes".
   const notes = parsedNotes.data === "" ? undefined : parsedNotes.data;
@@ -102,7 +102,7 @@ export async function updateBookAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to edit a book.";
+    return "Musisz być zalogowany, aby edytować książkę.";
   }
 
   const parsedBookId = bookIdSchema.safeParse(formData.get("bookId"));
@@ -111,18 +111,18 @@ export async function updateBookAction(
   }
   const parsedTitle = titleSchema.safeParse(formData.get("title"));
   if (!parsedTitle.success) {
-    return parsedTitle.error.issues[0]?.message ?? "Invalid title.";
+    return parsedTitle.error.issues[0]?.message ?? "Nieprawidłowy tytuł.";
   }
   const parsedAuthor = authorSchema.safeParse(formData.get("author"));
   if (!parsedAuthor.success) {
-    return parsedAuthor.error.issues[0]?.message ?? "Invalid author.";
+    return parsedAuthor.error.issues[0]?.message ?? "Nieprawidłowy autor.";
   }
   const rawNotes = formData.get("notes");
   const parsedNotes = notesSchema.safeParse(
     typeof rawNotes === "string" ? rawNotes : ""
   );
   if (!parsedNotes.success) {
-    return parsedNotes.error.issues[0]?.message ?? "Invalid notes.";
+    return parsedNotes.error.issues[0]?.message ?? "Nieprawidłowe notatki.";
   }
   // Edit resubmits the full form: an empty notes field unambiguously means
   // the user cleared it, so it must reach the repository as null, not be
@@ -155,7 +155,7 @@ export async function deleteBookAction(
 ): Promise<string | null> {
   const session = await auth();
   if (!session?.user) {
-    return "You must be signed in to delete a book.";
+    return "Musisz być zalogowany, aby usunąć książkę.";
   }
 
   const parsedBookId = bookIdSchema.safeParse(formData.get("bookId"));

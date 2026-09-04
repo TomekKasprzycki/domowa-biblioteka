@@ -44,9 +44,11 @@ describe("Home", () => {
     // then
     expect(mockRedirect).not.toHaveBeenCalled();
     expect(
-      screen.getByRole("link", { name: /create account/i })
+      screen.getByRole("link", { name: /załóż konto/i })
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /sign in/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /zaloguj się/i })
+    ).toBeInTheDocument();
   });
 
   it("renders the accountDeleted flash message when signed out", async () => {
@@ -61,7 +63,7 @@ describe("Home", () => {
 
     // then
     expect(screen.getByRole("status")).toHaveTextContent(
-      /account has been deleted/i
+      /konto zostało usunięte/i
     );
   });
 });

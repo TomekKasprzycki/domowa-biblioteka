@@ -32,7 +32,7 @@ describe("PendingReturnsList", () => {
 
     // when / then
     expect(
-      screen.getByRole("heading", { name: "Awaiting your confirmation" })
+      screen.getByRole("heading", { name: "Oczekuje na Twoje potwierdzenie" })
     ).toBeInTheDocument();
   });
 
@@ -51,7 +51,7 @@ describe("PendingReturnsList", () => {
     expect(screen.getByText("Clean Code")).toBeInTheDocument();
     expect(screen.getByText("Refactoring")).toBeInTheDocument();
     expect(
-      screen.getAllByRole("button", { name: "I received it back" })
+      screen.getAllByRole("button", { name: "Potwierdź odbiór" })
     ).toHaveLength(2);
   });
 });

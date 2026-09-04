@@ -26,20 +26,19 @@ export default async function Home({ searchParams }: HomeProps) {
             role="status"
             className="rounded-lg border border-green-300 bg-green-50 px-4 py-2.5 text-sm text-green-800"
           >
-            Your account has been deleted.
+            Twoje konto zostało usunięte.
           </p>
         )}
 
         <p className="text-lg text-ink-soft">
-          Browse your friends&apos; bookshelves and borrow without the
-          awkward ask.
+          Przeglądaj półki znajomych i wypożyczaj bez krępującego pytania.
         </p>
         <div className="flex flex-col gap-3 w-full sm:flex-row sm:justify-center">
           <Button href="/register" variant="primary">
-            Create account
+            Załóż konto
           </Button>
           <Button href="/login" variant="ghost">
-            Sign in
+            Zaloguj się
           </Button>
         </div>
       </div>

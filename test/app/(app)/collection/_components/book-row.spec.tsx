@@ -42,7 +42,7 @@ const returnPendingBook: CollectionBook = {
 };
 
 async function openDrawer(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
+  await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
 }
 
 describe("BookRow", () => {
@@ -64,7 +64,7 @@ describe("BookRow", () => {
 
     // then
     expect(
-      screen.queryByText(/Lent to|Return pending/)
+      screen.queryByText(/Wypożyczona|Zwrot zgłoszony/)
     ).not.toBeInTheDocument();
   });
 
@@ -78,7 +78,7 @@ describe("BookRow", () => {
 
     // then
     expect(
-      screen.getByText("Lent to Ania · since 12 Mar 2026")
+      screen.getByText("Wypożyczona: Ania · od 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe("BookRow", () => {
 
     // then
     expect(
-      screen.getByText("Return pending · Ania · since 12 Mar 2026")
+      screen.getByText("Zwrot zgłoszony: Ania · od 12 mar 2026")
     ).toBeInTheDocument();
   });
 
@@ -105,7 +105,7 @@ describe("BookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Usuń" })).toBeInTheDocument();
   });
 
   it.each([["active" as const], ["return_pending" as const]])(
@@ -124,7 +124,7 @@ describe("BookRow", () => {
 
       // then
       expect(
-        screen.queryByRole("button", { name: "Delete" })
+        screen.queryByRole("button", { name: "Usuń" })
       ).not.toBeInTheDocument();
     }
   );
@@ -138,7 +138,7 @@ describe("BookRow", () => {
     await openDrawer(user);
 
     // then
-    expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Edytuj" })).toBeInTheDocument();
   });
 
   it("opens a confirm modal instead of deleting immediately", async () => {
@@ -148,11 +148,11 @@ describe("BookRow", () => {
     await openDrawer(user);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await user.click(screen.getByRole("button", { name: "Usuń" }));
 
     // then
     expect(
-      screen.getByRole("dialog", { name: /delete book/i })
+      screen.getByRole("dialog", { name: /usuń książkę/i })
     ).toBeInTheDocument();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -162,11 +162,11 @@ describe("BookRow", () => {
     const user = userEvent.setup();
     render(<BookRow book={shelvedBook} onEdit={() => {}} />);
     await openDrawer(user);
-    await user.click(screen.getByRole("button", { name: "Delete" }));
-    const dialog = screen.getByRole("dialog", { name: /delete book/i });
+    await user.click(screen.getByRole("button", { name: "Usuń" }));
+    const dialog = screen.getByRole("dialog", { name: /usuń książkę/i });
 
     // when
-    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await user.click(within(dialog).getByRole("button", { name: "Anuluj" }));
 
     // then
     expect(mockDelete).not.toHaveBeenCalled();
@@ -177,11 +177,11 @@ describe("BookRow", () => {
     const user = userEvent.setup();
     render(<BookRow book={shelvedBook} onEdit={() => {}} />);
     await openDrawer(user);
-    await user.click(screen.getByRole("button", { name: "Delete" }));
-    const dialog = screen.getByRole("dialog", { name: /delete book/i });
+    await user.click(screen.getByRole("button", { name: "Usuń" }));
+    const dialog = screen.getByRole("dialog", { name: /usuń książkę/i });
 
     // when
-    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await user.click(within(dialog).getByRole("button", { name: "Usuń" }));
 
     // then
     expect(mockDelete).toHaveBeenCalledTimes(1);
@@ -195,7 +195,7 @@ describe("BookRow", () => {
     await openDrawer(user);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Edit" }));
+    await user.click(screen.getByRole("button", { name: "Edytuj" }));
 
     // then
     expect(onEdit).toHaveBeenCalledTimes(1);

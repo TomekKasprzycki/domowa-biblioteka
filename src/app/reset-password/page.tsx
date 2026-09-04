@@ -14,7 +14,7 @@ export default async function ResetPasswordPage({
     <main className="flex flex-1 items-center justify-center px-4 py-16">
       <div className="flex flex-col items-center gap-6 w-full max-w-sm">
         <h1 className="font-display text-3xl font-semibold text-ink">
-          Reset password
+          Zresetuj hasło
         </h1>
 
         {token ? (
@@ -25,13 +25,13 @@ export default async function ResetPasswordPage({
               role="alert"
               className="rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm text-red-800"
             >
-              This link is invalid or has expired. Request a new one.
+              Ten link jest nieprawidłowy lub wygasł. Poproś o nowy.
             </p>
             <Link
               href="/forgot-password"
               className="text-sm font-medium text-green-700 underline"
             >
-              Back to forgot password
+              Wróć do resetowania hasła
             </Link>
           </>
         )}

@@ -19,27 +19,29 @@ import { isDuplicateError } from "@/lib/db-error.utils";
 const bookIdSchema = z.uuid();
 const loanIdSchema = z.uuid();
 
-const SIGN_IN_TO_BORROW_MESSAGE = "You must be signed in to request a book.";
+const SIGN_IN_TO_BORROW_MESSAGE =
+  "Musisz być zalogowany, aby poprosić o wypożyczenie książki.";
 const SIGN_IN_TO_RESPOND_MESSAGE =
-  "You must be signed in to respond to a borrow request.";
-const BOOK_NOT_FOUND_MESSAGE = "This book no longer exists.";
-const OWN_BOOK_MESSAGE = "You can't borrow your own book.";
-const NOT_FRIEND_MESSAGE = "You can only borrow books from confirmed friends.";
-const ALREADY_BORROWED_MESSAGE = "This book is already on loan.";
-const DUPLICATE_REQUEST_MESSAGE = "You've already requested this book.";
+  "Musisz być zalogowany, aby odpowiedzieć na prośbę o wypożyczenie.";
+const BOOK_NOT_FOUND_MESSAGE = "Ta książka już nie istnieje.";
+const OWN_BOOK_MESSAGE = "Nie możesz wypożyczyć własnej książki.";
+const NOT_FRIEND_MESSAGE =
+  "Możesz wypożyczać książki tylko od potwierdzonych znajomych.";
+const ALREADY_BORROWED_MESSAGE = "Ta książka jest już wypożyczona.";
+const DUPLICATE_REQUEST_MESSAGE = "Masz już wysłaną prośbę o tę książkę.";
 const LOAN_NOT_FOUND_MESSAGE =
-  "Request not found or you don't have permission to do that.";
+  "Nie znaleziono prośby lub nie masz uprawnień, aby to zrobić.";
 const SIGN_IN_TO_RETURN_MESSAGE =
-  "You must be signed in to mark a book returned.";
+  "Musisz być zalogowany, aby oznaczyć książkę jako zwróconą.";
 const SIGN_IN_TO_CONFIRM_MESSAGE =
-  "You must be signed in to confirm a return.";
+  "Musisz być zalogowany, aby potwierdzić zwrot.";
 // Deliberately vague, like LOAN_NOT_FOUND_MESSAGE: a failed transition may mean
 // the loan is missing, belongs to someone else, or has already moved on. Naming
 // which would leak the existence of other people's loans.
 const RETURN_NOT_POSSIBLE_MESSAGE =
-  "This loan can't be marked returned — it may already have been.";
+  "Nie można oznaczyć tego wypożyczenia jako zwróconego — być może już zostało oznaczone.";
 const CONFIRM_NOT_POSSIBLE_MESSAGE =
-  "This return can't be confirmed — it may already have been.";
+  "Nie można potwierdzić tego zwrotu — być może już został potwierdzony.";
 
 // Closing or reopening a loan changes what four separate pages render: the
 // borrower's list, the owner's inbox, the owner's collection (loan state), and

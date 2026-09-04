@@ -33,7 +33,7 @@ describe("BookList", () => {
     render(<BookList books={[]} />);
 
     // then
-    expect(screen.getByText("Your collection is empty.")).toBeInTheDocument();
+    expect(screen.getByText("Twoja kolekcja jest pusta.")).toBeInTheDocument();
   });
 
   it("renders one spine per book", () => {
@@ -42,10 +42,10 @@ describe("BookList", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: /^View Solaris,/ })
+      screen.getByRole("button", { name: /^Zobacz: Solaris,/ })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /^View Cyberiada,/ })
+      screen.getByRole("button", { name: /^Zobacz: Cyberiada,/ })
     ).toBeInTheDocument();
   });
 
@@ -63,7 +63,7 @@ describe("BookList", () => {
     render(<BookList books={[solaris, cyberiad]} />);
 
     // then
-    expect(screen.queryByLabelText("Title")).toBeNull();
+    expect(screen.queryByLabelText("Tytuł")).toBeNull();
   });
 
   it("opens the edit dialog for the book whose Edit was clicked", async () => {
@@ -73,25 +73,25 @@ describe("BookList", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: /^View Cyberiada,/ })
+      screen.getByRole("button", { name: /^Zobacz: Cyberiada,/ })
     );
-    await user.click(screen.getByRole("button", { name: "Edit" }));
+    await user.click(screen.getByRole("button", { name: "Edytuj" }));
 
     // then
-    expect(screen.getByLabelText("Title")).toHaveValue("Cyberiada");
+    expect(screen.getByLabelText("Tytuł")).toHaveValue("Cyberiada");
   });
 
   it("closes the edit dialog when Cancel is clicked", async () => {
     // given
     const user = userEvent.setup();
     render(<BookList books={[solaris]} />);
-    await user.click(screen.getByRole("button", { name: /^View Solaris,/ }));
-    await user.click(screen.getByRole("button", { name: "Edit" }));
+    await user.click(screen.getByRole("button", { name: /^Zobacz: Solaris,/ }));
+    await user.click(screen.getByRole("button", { name: "Edytuj" }));
 
     // when
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Anuluj" }));
 
     // then
-    expect(screen.queryByLabelText("Title")).toBeNull();
+    expect(screen.queryByLabelText("Tytuł")).toBeNull();
   });
 });

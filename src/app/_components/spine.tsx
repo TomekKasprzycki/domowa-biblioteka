@@ -60,7 +60,7 @@ export function Spine({
     0,
     height - SPINE_TITLE_TOP_CLEARANCE - SPINE_TITLE_BOTTOM_CLEARANCE
   );
-  const tooltip = `${title} — ${author}${isbn ? ` · ISBN ${isbn}` : ""}${owner ? ` · owned by ${owner}` : ""}`;
+  const tooltip = `${title} — ${author}${isbn ? ` · ISBN ${isbn}` : ""}${owner ? ` · właściciel: ${owner}` : ""}`;
   const titleParts =
     columns === 2
       ? splitTitleForTwoColumns(title, titleMaxHeight)
@@ -74,7 +74,7 @@ export function Spine({
       // aria-label replaces the button's whole accessible content, so the
       // visible tag chip below (rendered inside this button) must be folded
       // in here too — otherwise assistive tech never announces it.
-      aria-label={`View ${title}, ${author}${owner ? `, owned by ${owner}` : ""}${tag ? `, ${tag}` : ""}`}
+      aria-label={`Zobacz: ${title}, ${author}${owner ? `, właściciel: ${owner}` : ""}${tag ? `, ${tag}` : ""}`}
       style={{
         height,
         width,

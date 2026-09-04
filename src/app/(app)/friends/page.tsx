@@ -67,10 +67,10 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
     <div className="flex flex-col gap-7">
       <div>
         <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
-          Circle of trust
+          Krąg zaufania
         </span>
         <h1 className="font-display text-[30px] font-semibold text-ink">
-          Friends
+          Znajomi
         </h1>
       </div>
       {notice === "not-a-friend" && (
@@ -78,7 +78,7 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
           role="alert"
           className="rounded-card border border-amber-200 bg-amber-200/30 px-4 py-3 text-sm text-amber-700"
         >
-          You&apos;re not connected with that user.
+          Nie masz połączenia z tym użytkownikiem.
         </p>
       )}
       <div className="grid grid-cols-1 gap-7 lg:grid-cols-[1fr_280px] lg:items-start">
@@ -86,7 +86,7 @@ export default async function FriendsPage({ searchParams }: FriendsPageProps) {
           <ManageInvitesSection received={plainReceived} sent={plainSent} />
         </div>
         <div className="lg:col-start-1 lg:row-start-1">
-          <Section title="Your friends" collapsible={false}>
+          <Section title="Potwierdzeni znajomi" collapsible={false}>
             <FriendsList friends={plainFriends} />
           </Section>
         </div>

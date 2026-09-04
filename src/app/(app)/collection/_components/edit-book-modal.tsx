@@ -9,7 +9,7 @@ import type { CollectionBook } from "@/app/(app)/collection/collection.types";
 import { Field } from "@/app/_components/field";
 import { Button } from "@/app/_components/button";
 
-const DISCARD_PROMPT = "Discard your changes to this book?";
+const DISCARD_PROMPT = "Odrzucić zmiany w tej książce?";
 
 export function EditBookModal({
   book,
@@ -52,12 +52,12 @@ export function EditBookModal({
 
   return (
     <>
-      <Modal open onClose={onClose} title="Edit book" canClose={canClose}>
+      <Modal open onClose={onClose} title="Edytuj książkę" canClose={canClose}>
         <form ref={formRef} action={formAction} className="flex flex-col gap-1">
           <input type="hidden" name="bookId" value={book.id} />
 
           <Field
-            label="Title"
+            label="Tytuł"
             id={`title-${book.id}`}
             name="title"
             required
@@ -65,7 +65,7 @@ export function EditBookModal({
           />
 
           <Field
-            label="Author"
+            label="Autor"
             id={`author-${book.id}`}
             name="author"
             required
@@ -74,7 +74,7 @@ export function EditBookModal({
 
           <Field
             as="textarea"
-            label="Notes (optional)"
+            label="Notatki (opcjonalnie)"
             id={`notes-${book.id}`}
             name="notes"
             rows={2}
@@ -89,19 +89,19 @@ export function EditBookModal({
 
           <div className="flex gap-2">
             <Button type="submit" variant="primary" disabled={isPending}>
-              {isPending ? "Saving…" : "Save"}
+              {isPending ? "Zapisywanie…" : "Zapisz"}
             </Button>
             <Button type="button" variant="ghost" onClick={requestClose}>
-              Cancel
+              Anuluj
             </Button>
           </div>
         </form>
       </Modal>
       <ConfirmModal
         open={discardConfirmOpen}
-        title="Discard changes"
+        title="Odrzuć zmiany"
         message={DISCARD_PROMPT}
-        confirmLabel="Discard"
+        confirmLabel="Odrzuć"
         confirmVariant="decline"
         onConfirm={() => {
           setDiscardConfirmOpen(false);

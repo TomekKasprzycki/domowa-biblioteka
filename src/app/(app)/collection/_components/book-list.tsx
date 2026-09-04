@@ -11,7 +11,7 @@ export function BookList({ books }: { books: CollectionBook[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   if (books.length === 0) {
-    return <EmptyNote>Your collection is empty.</EmptyNote>;
+    return <EmptyNote>Twoja kolekcja jest pusta.</EmptyNote>;
   }
 
   // Resolved from the current books rather than held in state, so an edited

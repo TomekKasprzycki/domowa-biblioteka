@@ -60,7 +60,7 @@ describe("BorrowingPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText("Borrowed from Marta")).toBeInTheDocument();
+    expect(screen.getByText("Wypożyczona od Marta")).toBeInTheDocument();
   });
 
   it("renders Requested from {owner} for a pending loan", async () => {
@@ -73,7 +73,7 @@ describe("BorrowingPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText("Requested from Marta")).toBeInTheDocument();
+    expect(screen.getByText("Prośba wysłana do Marta")).toBeInTheDocument();
   });
 
   it("renders Declined by {owner} for a declined loan", async () => {
@@ -86,7 +86,7 @@ describe("BorrowingPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText("Declined by Marta")).toBeInTheDocument();
+    expect(screen.getByText("Odrzucona przez Marta")).toBeInTheDocument();
   });
 
   it("renders an empty state when there are no loans", async () => {
@@ -100,7 +100,9 @@ describe("BorrowingPage", () => {
 
     // then
     expect(
-      screen.getByText(/you have no borrow requests or active loans/i)
+      screen.getByText(
+        /nie masz żadnych próśb o wypożyczenie ani aktywnych wypożyczeń/i
+      )
     ).toBeInTheDocument();
   });
 

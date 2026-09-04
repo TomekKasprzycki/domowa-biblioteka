@@ -20,7 +20,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
       <Field
         id="password"
-        label="New password"
+        label="Nowe hasło"
         type="password"
         name="password"
         value={password}
@@ -32,7 +32,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
       <Field
         id="confirmPassword"
-        label="Confirm new password"
+        label="Potwierdź nowe hasło"
         type="password"
         name="confirmPassword"
         value={confirmPassword}
@@ -54,7 +54,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
         disabled={!matches || isPending}
         className="w-full"
       >
-        {isPending ? "Resetting…" : "Reset password"}
+        {isPending ? "Resetowanie…" : "Zresetuj hasło"}
       </Button>
     </form>
   );

@@ -11,15 +11,15 @@ function statusLabel(loan: OutgoingLoan): string {
   const owner = loan.owner.name;
   switch (loan.status) {
     case "active":
-      return `Borrowed from ${owner}`;
+      return `Wypożyczona od ${owner}`;
     case "return_pending":
-      return `Return pending — waiting for ${owner} to confirm`;
+      return `Zwrot w trakcie — czeka na potwierdzenie od ${owner}`;
     case "returned":
-      return `Returned to ${owner}`;
+      return `Zwrócona do ${owner}`;
     case "declined":
-      return `Declined by ${owner}`;
+      return `Odrzucona przez ${owner}`;
     default:
-      return `Requested from ${owner}`;
+      return `Prośba wysłana do ${owner}`;
   }
 }
 
@@ -31,7 +31,7 @@ export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
   return (
     <li>
       <LibraryCard
-        stampLabel="With you"
+        stampLabel="U Ciebie"
         tone="default"
         title={loan.book.title}
         subtitle={
@@ -54,7 +54,7 @@ export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
                 disabled={isPending}
                 onClick={() => setConfirmOpen(true)}
               >
-                I returned it
+                Oznacz jako zwrócone
               </Button>
             </form>
           ) : undefined
@@ -67,9 +67,9 @@ export function BorrowingRow({ loan }: { loan: OutgoingLoan }) {
       )}
       <ConfirmModal
         open={confirmOpen}
-        title="Confirm return"
-        message={`Mark "${loan.book.title}" as returned to ${loan.owner.name}? This can't be undone.`}
-        confirmLabel="I returned it"
+        title="Potwierdź zwrot"
+        message={`Potwierdzić zwrot „${loan.book.title}” do ${loan.owner.name}? Tej operacji nie można cofnąć.`}
+        confirmLabel="Oznacz jako zwrócone"
         confirmVariant="outline-blue"
         onConfirm={() => {
           setConfirmOpen(false);

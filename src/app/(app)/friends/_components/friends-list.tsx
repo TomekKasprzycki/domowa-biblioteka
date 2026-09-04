@@ -4,7 +4,7 @@ import { EmptyNote } from "@/app/_components/empty-note";
 
 export function FriendsList({ friends }: { friends: Friend[] }) {
   if (friends.length === 0) {
-    return <EmptyNote>You have no friends yet.</EmptyNote>;
+    return <EmptyNote>Nie masz jeszcze żadnych znajomych.</EmptyNote>;
   }
 
   return (

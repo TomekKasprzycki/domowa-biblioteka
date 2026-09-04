@@ -13,7 +13,7 @@ describe("Spine", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: "View Solaris, Stanisław Lem" })
+      screen.getByRole("button", { name: "Zobacz: Solaris, Stanisław Lem" })
     ).toBeInTheDocument();
   });
 
@@ -58,7 +58,9 @@ describe("Spine", () => {
 
     // then
     expect(
-      screen.getByRole("button", { name: "View Rok 1984, George Orwell, On loan" })
+      screen.getByRole("button", {
+        name: "Zobacz: Rok 1984, George Orwell, On loan",
+      })
     ).toBeInTheDocument();
   });
 
@@ -117,9 +119,9 @@ describe("Spine", () => {
     // then
     expect(
       screen.getByRole("button", {
-        name: "View Solaris, Stanisław Lem, owned by Kasia",
+        name: "Zobacz: Solaris, Stanisław Lem, właściciel: Kasia",
       })
-    ).toHaveAttribute("title", "Solaris — Stanisław Lem · owned by Kasia");
+    ).toHaveAttribute("title", "Solaris — Stanisław Lem · właściciel: Kasia");
   });
 
   it("splits a long title into two columns, with ellipsis only on the second", () => {

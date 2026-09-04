@@ -21,15 +21,15 @@ describe("ResetPasswordForm", () => {
     // given
     const user = userEvent.setup();
     render(<ResetPasswordForm token="abc123" />);
-    const button = screen.getByRole("button", { name: /reset password/i });
+    const button = screen.getByRole("button", { name: /zresetuj hasło/i });
 
     // then (initial state)
     expect(button).toBeDisabled();
 
     // when (mismatch)
-    await user.type(screen.getByLabelText(/^new password$/i), "password123");
+    await user.type(screen.getByLabelText(/^nowe hasło$/i), "password123");
     await user.type(
-      screen.getByLabelText(/confirm new password/i),
+      screen.getByLabelText(/potwierdź nowe hasło/i),
       "different123"
     );
 
@@ -37,9 +37,9 @@ describe("ResetPasswordForm", () => {
     expect(button).toBeDisabled();
 
     // when (match)
-    await user.clear(screen.getByLabelText(/confirm new password/i));
+    await user.clear(screen.getByLabelText(/potwierdź nowe hasło/i));
     await user.type(
-      screen.getByLabelText(/confirm new password/i),
+      screen.getByLabelText(/potwierdź nowe hasło/i),
       "password123"
     );
 
@@ -51,14 +51,14 @@ describe("ResetPasswordForm", () => {
     // given
     const user = userEvent.setup();
     render(<ResetPasswordForm token="abc123" />);
-    await user.type(screen.getByLabelText(/^new password$/i), "password123");
+    await user.type(screen.getByLabelText(/^nowe hasło$/i), "password123");
     await user.type(
-      screen.getByLabelText(/confirm new password/i),
+      screen.getByLabelText(/potwierdź nowe hasło/i),
       "password123"
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: /reset password/i }));
+    await user.click(screen.getByRole("button", { name: /zresetuj hasło/i }));
 
     // then
     expect(mockResetPassword).toHaveBeenCalledTimes(1);

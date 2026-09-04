@@ -20,7 +20,7 @@ import { resetPasswordAction } from "@/app/reset-password/actions";
 const mockRedirect = redirect as jest.Mock;
 
 const INVALID_LINK_MESSAGE =
-  "This link is invalid or has expired. Request a new one.";
+  "Ten link jest nieprawidłowy lub wygasł. Poproś o nowy.";
 
 function formData(fields: Record<string, string>): FormData {
   const fd = new FormData();
@@ -111,7 +111,7 @@ describe("resetPasswordAction", () => {
     );
 
     // then
-    expect(result).toBe("Passwords must match.");
+    expect(result).toBe("Hasła muszą się zgadzać.");
     expect(mockRedirect).not.toHaveBeenCalled();
     const unchanged = await ds
       .getRepository(UserEntity)

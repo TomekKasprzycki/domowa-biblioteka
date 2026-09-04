@@ -60,7 +60,7 @@ describe("Drawer", () => {
 
     // then
     expect(
-      screen.getByText("No ISBN — added manually")
+      screen.getByText("Brak numeru ISBN — dodano ręcznie")
     ).toBeInTheDocument();
   });
 
@@ -232,7 +232,7 @@ describe("Drawer", () => {
     );
 
     // when
-    await user.click(screen.getByRole("button", { name: "Close ✕" }));
+    await user.click(screen.getByRole("button", { name: "Zamknij ✕" }));
 
     // then
     expect(onClose).toHaveBeenCalledTimes(1);

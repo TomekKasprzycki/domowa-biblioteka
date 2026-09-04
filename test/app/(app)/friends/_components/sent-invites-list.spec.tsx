@@ -23,7 +23,7 @@ describe("SentInvitesList", () => {
     render(<SentInvitesList invites={[]} />);
 
     // when
-    const message = screen.getByText(/haven't sent any invitations/i);
+    const message = screen.getByText(/nie wysłano jeszcze żadnych zaproszeń/i);
 
     // then
     expect(message).toBeInTheDocument();

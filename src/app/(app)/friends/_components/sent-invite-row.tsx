@@ -14,7 +14,7 @@ export function SentInviteRow({ invite }: { invite: SentInvite }) {
         </div>
       </div>
       <div className="self-start">
-        <Pill tone="pending">Pending</Pill>
+        <Pill tone="pending">Oczekuje</Pill>
       </div>
     </Card>
   );

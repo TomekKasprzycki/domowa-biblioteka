@@ -28,7 +28,7 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
         </div>
       </div>
       <div className="self-start">
-        <Pill tone="pending">Pending</Pill>
+        <Pill tone="pending">Oczekuje</Pill>
       </div>
       <div className="flex shrink-0 gap-2">
         <form action={acceptAction}>
@@ -39,7 +39,7 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
             size="sm"
             disabled={isAccepting || isRejecting}
           >
-            Accept
+            Akceptuj
           </Button>
         </form>
         <form action={rejectAction}>
@@ -50,7 +50,7 @@ export function ReceivedInviteRow({ invite }: { invite: ReceivedInvite }) {
             size="sm"
             disabled={isAccepting || isRejecting}
           >
-            Reject
+            Odrzuć
           </Button>
         </form>
       </div>
