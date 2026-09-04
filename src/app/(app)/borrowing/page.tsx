@@ -20,10 +20,10 @@ export default async function BorrowingPage() {
     <div className="flex flex-col gap-7">
       <div>
         <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
-          Loan status
+          Stan wypożyczeń
         </span>
         <h1 className="font-display text-[30px] font-semibold text-ink">
-          Borrowing
+          Wypożyczenia
         </h1>
       </div>
       <BorrowingList loans={plainLoans} />

@@ -40,7 +40,7 @@ describe("BorrowingRow", () => {
 
     // when / then
     expect(
-      screen.getByRole("button", { name: "I returned it" })
+      screen.getByRole("button", { name: "Oznacz jako zwrócone" })
     ).toBeInTheDocument();
   });
 
@@ -55,19 +55,19 @@ describe("BorrowingRow", () => {
 
     // when / then
     expect(
-      screen.queryByRole("button", { name: "I returned it" })
+      screen.queryByRole("button", { name: "Oznacz jako zwrócone" })
     ).not.toBeInTheDocument();
   });
 
   it.each([
-    ["requested" as const, "Requested from Marta"],
-    ["active" as const, "Borrowed from Marta"],
+    ["requested" as const, "Prośba wysłana do Marta"],
+    ["active" as const, "Wypożyczona od Marta"],
     [
       "return_pending" as const,
-      "Return pending — waiting for Marta to confirm",
+      "Zwrot w trakcie — czeka na potwierdzenie od Marta",
     ],
-    ["returned" as const, "Returned to Marta"],
-    ["declined" as const, "Declined by Marta"],
+    ["returned" as const, "Zwrócona do Marta"],
+    ["declined" as const, "Odrzucona przez Marta"],
   ])("labels a %s loan as %s", (status, label) => {
     // given
     render(<BorrowingRow loan={loanWith(status)} />);
@@ -95,11 +95,11 @@ describe("BorrowingRow", () => {
     render(<BorrowingRow loan={activeLoan} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "I returned it" }));
+    await user.click(screen.getByRole("button", { name: "Oznacz jako zwrócone" }));
 
     // then
     expect(
-      screen.getByRole("dialog", { name: /confirm return/i })
+      screen.getByRole("dialog", { name: /potwierdź zwrot/i })
     ).toBeInTheDocument();
     expect(mockMarkReturned).not.toHaveBeenCalled();
   });
@@ -108,8 +108,8 @@ describe("BorrowingRow", () => {
     // given
     const user = userEvent.setup();
     render(<BorrowingRow loan={activeLoan} />);
-    await user.click(screen.getByRole("button", { name: "I returned it" }));
-    const dialog = screen.getByRole("dialog", { name: /confirm return/i });
+    await user.click(screen.getByRole("button", { name: "Oznacz jako zwrócone" }));
+    const dialog = screen.getByRole("dialog", { name: /potwierdź zwrot/i });
 
     // when
     await user.click(within(dialog).getByRole("button", { name: "Anuluj" }));
@@ -122,12 +122,12 @@ describe("BorrowingRow", () => {
     // given
     const user = userEvent.setup();
     render(<BorrowingRow loan={activeLoan} />);
-    await user.click(screen.getByRole("button", { name: "I returned it" }));
-    const dialog = screen.getByRole("dialog", { name: /confirm return/i });
+    await user.click(screen.getByRole("button", { name: "Oznacz jako zwrócone" }));
+    const dialog = screen.getByRole("dialog", { name: /potwierdź zwrot/i });
 
     // when
     await user.click(
-      within(dialog).getByRole("button", { name: "I returned it" })
+      within(dialog).getByRole("button", { name: "Oznacz jako zwrócone" })
     );
 
     // then

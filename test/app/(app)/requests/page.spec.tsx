@@ -57,7 +57,9 @@ describe("RequestsPage", () => {
 
     // then
     expect(screen.getByText("Clean Code")).toBeInTheDocument();
-    expect(screen.getByText(/Requested by Alice/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Alice chce wypożyczyć tę książkę/)
+    ).toBeInTheDocument();
   });
 
   it("renders an empty state when there are no pending requests", async () => {
@@ -70,7 +72,7 @@ describe("RequestsPage", () => {
     render(ui);
 
     // then
-    expect(screen.getByText(/no pending requests/i)).toBeInTheDocument();
+    expect(screen.getByText(/brak oczekujących próśb/i)).toBeInTheDocument();
   });
 
   it("returns null when there is no session", async () => {
@@ -97,10 +99,10 @@ describe("RequestsPage", () => {
 
     // then
     expect(
-      screen.getByRole("heading", { name: "Awaiting your confirmation" })
+      screen.getByRole("heading", { name: "Oczekuje na Twoje potwierdzenie" })
     ).toBeInTheDocument();
     expect(screen.getByText("Refactoring")).toBeInTheDocument();
-    expect(screen.getByText(/Bob says they returned it/)).toBeInTheDocument();
+    expect(screen.getByText(/Bob zgłasza zwrot/)).toBeInTheDocument();
   });
 
   it("omits the confirmation section when nothing awaits confirmation", async () => {
@@ -114,10 +116,10 @@ describe("RequestsPage", () => {
 
     // then
     expect(
-      screen.queryByRole("heading", { name: "Awaiting your confirmation" })
+      screen.queryByRole("heading", { name: "Oczekuje na Twoje potwierdzenie" })
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Borrow requests" })
+      screen.getByRole("heading", { name: "Nowe prośby" })
     ).toBeInTheDocument();
   });
 

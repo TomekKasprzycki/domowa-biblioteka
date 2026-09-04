@@ -30,7 +30,7 @@ describe("RequestsList", () => {
     render(<RequestsList requests={[]} />);
 
     // when
-    const message = screen.getByText(/no pending requests/i);
+    const message = screen.getByText(/brak oczekujących próśb/i);
 
     // then
     expect(message).toBeInTheDocument();
@@ -47,7 +47,11 @@ describe("RequestsList", () => {
     // then
     expect(first).toBeInTheDocument();
     expect(second).toBeInTheDocument();
-    expect(screen.getByText(/Requested by Alice Example/)).toBeInTheDocument();
-    expect(screen.getByText(/Requested by Bob Example/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Alice Example chce wypożyczyć tę książkę/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Bob Example chce wypożyczyć tę książkę/)
+    ).toBeInTheDocument();
   });
 });

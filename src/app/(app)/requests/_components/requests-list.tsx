@@ -4,7 +4,11 @@ import type { IncomingRequest } from "@/app/(app)/requests/requests.types";
 
 export function RequestsList({ requests }: { requests: IncomingRequest[] }) {
   if (requests.length === 0) {
-    return <EmptyNote>No pending requests.</EmptyNote>;
+    return (
+      <EmptyNote>
+        Brak oczekujących próśb. Gdy ktoś poprosi o książkę, pojawi się tutaj.
+      </EmptyNote>
+    );
   }
 
   return (

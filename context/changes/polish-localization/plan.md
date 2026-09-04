@@ -459,25 +459,25 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 4.1 `page.spec.tsx` and `_components/*.spec.tsx` updated, full directory suite passes
-- [x] 4.2 `npm run lint` passes
+- [x] 4.1 `page.spec.tsx` and `_components/*.spec.tsx` updated, full directory suite passes — 9560e61
+- [x] 4.2 `npm run lint` passes — 9560e61
 
 #### Manual
 
-- [x] 4.3 Browse, search, filter by friend — all labels, placeholders, availability status correct in Polish
+- [x] 4.3 Browse, search, filter by friend — all labels, placeholders, availability status correct in Polish — 9560e61
 
 ### Phase 5: Requests & Borrowing
 
 #### Automated
 
-- [ ] 5.1 `borrow/actions.spec.ts` updated and passing
-- [ ] 5.2 `requests/page.spec.tsx`, `borrowing/page.spec.tsx`, and both directories' `_components/*.spec.tsx` updated, full suites pass
-- [ ] 5.3 `npm run lint` passes
+- [x] 5.1 `borrow/actions.spec.ts` updated and passing
+- [x] 5.2 `requests/page.spec.tsx`, `borrowing/page.spec.tsx`, and both directories' `_components/*.spec.tsx` updated, full suites pass
+- [x] 5.3 `npm run lint` passes
 
 #### Manual
 
-- [ ] 5.4 Approve/decline/return/confirm flows — all labels, buttons, relative-time stamps correct in Polish with correct plural agreement
-- [ ] 5.5 `pl-PL` date locale renders correctly on the pending-return "borrowed since" line
+- [x] 5.4 Approve/decline/return/confirm flows — all labels, buttons, relative-time stamps correct in Polish with correct plural agreement
+- [x] 5.5 `pl-PL` date locale renders correctly on the pending-return "borrowed since" line
 
 ### Phase 6: Account
 

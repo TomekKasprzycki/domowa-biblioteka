@@ -125,7 +125,9 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You must be signed in to request a book.");
+    expect(result).toBe(
+      "Musisz być zalogowany, aby poprosić o wypożyczenie książki."
+    );
   });
 
   it("rejects a request for the viewer's own book", async () => {
@@ -139,7 +141,7 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You can't borrow your own book.");
+    expect(result).toBe("Nie możesz wypożyczyć własnej książki.");
   });
 
   it("rejects a request from a non-friend", async () => {
@@ -153,7 +155,9 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You can only borrow books from confirmed friends.");
+    expect(result).toBe(
+      "Możesz wypożyczać książki tylko od potwierdzonych znajomych."
+    );
   });
 
   it("creates a requested loan for a confirmed friend on an available book", async () => {
@@ -185,7 +189,7 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You've already requested this book.");
+    expect(result).toBe("Masz już wysłaną prośbę o tę książkę.");
   });
 
   it("returns not-found when approving with a non-owner session", async () => {
@@ -201,7 +205,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBe(
-      "Request not found or you don't have permission to do that."
+      "Nie znaleziono prośby lub nie masz uprawnień, aby to zrobić."
     );
   });
 
@@ -237,7 +241,7 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("This book is already on loan.");
+    expect(result).toBe("Ta książka jest już wypożyczona.");
   });
 
   it("declines a pending request for the owner", async () => {
@@ -305,7 +309,7 @@ describe("borrow actions", () => {
 
     // then
     expect(firstApproval).toBeNull();
-    expect(secondApproval).toBe("This book is already on loan.");
+    expect(secondApproval).toBe("Ta książka jest już wypożyczona.");
   });
 
   it("rejects a concurrent double-submit with the duplicate-request message", async () => {
@@ -330,8 +334,9 @@ describe("borrow actions", () => {
     // the partial unique index admits exactly one pending row; the loser is
     // mapped through isDuplicateError rather than throwing
     expect(results.filter((r) => r === null)).toHaveLength(1);
-    expect(results.filter((r) => r === "You've already requested this book."))
-      .toHaveLength(1);
+    expect(
+      results.filter((r) => r === "Masz już wysłaną prośbę o tę książkę.")
+    ).toHaveLength(1);
   });
 
   it("returns not-found when declining with a malformed loanId", async () => {
@@ -346,7 +351,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBe(
-      "Request not found or you don't have permission to do that."
+      "Nie znaleziono prośby lub nie masz uprawnień, aby to zrobić."
     );
   });
 
@@ -361,7 +366,9 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You must be signed in to mark a book returned.");
+    expect(result).toBe(
+      "Musisz być zalogowany, aby oznaczyć książkę jako zwróconą."
+    );
   });
 
   it("refuses to mark returned with a malformed loanId", async () => {
@@ -376,7 +383,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBe(
-      "This loan can't be marked returned — it may already have been."
+      "Nie można oznaczyć tego wypożyczenia jako zwróconego — być może już zostało oznaczone."
     );
   });
 
@@ -393,7 +400,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBe(
-      "This loan can't be marked returned — it may already have been."
+      "Nie można oznaczyć tego wypożyczenia jako zwróconego — być może już zostało oznaczone."
     );
   });
 
@@ -432,7 +439,7 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("This book is already on loan.");
+    expect(result).toBe("Ta książka jest już wypożyczona.");
   });
 
   it("returns a sign-in message when confirming a return with no session", async () => {
@@ -446,7 +453,7 @@ describe("borrow actions", () => {
     );
 
     // then
-    expect(result).toBe("You must be signed in to confirm a return.");
+    expect(result).toBe("Musisz być zalogowany, aby potwierdzić zwrot.");
   });
 
   it("refuses to confirm a return when the borrower rather than the owner asks", async () => {
@@ -462,7 +469,7 @@ describe("borrow actions", () => {
 
     // then
     expect(result).toBe(
-      "This return can't be confirmed — it may already have been."
+      "Nie można potwierdzić tego zwrotu — być może już został potwierdzony."
     );
   });
 

@@ -3,7 +3,7 @@ id: polish-localization
 title: "S-13: Polish Localization — one-off Polish string sweep"
 status: implementing
 created: 2026-08-22
-updated: 2026-09-02
+updated: 2026-09-04
 roadmap_id: S-13
 prd_refs:
   - "NFR (usable)"

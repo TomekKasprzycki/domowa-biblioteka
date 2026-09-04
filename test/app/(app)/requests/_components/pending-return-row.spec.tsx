@@ -32,7 +32,7 @@ describe("PendingReturnRow", () => {
     expect(screen.getByText("Clean Code")).toBeInTheDocument();
     expect(screen.getByText("Robert Martin")).toBeInTheDocument();
     expect(
-      screen.getByText(/Alice says they returned it/)
+      screen.getByText(/Alice zgłasza zwrot/)
     ).toBeInTheDocument();
   });
 
@@ -42,7 +42,7 @@ describe("PendingReturnRow", () => {
 
     // when / then
     expect(
-      screen.getByText(/borrowed since 12 mar 2026/)
+      screen.getByText(/wypożyczono od 12 mar 2026/)
     ).toBeInTheDocument();
   });
 
@@ -55,7 +55,7 @@ describe("PendingReturnRow", () => {
     );
 
     // when / then
-    expect(screen.queryByText(/borrowed since/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/wypożyczono od/)).not.toBeInTheDocument();
   });
 
   it("carries the loan id in a hidden field", () => {
@@ -80,7 +80,7 @@ describe("PendingReturnRow", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: "I received it back" })
+      screen.getByRole("button", { name: "Potwierdź odbiór" })
     );
 
     // then

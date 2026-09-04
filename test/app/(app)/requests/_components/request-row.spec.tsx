@@ -37,7 +37,7 @@ describe("RequestRow", () => {
     // when / then
     expect(screen.getByText("Clean Code")).toBeInTheDocument();
     expect(screen.getByText("Robert Martin")).toBeInTheDocument();
-    expect(screen.getByText(/Requested by Alice/)).toBeInTheDocument();
+    expect(screen.getByText(/Alice chce wypożyczyć tę książkę/)).toBeInTheDocument();
   });
 
   it("carries the loan id in a hidden field for each action form", () => {
@@ -61,7 +61,7 @@ describe("RequestRow", () => {
     render(<RequestRow request={request} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Approve" }));
+    await user.click(screen.getByRole("button", { name: "Zatwierdź" }));
 
     // then
     expect(mockApprove).toHaveBeenCalledTimes(1);
@@ -74,7 +74,7 @@ describe("RequestRow", () => {
     render(<RequestRow request={request} />);
 
     // when
-    await user.click(screen.getByRole("button", { name: "Decline" }));
+    await user.click(screen.getByRole("button", { name: "Odrzuć" }));
 
     // then
     expect(mockDecline).toHaveBeenCalledTimes(1);

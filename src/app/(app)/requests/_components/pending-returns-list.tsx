@@ -14,7 +14,7 @@ export function PendingReturnsList({
   }
 
   return (
-    <Section title="Awaiting your confirmation" collapsible={false}>
+    <Section title="Oczekuje na Twoje potwierdzenie" collapsible={false}>
       <ul className="flex flex-col gap-3">
         {pendingReturns.map((pendingReturn) => (
           <PendingReturnRow

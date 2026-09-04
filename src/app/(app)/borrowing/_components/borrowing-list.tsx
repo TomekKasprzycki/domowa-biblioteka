@@ -12,7 +12,9 @@ const PAST_STATUSES: ReadonlySet<OutgoingLoan["status"]> = new Set([
 export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
   if (loans.length === 0) {
     return (
-      <EmptyNote>You have no borrow requests or active loans.</EmptyNote>
+      <EmptyNote>
+        Nie masz żadnych próśb o wypożyczenie ani aktywnych wypożyczeń.
+      </EmptyNote>
     );
   }
 
@@ -34,7 +36,7 @@ export function BorrowingList({ loans }: { loans: OutgoingLoan[] }) {
       {past.length > 0 && (
         <details className="rounded-card border border-line bg-paper-card p-4">
           <summary className="cursor-pointer text-sm font-medium text-ink-soft">
-            Past loans ({past.length})
+            Poprzednie wypożyczenia ({past.length})
           </summary>
           <ul className="mt-3 flex flex-col gap-3">
             {past.map((loan) => (

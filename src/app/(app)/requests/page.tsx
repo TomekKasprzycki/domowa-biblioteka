@@ -38,16 +38,16 @@ export default async function RequestsPage() {
     <div className="flex flex-col gap-7">
       <div>
         <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wide text-green-600">
-          Request inbox
+          Skrzynka próśb
         </span>
         <h1 className="font-display text-[30px] font-semibold text-ink">
-          Requests
+          Prośby o wypożyczenie
         </h1>
       </div>
       {/* Returns first: a pending return keeps a book locked out of
           circulation, so it is the more urgent of the two. */}
       <PendingReturnsList pendingReturns={plainPendingReturns} />
-      <Section title="Borrow requests" collapsible={false}>
+      <Section title="Nowe prośby" collapsible={false}>
         <RequestsList requests={plainRequests} />
       </Section>
     </div>
