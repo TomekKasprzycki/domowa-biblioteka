@@ -470,25 +470,25 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 5.1 `borrow/actions.spec.ts` updated and passing
-- [x] 5.2 `requests/page.spec.tsx`, `borrowing/page.spec.tsx`, and both directories' `_components/*.spec.tsx` updated, full suites pass
-- [x] 5.3 `npm run lint` passes
+- [x] 5.1 `borrow/actions.spec.ts` updated and passing — 8b6b191
+- [x] 5.2 `requests/page.spec.tsx`, `borrowing/page.spec.tsx`, and both directories' `_components/*.spec.tsx` updated, full suites pass — 8b6b191
+- [x] 5.3 `npm run lint` passes — 8b6b191
 
 #### Manual
 
-- [x] 5.4 Approve/decline/return/confirm flows — all labels, buttons, relative-time stamps correct in Polish with correct plural agreement
-- [x] 5.5 `pl-PL` date locale renders correctly on the pending-return "borrowed since" line
+- [x] 5.4 Approve/decline/return/confirm flows — all labels, buttons, relative-time stamps correct in Polish with correct plural agreement — 8b6b191
+- [x] 5.5 `pl-PL` date locale renders correctly on the pending-return "borrowed since" line — 8b6b191
 
 ### Phase 6: Account
 
 #### Automated
 
-- [ ] 6.1 `account/actions.spec.ts` and `delete-account-form.spec.tsx` updated, full directory suite passes
-- [ ] 6.2 `npm run lint` passes
+- [x] 6.1 `account/actions.spec.ts` and `delete-account-form.spec.tsx` updated, full directory suite passes
+- [x] 6.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 6.3 Delete-account flow (including blocked-by-active-loan error if reachable) correct in Polish end to end
+- [x] 6.3 Delete-account flow (including blocked-by-active-loan error if reachable) correct in Polish end to end
 
 ### Phase 7: Auth & Public Pages
 

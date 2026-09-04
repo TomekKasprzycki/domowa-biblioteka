@@ -7,14 +7,14 @@ import { deleteAccount } from "@/server/account-deletion/account-deletion.reposi
 const confirmEmailSchema = z
   .string()
   .trim()
-  .min(1, "Type your email to confirm.");
+  .min(1, "Wpisz swój adres e-mail, aby potwierdzić.");
 
-const AUTH_MESSAGE = "You must be signed in to delete your account.";
+const AUTH_MESSAGE = "Musisz być zalogowany, aby usunąć konto.";
 const MISMATCH_MESSAGE =
-  "The email you typed doesn't match your account email.";
+  "Wpisany adres e-mail nie zgadza się z adresem Twojego konta.";
 const BLOCKED_MESSAGE =
-  "You have an active loan, or one of your books is on loan to someone else. Resolve it before deleting your account.";
-const CONFLICT_MESSAGE = "Something changed. Please try again.";
+  "Masz aktywne wypożyczenie lub jedna z Twoich książek jest wypożyczona komuś innemu. Rozwiąż to przed usunięciem konta.";
+const CONFLICT_MESSAGE = "Coś się zmieniło. Spróbuj ponownie.";
 
 export async function deleteAccountAction(
   _prevState: string | null,

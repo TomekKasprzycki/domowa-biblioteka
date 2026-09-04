@@ -9,18 +9,19 @@ export default async function AccountPage() {
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        Account
+        Konto
       </h1>
 
       <Card>
         <h2 className="mb-2 text-sm font-semibold text-green-800">
-          Delete your account
+          Usuń konto
         </h2>
         <p className="mb-4 text-sm text-ink-soft">
-          This permanently deletes your account and everything tied to it —
-          your book collection, friend connections, and loan history. This
-          cannot be undone. If you currently have an active loan, or one of
-          your books is on loan to a friend, resolve it first.
+          To trwale usunie Twoje konto oraz wszystko, co jest z nim związane —
+          Twoją kolekcję książek, połączenia ze znajomymi i historię
+          wypożyczeń. Tej operacji nie można cofnąć. Jeśli masz obecnie
+          aktywne wypożyczenie lub jedna z Twoich książek jest wypożyczona
+          znajomemu, najpierw to rozwiąż.
         </p>
         <DeleteAccountForm email={session.user.email} />
       </Card>

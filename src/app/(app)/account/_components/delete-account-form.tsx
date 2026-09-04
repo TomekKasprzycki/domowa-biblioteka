@@ -17,7 +17,7 @@ export function DeleteAccountForm({ email }: { email: string }) {
     <form action={formAction} className="flex flex-col gap-3">
       <Field
         id="confirmEmail"
-        label={`Type ${email} to confirm`}
+        label={`Wpisz ${email}, aby potwierdzić`}
         type="email"
         name="confirmEmail"
         value={typedEmail}
@@ -38,7 +38,7 @@ export function DeleteAccountForm({ email }: { email: string }) {
         disabled={!matches || isPending}
         className="w-full"
       >
-        {isPending ? "Deleting…" : "Delete my account"}
+        {isPending ? "Usuwanie…" : "Usuń moje konto"}
       </Button>
     </form>
   );

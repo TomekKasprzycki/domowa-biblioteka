@@ -20,7 +20,7 @@ describe("DeleteAccountForm", () => {
     // given
     const user = userEvent.setup();
     render(<DeleteAccountForm email="me@example.com" />);
-    const button = screen.getByRole("button", { name: /delete my account/i });
+    const button = screen.getByRole("button", { name: /usuń moje konto/i });
     const input = screen.getByLabelText(/me@example\.com/i);
 
     // then (initial state)
@@ -51,7 +51,7 @@ describe("DeleteAccountForm", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: /delete my account/i })
+      screen.getByRole("button", { name: /usuń moje konto/i })
     );
 
     // then

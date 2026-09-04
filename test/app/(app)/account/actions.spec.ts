@@ -72,7 +72,7 @@ describe("deleteAccountAction", () => {
     );
 
     // then
-    expect(result).toBe("You must be signed in to delete your account.");
+    expect(result).toBe("Musisz być zalogowany, aby usunąć konto.");
     expect(mockSignOut).not.toHaveBeenCalled();
   });
 
@@ -86,7 +86,7 @@ describe("deleteAccountAction", () => {
 
     // then
     expect(result).toBe(
-      "The email you typed doesn't match your account email."
+      "Wpisany adres e-mail nie zgadza się z adresem Twojego konta."
     );
     const stillExists = await ds
       .getRepository(UserEntity)
@@ -108,7 +108,7 @@ describe("deleteAccountAction", () => {
 
     // then
     expect(result).toBe(
-      "The email you typed doesn't match your account email."
+      "Wpisany adres e-mail nie zgadza się z adresem Twojego konta."
     );
     const stillExists = await ds
       .getRepository(UserEntity)
@@ -143,7 +143,7 @@ describe("deleteAccountAction", () => {
 
     // then
     expect(result).toBe(
-      "You have an active loan, or one of your books is on loan to someone else. Resolve it before deleting your account."
+      "Masz aktywne wypożyczenie lub jedna z Twoich książek jest wypożyczona komuś innemu. Rozwiąż to przed usunięciem konta."
     );
     const stillExists = await ds
       .getRepository(UserEntity)
