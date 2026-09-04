@@ -15,7 +15,7 @@ export async function sendPasswordResetEmail(
   await transport.sendMail({
     from: `"Domowa Biblioteka" <${process.env.GMAIL_USER}>`,
     to,
-    subject: "Reset your Domowa Biblioteka password",
-    text: `We received a request to reset your password. Use the link below within one hour to set a new one:\n\n${resetUrl}\n\nIf you didn't request this, you can ignore this email.`,
+    subject: "Zresetuj hasło do Domowej Biblioteki",
+    text: `Otrzymaliśmy prośbę o zresetowanie Twojego hasła. Skorzystaj z poniższego linku w ciągu godziny, aby ustawić nowe hasło:\n\n${resetUrl}\n\nJeśli to nie Ty złożyłeś tę prośbę, możesz zignorować tę wiadomość.`,
   });
 }

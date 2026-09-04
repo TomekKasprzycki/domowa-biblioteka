@@ -36,7 +36,7 @@ describe("ForgotPasswordForm", () => {
 
     // when
     await user.click(
-      screen.getByRole("button", { name: /send reset link/i })
+      screen.getByRole("button", { name: /wyślij link resetujący/i })
     );
 
     // then
@@ -46,18 +46,18 @@ describe("ForgotPasswordForm", () => {
   it("renders a returned error string inline", async () => {
     // given
     const user = userEvent.setup();
-    mockRequestPasswordReset.mockResolvedValue("Invalid email address");
+    mockRequestPasswordReset.mockResolvedValue("Nieprawidłowy adres e-mail");
     render(<ForgotPasswordForm />);
     await user.type(screen.getByLabelText(/email/i), "me@example.com");
 
     // when
     await user.click(
-      screen.getByRole("button", { name: /send reset link/i })
+      screen.getByRole("button", { name: /wyślij link resetujący/i })
     );
 
     // then
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "Invalid email address"
+      "Nieprawidłowy adres e-mail"
     );
   });
 });

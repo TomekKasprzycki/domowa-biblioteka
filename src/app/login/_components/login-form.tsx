@@ -27,7 +27,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
 
       <Field
         id="password"
-        label="Password"
+        label="Hasło"
         type="password"
         name="password"
         required
@@ -38,7 +38,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
         href="/forgot-password"
         className="mb-3.5 -mt-2 text-right text-xs font-medium text-green-700 underline"
       >
-        Forgot password?
+        Nie pamiętasz hasła?
       </a>
 
       {error && (
@@ -48,13 +48,13 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       )}
 
       <Button type="submit" variant="primary" disabled={isPending} className="w-full">
-        {isPending ? "Signing in…" : "Sign in"}
+        {isPending ? "Logowanie…" : "Zaloguj się"}
       </Button>
 
       <p className="mt-4 text-center text-sm text-ink-soft">
-        No account?{" "}
+        Nie masz konta?{" "}
         <a href="/register" className="font-medium text-green-700 underline">
-          Register
+          Zarejestruj się
         </a>
       </p>
     </form>

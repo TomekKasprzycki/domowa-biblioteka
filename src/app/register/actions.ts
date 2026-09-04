@@ -8,9 +8,9 @@ import { createUser } from "@/server/user/user.repository";
 import { z } from "zod";
 
 const registerSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(1, "Imię i nazwisko jest wymagane"),
+  email: z.string().email("Nieprawidłowy adres e-mail"),
+  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
 });
 
 export async function registerAction(
@@ -24,7 +24,7 @@ export async function registerAction(
   });
 
   if (!parsed.success) {
-    return parsed.error.issues[0]?.message ?? "Invalid input.";
+    return parsed.error.issues[0]?.message ?? "Nieprawidłowe dane.";
   }
 
   const { name, email, password } = parsed.data;
@@ -37,7 +37,7 @@ export async function registerAction(
       error instanceof QueryFailedError &&
       (error as { code?: string }).code === "23505"
     ) {
-      return "An account with this email already exists.";
+      return "Konto z tym adresem e-mail już istnieje.";
     }
     throw error;
   }
@@ -46,7 +46,7 @@ export async function registerAction(
     await signIn("credentials", { email, password, redirectTo: "/collection" });
   } catch (error) {
     if (error instanceof AuthError) {
-      return "Account created, but sign-in failed. Please sign in manually.";
+      return "Konto zostało utworzone, ale logowanie się nie powiodło. Zaloguj się ręcznie.";
     }
     throw error;
   }

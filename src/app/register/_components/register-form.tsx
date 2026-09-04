@@ -10,7 +10,7 @@ export function RegisterForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-1 w-full max-w-sm">
-      <Field id="name" label="Name" type="text" name="name" required autoComplete="name" />
+      <Field id="name" label="Imię i nazwisko" type="text" name="name" required autoComplete="name" />
 
       <Field
         id="email"
@@ -23,7 +23,7 @@ export function RegisterForm() {
 
       <Field
         id="password"
-        label="Password"
+        label="Hasło"
         type="password"
         name="password"
         required
@@ -38,13 +38,13 @@ export function RegisterForm() {
       )}
 
       <Button type="submit" variant="primary" disabled={isPending} className="w-full">
-        {isPending ? "Creating account…" : "Create account"}
+        {isPending ? "Zakładanie konta…" : "Załóż konto"}
       </Button>
 
       <p className="mt-4 text-center text-sm text-ink-soft">
-        Already have an account?{" "}
+        Masz już konto?{" "}
         <a href="/login" className="font-medium text-green-700 underline">
-          Sign in
+          Zaloguj się
         </a>
       </p>
     </form>

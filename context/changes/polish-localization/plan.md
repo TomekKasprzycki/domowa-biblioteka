@@ -483,25 +483,25 @@ None — no schema or data changes. No user-visible URL changes (no locale routi
 
 #### Automated
 
-- [x] 6.1 `account/actions.spec.ts` and `delete-account-form.spec.tsx` updated, full directory suite passes
-- [x] 6.2 `npm run lint` passes
+- [x] 6.1 `account/actions.spec.ts` and `delete-account-form.spec.tsx` updated, full directory suite passes — a855be9
+- [x] 6.2 `npm run lint` passes — a855be9
 
 #### Manual
 
-- [x] 6.3 Delete-account flow (including blocked-by-active-loan error if reachable) correct in Polish end to end
+- [x] 6.3 Delete-account flow (including blocked-by-active-loan error if reachable) correct in Polish end to end — a855be9
 
 ### Phase 7: Auth & Public Pages
 
 #### Automated
 
-- [ ] 7.1 Auth/public page and component specs updated, full directory suites pass
-- [ ] 7.2 `npm run lint` passes
-- [ ] 7.3 `npx tsc --noEmit` shows no new errors
-- [ ] 7.4 Full project test suite passes end to end
-- [ ] 7.5 Spot-check `grep` for common English UI words across `src/app/**/*.tsx` returns no matches outside comments/prop names
+- [x] 7.1 Auth/public page and component specs updated, full directory suites pass
+- [x] 7.2 `npm run lint` passes
+- [x] 7.3 `npx tsc --noEmit` shows no new errors
+- [x] 7.4 Full project test suite passes end to end
+- [x] 7.5 Spot-check `grep` for common English UI words across `src/app/**/*.tsx` returns no matches outside comments/prop names
 
 #### Manual
 
-- [ ] 7.6 Full account lifecycle (register → login → forgot → reset via emailed link → login → privacy → delete) reads correctly in Polish
-- [ ] 7.7 `<html lang="pl">` confirmed via dev tools
-- [ ] 7.8 Final pass across all 12 pages confirms no leftover English text anywhere
+- [x] 7.6 Full account lifecycle (register → login → forgot → reset via emailed link → login → privacy → delete) reads correctly in Polish
+- [x] 7.7 `<html lang="pl">` confirmed via dev tools
+- [x] 7.8 Final pass across all 12 pages confirms no leftover English text anywhere

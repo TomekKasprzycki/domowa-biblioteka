@@ -34,13 +34,13 @@ export function ForgotPasswordForm() {
         disabled={isPending}
         className="w-full"
       >
-        {isPending ? "Sending…" : "Send reset link"}
+        {isPending ? "Wysyłanie…" : "Wyślij link resetujący"}
       </Button>
 
       <p className="mt-4 text-center text-sm text-ink-soft">
-        Remembered your password?{" "}
+        Przypomniałeś sobie hasło?{" "}
         <a href="/login" className="font-medium text-green-700 underline">
-          Sign in
+          Zaloguj się
         </a>
       </p>
     </form>
